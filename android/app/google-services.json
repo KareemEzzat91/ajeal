@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "880893286482",
+    "project_id": "ajeal-b4b41",
+    "storage_bucket": "ajeal-b4b41.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:880893286482:android:3cc63974cfe5b3c02ba78b",
+        "android_client_info": {
+          "package_name": "com.example.ajeal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDli0EVHxsZNAY7XGLs3VzeQgc8DwzYrjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

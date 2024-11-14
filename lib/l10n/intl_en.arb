@@ -1,0 +1,14 @@
+{
+  "@@locale": "en",
+  "AdminOrParents": "Who Are You",
+  "Parents": "Parents",
+  "Admin": "Admin",
+  "Login": "Login",
+  "Register": "Register",
+  "ChildrenPage":"Children",
+  "ReportsPage": "Reports",
+  "ObjectivesPage": "Objectives",
+  "CommunicationPage": "Communication",
+  "ProfilePage": "Profile"
+
+}
