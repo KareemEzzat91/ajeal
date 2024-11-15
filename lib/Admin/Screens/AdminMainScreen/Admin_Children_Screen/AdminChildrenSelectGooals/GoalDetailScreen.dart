@@ -14,6 +14,7 @@ class GoalDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("تفاصيل الهدف: ${goal.goalName}"),
+        backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -21,11 +22,18 @@ class GoalDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Goal Title
               Text(
                 goal.goalName,
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent,
+                ),
               ),
               const SizedBox(height: 10),
+
+              // Goal Description
               Text(
                 goal.goalDescription,
                 style: const TextStyle(fontSize: 16, color: Colors.grey),
@@ -33,51 +41,27 @@ class GoalDetailScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Section: Session Scheduling
-              const Text(
-                "جدولة الجلسات:",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
+              _buildSectionTitle("جدولة الجلسات:"),
               ...goal.sessions.map((session) {
-                return ListTile(
-                  title: Text("جلسة بتاريخ ${session['date']}"),
-                  subtitle: Text("الأهداف الموزعة: ${session['objectives']}"),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () {
-                      // Code to edit scheduled session
-                    },
-                  ),
-                );
+                return _buildSessionTile(context, session);
               }).toList(),
               const SizedBox(height: 20),
 
               // Section: Evaluation Sessions
-              const Text(
-                "جلسات التقييم:",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
+              _buildSectionTitle("جلسات التقييم:"),
               ...goal.evaluations.map((evaluation) {
-                return ListTile(
-                  title: Text("جلسة بتاريخ ${evaluation['date']}"),
-                  subtitle: Text("التقييم: ${evaluation['rating']}"),
-                  trailing: Text(
-                    "ملاحظات: ${evaluation['notes']}",
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                );
+                return _buildEvaluationTile(context, evaluation);
               }).toList(),
               const SizedBox(height: 20),
 
               // Section: Progress Chart
-              const Text(
-                "التقدم:",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
+              _buildSectionTitle("التقدم:"),
               Container(
-                height: 200,
+                height: 250,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.shade200,
+                ),
                 child: CustomPaint(
                   painter: ProgressChartPainter(goal.progressData),
                 ),
@@ -85,36 +69,133 @@ class GoalDetailScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Section: Notes on Strengths and Weaknesses
-              const Text(
-                "ملاحظات:",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                "نقاط القوة: ...",
-                style: TextStyle(fontSize: 16),
-              ),
+              _buildSectionTitle("ملاحظات:"),
+              _buildNotes("نقاط القوة: ...", Colors.green),
               const SizedBox(height: 5),
-              const Text(
-                "نقاط الضعف: ...",
-                style: TextStyle(fontSize: 16),
-              ),
+              _buildNotes("نقاط الضعف: ...", Colors.red),
             ],
           ),
         ),
       ),
     );
   }
+
+  // Section Title Widget
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    );
+  }
+
+  // Session Tile Widget with edit functionality
+  Widget _buildSessionTile(BuildContext context, Map session) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      elevation: 3,
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(10),
+        title: Text("جلسة بتاريخ ${session['date']}"),
+        subtitle: Text("الأهداف الموزعة: ${session['objectives']}"),
+        trailing: IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () {
+            _editSession(context, session);
+          },
+        ),
+      ),
+    );
+  }
+
+  // Evaluation Tile Widget
+  Widget _buildEvaluationTile(BuildContext context, Map evaluation) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      elevation: 3,
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(10),
+        title: Text("جلسة بتاريخ ${evaluation['date']}"),
+        subtitle: Text("التقييم: ${evaluation['rating']}"),
+        trailing: Text(
+          "ملاحظات: ${evaluation['notes']}",
+          style: const TextStyle(color: Colors.grey),
+        ),
+      ),
+    );
+  }
+
+  // Notes Widget
+  Widget _buildNotes(String text, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(fontSize: 16, color: color),
+      ),
+    );
+  }
+
+  // Edit Session Functionality (Placeholder)
+  void _editSession(BuildContext context, Map session) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("تعديل الجلسة"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: TextEditingController(text: session['date']),
+                decoration: InputDecoration(labelText: "التاريخ"),
+              ),
+              TextField(
+                controller: TextEditingController(text: session['objectives']),
+                decoration: InputDecoration(labelText: "الأهداف"),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("إلغاء"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Save the edited session
+                Navigator.pop(context);
+              },
+              child: const Text("حفظ"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
-// CustomPaint component for drawing the progress chart
+// CustomPainter component for drawing the progress chart
 class ProgressChartPainter extends CustomPainter {
   final List<double> progressData;
   ProgressChartPainter(this.progressData);
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Code to draw the progress chart based on progressData
+    // Example drawing: Simple circle representing the progress
+    Paint paint = Paint()..color = Colors.blueAccent..style = PaintingStyle.fill;
+    double progress = progressData.isNotEmpty ? progressData[0] : 0.0;
+    double radius = size.width / 2;
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), radius, paint);
+
+    // More complex chart logic can be added here based on progressData
   }
 
   @override

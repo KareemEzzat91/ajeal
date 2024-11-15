@@ -107,7 +107,7 @@ class ChildDetailScreen extends StatelessWidget {
                                    Text(
                                     goals[index].goalDescription,
                                     style:
-                                    TextStyle(fontSize: 14, color: Colors.grey),
+                                    const TextStyle(fontSize: 14, color: Colors.grey),
                                   ),
                                 ],
                               ),
@@ -136,6 +136,15 @@ class ChildDetailScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            Padding(
+
+                              padding: const EdgeInsets.only(right: 7),
+                              child: LinearProgressIndicator(
+                                value: index*5 / 100,
+                                backgroundColor: Colors.grey[200],
+                                color: Colors.blue,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -154,13 +163,6 @@ class ChildDetailScreen extends StatelessWidget {
             Text(
               progress,
               style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // الانتقال إلى شاشة تعديل بيانات الطفل
-              },
-              child: const Text("تعديل البيانات"),
             ),
           ],
         ),

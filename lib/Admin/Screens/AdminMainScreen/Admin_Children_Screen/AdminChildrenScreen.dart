@@ -28,14 +28,20 @@ class Adminchildrenscreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: bloc.Children.length, // عدد الأطفال
-        itemBuilder: (context, index) {
-          final child = bloc.Children[index];
-          return ChildCard(
-            child: child,
-            index: index,
+      body: BlocBuilder<AddChildCubit, AddChildState>(
+
+        builder: ( context,  state) {
+          return  ListView.builder(
+            itemCount: bloc.Children.length, // عدد الأطفال
+            itemBuilder: (context, index) {
+              final child = bloc.Children[index];
+              return ChildCard(
+                child: child,
+                index: index,
+              );
+            },
           );
+
         },
       ),
       floatingActionButton: FloatingActionButton(
