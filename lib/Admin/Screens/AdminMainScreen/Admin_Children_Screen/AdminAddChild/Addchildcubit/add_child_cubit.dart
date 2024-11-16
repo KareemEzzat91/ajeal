@@ -11,7 +11,7 @@ class AddChildCubit extends Cubit<AddChildState> {
   final Map<String, List<Goals>> selectedGoals = {}; // لتخزين الأهداف المختارة//id ==ParentsPhone
   List<Map<String, Child>> Children = [];//id =ParentsPhone+id
 
-  void saveChild(String name, String age, DateTime dateOfBirth,
+  void saveChild(String name, String age, DateTime dateOfBirth,DateTime startDate,DateTime endDate,String period ,
       String parentOccupation, String notes, context) {
     emit(AddLoadingState());
     final newChild = Child(
@@ -19,6 +19,9 @@ class AddChildCubit extends Cubit<AddChildState> {
       name: name,
       age: age,
       dateOfBirth: dateOfBirth,
+      startDate:startDate,
+      endDate: endDate,
+      period :period,
       parentOccupation: parentOccupation,
       notes: notes,
       selectedGoals: selectedGoals,
@@ -57,6 +60,9 @@ class Child {
   String name;
   String age;
   DateTime dateOfBirth;
+  DateTime startDate;
+  DateTime endDate;
+  String period;
   String parentOccupation;
   String notes;
 Map<String,List<Goals>> selectedGoals; // New field to store selected goals
@@ -65,6 +71,9 @@ Map<String,List<Goals>> selectedGoals; // New field to store selected goals
     required this.id,
     required this.name,
     required this.age,
+    required this.startDate,
+    required this.endDate,
+    required this.period,
     required this.dateOfBirth,
     required this.parentOccupation,
     required this.notes,

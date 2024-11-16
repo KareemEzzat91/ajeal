@@ -18,36 +18,71 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
   final TextEditingController parentOccupationController = TextEditingController();
   final TextEditingController goalsController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
+  final TextEditingController PeriodController = TextEditingController();
   final _key = GlobalKey<FormState>();
   late final String? Function(String?)? validator ;
 
   DateTime? selectedDate;
+  DateTime? StartDate;
+  DateTime? EndDate;
   int  age =2 ;
   List <Goals>Selecteditems = [ ];
-  // دالة اختيار تاريخ الميلاد
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDate( context, DateTime? dateType) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: dateType ?? DateTime.now(),
       firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
+      lastDate:dateType == selectedDate? DateTime.now():DateTime.utc(2030),
     );
-    if (picked != null && picked != selectedDate) {
+
+    if (picked != null) {
       setState(() {
-        selectedDate = picked;
-        final date = DateTime.now();
-        age = date.year - selectedDate!.year;
-
-        if (date.month < selectedDate!.month ||
-            (date.month == selectedDate!.month && date.day < selectedDate!.day)) {
-          age--;
+        if (dateType == selectedDate) {
+          selectedDate = picked;
+          _updateAge();
+        } else if (dateType == StartDate) {
+          StartDate = picked;
+          if (EndDate == null) {
+            PeriodController.text = " اشهر 3 "; // Default period of 3 months
+          } else {
+            PeriodController.text = _calculatePeriod(StartDate!, EndDate!);
+          }
+        } else if (dateType == EndDate) {
+          EndDate = picked;
+          if (StartDate == null) {
+            PeriodController.text = _calculatePeriod(DateTime.now(), EndDate!);
+          } else {
+            PeriodController.text = _calculatePeriod(StartDate!, EndDate!);
+          }
         }
-
-        ageController.text = age.toString();
-
       });
     }
   }
+
+  void _updateAge() {
+    if (selectedDate != null) {
+      final currentDate = DateTime.now();
+      age = currentDate.year - selectedDate!.year;
+
+      if (currentDate.month < selectedDate!.month ||
+          (currentDate.month == selectedDate!.month &&
+              currentDate.day < selectedDate!.day)) {
+        age--;
+      }
+
+      ageController.text = age.toString();
+    }
+  }
+
+  String _calculatePeriod(DateTime start, DateTime end) {
+    final difference = end.difference(start);
+    final years = (difference.inDays ~/ 365);
+    final months = (difference.inDays % 365) ~/ 30;
+    final days = (difference.inDays % 365) % 30;
+
+    return " سنوات ${years} شهور $months ايام $days  ";
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +128,7 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
               ),
               const SizedBox(height: 10),
               GestureDetector(
-                onTap: () => _selectDate(context),
+                onTap: () => _selectDate(context,selectedDate),
                 child: AbsorbPointer(
                   child: CustomTextField(
                     height: height,
@@ -116,6 +151,69 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                 ),
               ),
               const SizedBox(height: 10),
+              GestureDetector(
+                onTap: () => _selectDate(context,StartDate),
+                child: AbsorbPointer(
+                  child: CustomTextField(
+                    height: height,
+                    controller: TextEditingController(
+                      text: StartDate != null
+                          ? "${StartDate!.day}/${StartDate!.month}/${StartDate!.year}"
+                          : "",
+                    ),
+                    icon: const Icon(Icons.calendar_today),
+                    text: "تاريخ البداية",
+                    validator: (val){
+                      if( val!.isEmpty)
+                      {
+                        return "StarteDate shouldn't be empty";
+                      }
+                      return null;
+                    },
+
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              GestureDetector(
+                onTap: () => _selectDate(context,EndDate),
+                child: AbsorbPointer(
+                  child: CustomTextField(
+                    height: height,
+                    controller: TextEditingController(
+                      text: EndDate != null
+                          ? "${EndDate!.day}/${EndDate!.month}/${EndDate!.year}"
+                          : "",
+                    ),
+                    icon: const Icon(Icons.calendar_today),
+                    text: "تاريخ الانتهاء",
+                    validator: (val){
+                      if( val!.isEmpty)
+                      {
+                        return "EndDate shouldn't be empty";
+                      }
+                      return null;
+                    },
+
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              CustomTextField(
+                height: height,
+                controller: PeriodController,
+                icon: const Icon(Icons.timer),
+                text: "المدة",
+                validator:(val){
+                  if( val!.isEmpty)
+                  {
+                    return "Period shouldn't be empty";
+                  }
+                  return null;
+                } ,
+              ),
+              const SizedBox(height: 10),
+
               CustomTextField(
                 height: height,
                 controller: parentOccupationController,
@@ -167,7 +265,7 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                 child: const Text("اختيار الاهداف",style: TextStyle(color: Colors.white),),
               ),
               SizedBox(
-              height: 300,
+              height: 120,
               child: ListView.builder(
                 itemCount: Selecteditems.length,
                 itemBuilder: (context, index) {
@@ -204,7 +302,7 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                 onPressed: () {
                   if (_key.currentState!.validate())
                     {
-                  bloc.saveChild(nameController.text, ageController.text, selectedDate!, parentOccupationController.text, notesController.text,context)
+                  bloc.saveChild(nameController.text, ageController.text, selectedDate!,StartDate!,EndDate!,PeriodController.text, parentOccupationController.text, notesController.text,context)
                  ;} },
                 child: const Text("حفظ"),
               ),
