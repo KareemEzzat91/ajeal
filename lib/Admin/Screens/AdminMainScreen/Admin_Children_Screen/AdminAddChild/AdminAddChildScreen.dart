@@ -300,10 +300,23 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
             ),
               ElevatedButton(
                 onPressed: () {
-                  if (_key.currentState!.validate())
+                  if (bloc.selectedGoals[parentOccupationController.text]==null)
                     {
-                  bloc.saveChild(nameController.text, ageController.text, selectedDate!,StartDate!,EndDate!,PeriodController.text, parentOccupationController.text, notesController.text,context)
-                 ;} },
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'قم باضافة اهداف ',
+                              style: TextStyle(color: Colors.blue[400]),
+                            ),
+                          ));
+                    }
+                  else{
+                    bloc.saveChild(nameController.text, ageController.text, selectedDate!,StartDate!,EndDate!,PeriodController.text, parentOccupationController.text, notesController.text,context);
+
+                  }
+                  /* if (_key.currentState!.validate())
+                    {
+                } */},
                 child: const Text("حفظ"),
               ),
             ],
