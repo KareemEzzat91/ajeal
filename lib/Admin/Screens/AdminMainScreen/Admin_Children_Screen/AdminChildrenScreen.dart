@@ -91,7 +91,7 @@ class ChildCard extends StatelessWidget {
               builder: (context) => ChildDetailScreen(
                 childName: child.name,
                 birthDate: "${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
-                goals: child.selectedGoals[child.parentOccupation]!,
+                goals: child.selectedGoals,
                 progress: "مستوى التقدم الحالي",
               ),
             ),

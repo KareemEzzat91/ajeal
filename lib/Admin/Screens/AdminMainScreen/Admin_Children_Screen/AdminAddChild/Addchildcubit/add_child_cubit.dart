@@ -14,6 +14,9 @@ class AddChildCubit extends Cubit<AddChildState> {
   void saveChild(String name, String age, DateTime dateOfBirth,DateTime startDate,DateTime endDate,String period ,
       String parentOccupation, String notes, context) {
     emit(AddLoadingState());
+    //fun for  edit the Goals and shudel
+    // ممكن اخد الاهداف واعمل  List جديده فيها زي التفاصيل
+    //انه اول مره مثلا يدوس على ال child ي Genrate الحاجات ال عايزنها
     final newChild = Child(
       id: id++,
       name: name,
@@ -24,11 +27,12 @@ class AddChildCubit extends Cubit<AddChildState> {
       period :period,
       parentOccupation: parentOccupation,
       notes: notes,
-      selectedGoals: selectedGoals,
+      selectedGoals: selectedGoals[parentOccupation]!,
 
     );
 
-    Children.add({parentOccupation +'${id}': newChild});
+    Children.add({'$parentOccupation$id': newChild});
+
     Navigator.pop(context);
     emit(AddScuccesState());
   }
@@ -65,7 +69,7 @@ class Child {
   String period;
   String parentOccupation;
   String notes;
-Map<String,List<Goals>> selectedGoals; // New field to store selected goals
+List<Goals> selectedGoals; // New field to store selected goals
 
   Child({
     required this.id,
@@ -77,6 +81,6 @@ Map<String,List<Goals>> selectedGoals; // New field to store selected goals
     required this.dateOfBirth,
     required this.parentOccupation,
     required this.notes,
-    this.selectedGoals = const{}, // Default empty list
+    this.selectedGoals = const [], // Default empty list
   });
 }

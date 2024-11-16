@@ -165,8 +165,9 @@ class AdminSelectGoals extends StatelessWidget {
             return;
           }
 
+
           const bool shouldPop =  true;
-          if (context.mounted && shouldPop) {
+          if (context.mounted && shouldPop &&bloc.selectedGoals[Phone]!=null) {
              Navigator.pop(context,bloc.selectedGoals[Phone]);
           }
         },
