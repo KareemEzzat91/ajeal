@@ -34,9 +34,11 @@ class Adminchildrenscreen extends StatelessWidget {
           return  ListView.builder(
             itemCount: bloc.Children.length, // عدد الأطفال
             itemBuilder: (context, index) {
-              final child = bloc.Children[index];
+              final map = bloc.Children[index];//<String><Child>
+              final id = map.keys.first;//<String>
+              final child = map[id];
               return ChildCard(
-                child: child,
+                child: child!,
                 index: index,
               );
             },
@@ -89,7 +91,7 @@ class ChildCard extends StatelessWidget {
               builder: (context) => ChildDetailScreen(
                 childName: child.name,
                 birthDate: "${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
-                goals: child.selectedGoals,
+                goals: child.selectedGoals[child.parentOccupation]!,
                 progress: "مستوى التقدم الحالي",
               ),
             ),

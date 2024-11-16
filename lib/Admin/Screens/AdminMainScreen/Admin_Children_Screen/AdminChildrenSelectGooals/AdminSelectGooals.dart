@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdminSelectGoals extends StatelessWidget {
-   AdminSelectGoals({super.key});
+   final String Phone ;
+   AdminSelectGoals({super.key, required this.Phone});
+
    final List<Goals> goalList = [
      Goals(
        goalName: "تحسين القراءة",
@@ -151,7 +153,7 @@ class AdminSelectGoals extends StatelessWidget {
 
               builder: (BuildContext context, state) {
                 return Text(
-                    "${bloc.selectedGoals.length > 9 ? "You have reached the max" : bloc.selectedGoals.length} / 10"
+                    "${(bloc.selectedGoals[Phone]?.length ?? 0) > 9 ? "You have reached the max" : (bloc.selectedGoals[Phone]?.length ?? 0)} / 10"
                 );
          },)
         ],
@@ -165,7 +167,7 @@ class AdminSelectGoals extends StatelessWidget {
 
           const bool shouldPop =  true;
           if (context.mounted && shouldPop) {
-             Navigator.pop(context,bloc.selectedGoals);
+             Navigator.pop(context,bloc.selectedGoals[Phone]);
           }
         },
         child: Padding(
@@ -237,7 +239,7 @@ class AdminSelectGoals extends StatelessWidget {
                               ElevatedButton(
                                 onPressed: () {
                 
-                                  bloc.AddChild( goalList[index],context);
+                                  bloc.AddGoal( goalList[index],Phone,context);
                                   // اكتب هنا وظيفة التحديد
                                 },
                                 child: const Text("اختر الهدف"),
@@ -245,7 +247,6 @@ class AdminSelectGoals extends StatelessWidget {
                               IconButton(
                                 icon: const Icon(Icons.info_outline),
                                 onPressed: () {
-                
                                 },
                               ),
                             ],

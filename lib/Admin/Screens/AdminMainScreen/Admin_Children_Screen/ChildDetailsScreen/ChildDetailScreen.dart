@@ -9,12 +9,12 @@ class ChildDetailScreen extends StatelessWidget {
   final String progress;
 
   const ChildDetailScreen({
-    Key? key,
+    super.key,
     required this.childName,
     required this.birthDate,
     required this.goals,
     required this.progress,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

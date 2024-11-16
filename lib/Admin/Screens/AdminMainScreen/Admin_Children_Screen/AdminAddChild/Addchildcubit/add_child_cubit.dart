@@ -7,11 +7,12 @@ part 'add_child_state.dart';
 
 class AddChildCubit extends Cubit<AddChildState> {
   AddChildCubit() : super(AddChildInitial());
-    static int id =0;
-  final List<Goals> selectedGoals = []; // لتخزين الأهداف المختارة
-  List <Child> Children =[];
+  static int id = 0;
+  final Map<String, List<Goals>> selectedGoals = {}; // لتخزين الأهداف المختارة//id ==ParentsPhone
+  List<Map<String, Child>> Children = [];//id =ParentsPhone+id
 
-  void saveChild(String name, String age, DateTime dateOfBirth, String parentOccupation, String notes,context) {
+  void saveChild(String name, String age, DateTime dateOfBirth,
+      String parentOccupation, String notes, context) {
     emit(AddLoadingState());
     final newChild = Child(
       id: id++,
@@ -24,35 +25,32 @@ class AddChildCubit extends Cubit<AddChildState> {
 
     );
 
-    Children.add(newChild);
+    Children.add({parentOccupation +'${id}': newChild});
     Navigator.pop(context);
     emit(AddScuccesState());
   }
 
-  void AddChild(Goals goal,context ){
+  void AddGoal(Goals goal, String childId, BuildContext context) {
+    // Emit loading state (for state management, typically with Bloc or Provider)
     emit(AddLoadingState());
 
-    if (selectedGoals.length>=10)
-     {
-       ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(
-           content: Text(
-             'لقد تخطيت الحد المخصص للاهداف لايمكنك اضافة المزيد',
-             style: TextStyle(color: Colors.blue[400]),
-           ),
-         ),
-       );
-
-     }
-     else {
-       selectedGoals.add(goal);
-
-     }
-     emit(AddScuccesState());
-
-
+    if (selectedGoals.containsKey(childId)) {
+      if (selectedGoals[childId]!.length < 10) {
+        selectedGoals[childId]!.add(goal);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'You have reached the max limit of 10 goals for this child.',
+              style: TextStyle(color: Colors.blue[400]),
+            ),
+          ),
+        );
+      }
+    } else {
+      selectedGoals[childId] = [goal];
+    }
   }
-
 }
 class Child {
   int id ;
@@ -61,7 +59,7 @@ class Child {
   DateTime dateOfBirth;
   String parentOccupation;
   String notes;
-  List<Goals> selectedGoals; // New field to store selected goals
+Map<String,List<Goals>> selectedGoals; // New field to store selected goals
 
   Child({
     required this.id,
@@ -70,6 +68,6 @@ class Child {
     required this.dateOfBirth,
     required this.parentOccupation,
     required this.notes,
-    this.selectedGoals = const [], // Default empty list
+    this.selectedGoals = const{}, // Default empty list
   });
 }

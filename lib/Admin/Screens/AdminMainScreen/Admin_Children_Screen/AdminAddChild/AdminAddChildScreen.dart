@@ -120,7 +120,24 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                 height: height,
                 controller: parentOccupationController,
                 icon: const Icon(Icons.work),
-                text: "مهنة الوالدين",
+                text: "رقم تواصل الوالدين",
+                validator: (val){
+                  if( val!.isEmpty)
+                  {
+                    return "رقم التواصل shouldn't be empty";
+                  }
+                  else if (val.length!=11){
+
+                    return "رقم التواصل يجب ان يكون من 11 رقم 01xxxxxxxxx";
+
+                  }
+                  else if (bloc.selectedGoals.containsKey(val)){
+                    return "this Phone Already exist";
+
+                  }
+                  else return null;
+                },
+
               ),
               const SizedBox(height: 10),
                CustomTextField(
@@ -132,19 +149,24 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
               const SizedBox(height: 20),
               ElevatedButton(style:ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blueAccent)),
                 onPressed: ()async {
-                  Selecteditems = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AdminSelectGoals(),
-                    ),
-                  );
-                  setState(() {
+                  if (_key.currentState!.validate())
+                    {
+                      Selecteditems = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AdminSelectGoals(Phone:parentOccupationController.text, ),
+                        ),
+                      );
+                      setState(() {
 
-                  });
+                      });
+                    }
+
+
                 },
                 child: const Text("اختيار الاهداف",style: TextStyle(color: Colors.white),),
               ),
-            SizedBox(
+              SizedBox(
               height: 300,
               child: ListView.builder(
                 itemCount: Selecteditems.length,
