@@ -12,7 +12,7 @@ class Adminchildrenscreen extends StatelessWidget {
     final bloc = context.read<AddChildCubit>();
     return Scaffold(
       appBar: AppBar(
-        title:  Text('قائمة الأطفال'),
+        title:  const Text('قائمة الأطفال'),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -21,7 +21,7 @@ class Adminchildrenscreen extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: Icon(Icons.filter_list),
+            icon: const Icon(Icons.filter_list),
             onPressed: () {
               // فتح الفلترة
             },
@@ -48,7 +48,7 @@ class Adminchildrenscreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-Navigator.push(context, MaterialPageRoute(builder: (c)=>AdminAddChildScreen()));        },
+Navigator.push(context, MaterialPageRoute(builder: (c)=>const AdminAddChildScreen()));        },
         tooltip: 'إضافة طفل جديد',
         child: const Icon(Icons.add),
       ),
