@@ -89,7 +89,29 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
     final bloc =context.read<AddChildCubit>();
     final height = MediaQuery.sizeOf(context).height;
 
-    return Scaffold(
+    return BlocListener<AddChildCubit, AddChildState>(
+      listener: (context, state) {
+        if (state is AddLoadingState) {
+          // Show a loading indicator when in AddLoadingState
+          showDialog(
+            context: context,
+            barrierDismissible: false, // Prevent dismissal while loading
+            builder: (BuildContext context) {
+              return const Center(child: CircularProgressIndicator());
+            },
+          );
+        } else if (state is AddScuccesState) {
+          // Close the loading dialog when the operation succeeds
+          Navigator.pop(context);
+        } else if (state is AddFailureState) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('An error occurred.'),
+            ),
+          );
+        }
+      },  child: Scaffold(
       appBar: AppBar(
         title: const Text("إضافة طفل جديد"),
       ),
@@ -323,6 +345,7 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
           ),
         ),
       ),
-    );
+    ),
+);
   }
 }

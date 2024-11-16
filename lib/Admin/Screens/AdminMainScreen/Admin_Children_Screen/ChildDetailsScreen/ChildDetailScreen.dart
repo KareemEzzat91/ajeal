@@ -1,8 +1,10 @@
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/add_child_cubit.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenSelectGooals/GoalDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
 import 'package:flutter/material.dart';
 
 class ChildDetailScreen extends StatelessWidget {
+  final Child child;
   final String childName;
   final String birthDate;
   final List <Goals> goals; // يجب أن تكون من نوع String لتظهر النصوص بشكل صحيح
@@ -13,11 +15,12 @@ class ChildDetailScreen extends StatelessWidget {
     required this.childName,
     required this.birthDate,
     required this.goals,
-    required this.progress,
+    required this.progress,  required this.child,
   });
 
   @override
   Widget build(BuildContext context) {
+    print(child.scheduleSesoins);
     return Scaffold(
       appBar: AppBar(
         title: Text("تفاصيل $childName"),
@@ -43,6 +46,41 @@ class ChildDetailScreen extends StatelessWidget {
             Text(
               "تاريخ الميلاد: $birthDate",
               style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: child.scheduleSesoins.length, // Number of sessions
+                itemBuilder: (context, index) {
+                  final session = child.scheduleSesoins[index]; // Get the current session data
+                  return Container(
+                    padding: EdgeInsets.all(8),
+                    margin: EdgeInsets.symmetric(vertical: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.blue[50], // Background color for each session
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Session: ${session['session']}',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Date: ${session['date']}',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Goals: ${session['goals'].join(', ')}', // Displaying the goals
+                          style: TextStyle(color: Colors.black87),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
             const SizedBox(height: 20),
             const Text(
@@ -166,6 +204,7 @@ class ChildDetailScreen extends StatelessWidget {
             ),
           ],
         ),
+
       ),
     );
   }

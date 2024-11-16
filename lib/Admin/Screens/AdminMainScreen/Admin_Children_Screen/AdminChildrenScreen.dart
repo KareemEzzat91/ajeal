@@ -89,6 +89,7 @@ class ChildCard extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => ChildDetailScreen(
+                child :child,
                 childName: child.name,
                 birthDate: "${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
                 goals: child.selectedGoals,
