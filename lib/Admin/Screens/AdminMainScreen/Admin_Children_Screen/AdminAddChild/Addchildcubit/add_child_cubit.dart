@@ -83,97 +83,70 @@ class AddChildCubit extends Cubit<AddChildState> {
     final sessionsPerWeek = 3; // عدد الجلسات الأسبوعية
 
     final prompt = """
-    Create a schedule for sessions lasting $durationInDays days for the child $childName with the following goals: ${goals.join(', ')}.
-    Start Date: ${startDate.toIso8601String()}, End Date: ${endDate.toIso8601String()}.
-    Distribute the goals across the weekly sessions, considering the number of sessions per week (3 weekly sessions). Please return the schedule in JSON format with the following structure:
-    {
-      "weeks": [
-        {
-          "session": 1,
-          "date": "2024-01-01",
-          "goals": ["${goalsDescription[0]}", "${goalsDescription[0]}"]
-        },
-        {
-          "session": 2,
-          "date": "2024-01-03",
-          "goals": ["${goalsDescription[0]}", "${goalsDescription[0]}"]
-        },
-        ...
-      ]
-    }
-    """;
+  Create a schedule for sessions lasting $durationInDays days for the child $childName with the following goals: ${goals.join(', ')}.
+  Start Date: ${startDate.toIso8601String()}, End Date: ${endDate.toIso8601String()}.
+  Distribute the goals across the weekly sessions, considering the number of sessions per week (3 weekly sessions). Please return the schedule in JSON format with the following structure:
+  {
+    "weeks": [
+      {
+        "session": 1,
+        "date": "2024-01-01",
+        "goals": ["${goalsDescription[0]}", "${goalsDescription[0]}"]
+      },
+      {
+        "session": 2,
+        "date": "2024-01-03",
+        "goals": ["${goalsDescription[0]}", "${goalsDescription[0]}"]
+      },
+      ...
+    ]
+  }
+  """;
 
     final gemini = Gemini.instance;
 
     try {
       final response = await gemini.text(prompt);
-      print(response);
+      String rawResponse = response?.output ?? '';
 
-      // تحويل الاستجابة إلى JSON
-      String scheduleText = response?.output ?? '';
-      final jsonResponse = parseScheduleToJson(scheduleText);
-
-      return jsonResponse;
-    } catch (e) {
-      throw Exception("Error generating schedule: $e");
-    }
-  }
-
-  // تحليل الاستجابة إلى JSON
-  List<Map<String, dynamic>> parseScheduleToJson(String text) {
-    final List<Map<String, dynamic>> sessionsList = [];
-
-    try {
-      // Debug: Print the raw response to check what is being returned
-      print("Raw Response: $text");
-
-      // Ensure that the text starts with { or [
-      if (text.trim().isEmpty || (!text.trim().startsWith("{") && !text.trim().startsWith("["))) {
-        print("The response is not a valid JSON string.");
-        return sessionsList;
+      // Clean the response
+      rawResponse = rawResponse.trim();
+      if (rawResponse.startsWith('```json')) {
+        rawResponse = rawResponse.replaceFirst('```json', '');
+      }
+      if (rawResponse.endsWith('```')) {
+        rawResponse = rawResponse.substring(0, rawResponse.lastIndexOf('```'));
       }
 
-      // Try to decode the JSON response
-      final jsonResponse = jsonDecode(text); // تحويل النص إلى JSON
+      // Parse the cleaned response
+      final List<Map<String, dynamic>> sessionsList = [];
+      final jsonResponse = jsonDecode(rawResponse);
 
-      // Check if 'weeks' exists and is a list
       if (jsonResponse is Map<String, dynamic> && jsonResponse.containsKey('weeks')) {
         final weeks = jsonResponse['weeks'] as List<dynamic>;
-
         for (int i = 0; i < weeks.length; i++) {
           final week = weeks[i];
-
-          // Ensure that 'sessions' exists and is a list
-          if (week is Map<String, dynamic> && week.containsKey('sessions')) {
-            List<Map<String, dynamic>> sessions = [];
-
-            for (var session in week['sessions']) {
-              if (session is Map<String, dynamic> && session.containsKey('session') && session.containsKey('date') && session.containsKey('goals')) {
-                sessions.add({
-                  "session": session['session'],
-                  "date": session['date'],
-                  "goals": List<String>.from(session['goals']),
-                });
-              } else {
-                print("Invalid session format for week ${i + 1}, session data: $session");
-              }
-            }
-
-            sessionsList.add({"week${i + 1}": sessions});
+          if (week is Map<String, dynamic>) {
+            sessionsList.add({
+              "session": week['session'],
+              "date": week['date'],
+              "goals": List<String>.from(week['goals']),
+            });
           } else {
-            print("Invalid or missing sessions for week ${i + 1}");
+            print("Invalid week format: $week");
           }
         }
       } else {
         print("Invalid response format or missing 'weeks' key");
       }
-    } catch (e) {
-      print("Error parsing schedule: $e");
-    }
 
-    return sessionsList;
+      return sessionsList;
+    } catch (e) {
+      throw Exception("Error generating schedule: $e");
+    }
   }
-}
+
+  }
 
 class Child {
   int id;
