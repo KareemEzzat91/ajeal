@@ -1,3 +1,4 @@
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenScreen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -28,10 +29,10 @@ class SignCubit extends Cubit<SignState> {
         if (user != null) {
           if (user.emailVerified)
             {
-       /*   Navigator.pushReplacement(
+          Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const Mainscreen()),
-          );*/
+            MaterialPageRoute(builder: (context) => const Adminchildrenscreen()),
+          );
             }
           else {
               user.sendEmailVerification();

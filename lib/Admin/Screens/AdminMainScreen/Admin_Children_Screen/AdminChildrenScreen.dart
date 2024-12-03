@@ -15,8 +15,10 @@ class Adminchildrenscreen extends StatelessWidget {
         title:  const Text('قائمة الأطفال'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(Icons.save),
             onPressed: () {
+              bloc.saveToFirestore();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Saved Succesfuilly ")));
               // بحث عن طفل
             },
           ),
@@ -52,6 +54,7 @@ Navigator.push(context, MaterialPageRoute(builder: (c)=>const AdminAddChildScree
         tooltip: 'إضافة طفل جديد',
         child: const Icon(Icons.add),
       ),
+
     );
   }
 }

@@ -51,7 +51,7 @@ class AdminLoginScreen extends StatelessWidget {
                   Image.asset("assets/images/Untitled design.png",scale: 0.5,height:height/4,width: width/2, )
                ,    Row(
                     children: [
-                      Text("Lets Get You Login! ",style :TextStyle(
+                      Text("لنقم بتسجيل دخولك ",style :TextStyle(
                         fontSize:Responsive.TextSize(context,isExtraSmallSize:18,isMobileSize: 25,isMobileLarge:30,isIpadSize: 40,isTabletSize: 43,isLargeTabletSize: 50,defaultSize: 20  ),shadows: const [
                         Shadow(
                           offset: Offset(2, 2),
@@ -63,7 +63,7 @@ class AdminLoginScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8,),
-                  Text("Enter Your information Below ",style: TextStyle(color: Colors.grey.shade400,fontSize:Responsive.TextSize(context,isExtraSmallSize:10,isMobileSize: 17,isMobileLarge:19,isIpadSize: 26,isTabletSize: 25,isLargeTabletSize: 40,defaultSize: 15  )),)
+                  Text("قم بادخال المعلومات اسفل ",style: TextStyle(color: Colors.grey.shade400,fontSize:Responsive.TextSize(context,isExtraSmallSize:10,isMobileSize: 17,isMobileLarge:19,isIpadSize: 26,isTabletSize: 25,isLargeTabletSize: 40,defaultSize: 15  )),)
                   ,Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Row(
@@ -202,7 +202,7 @@ class AdminLoginScreen extends StatelessWidget {
                   ),
                   Row(children: [const Spacer(),InkWell(onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>const ResetPasswordScreen()));
-                  }, child:   Text("Forgot Password ?",style:TextStyle(color: Color(0xff0186c7),fontWeight: FontWeight.bold,fontSize: Responsive.TextSize(context,isExtraSmallSize:13,isMobileSize: 15,isMobileLarge:18,isIpadSize: 20,isTabletSize: 22,isLargeTabletSize: 30,defaultSize: 18  ))/*GoogleFonts.agbalumo(color: Color(0xff0186c7))*/ ,))],)
+                  }, child:   Text("لا تتذكر الباسورد ",style:TextStyle(color: Color(0xff0186c7),fontWeight: FontWeight.bold,fontSize: Responsive.TextSize(context,isExtraSmallSize:13,isMobileSize: 15,isMobileLarge:18,isIpadSize: 20,isTabletSize: 22,isLargeTabletSize: 30,defaultSize: 18  ))/*GoogleFonts.agbalumo(color: Color(0xff0186c7))*/ ,))],)
                   ,const SizedBox(height:40,),
                 GestureDetector(
                   onTap: (){
@@ -231,7 +231,7 @@ class AdminLoginScreen extends StatelessWidget {
                               }
                             return  Center(
                               child: Text(
-                                "Login",style:TextStyle(fontSize: Responsive.TextSize(context,isExtraSmallSize:25,isMobileSize: 30,isMobileLarge:35,isIpadSize: 70,isTabletSize: 90,isLargeTabletSize: 100,defaultSize: 40  ),color: Colors.white,) /*GoogleFonts.agbalumo(fontSize: 40,color: Colors.white)*/,),
+                                "تسجيل الدخول",style:TextStyle(fontSize: Responsive.TextSize(context,isExtraSmallSize:25,isMobileSize: 30,isMobileLarge:35,isIpadSize: 70,isTabletSize: 90,isLargeTabletSize: 100,defaultSize: 40  ),color: Colors.white,) /*GoogleFonts.agbalumo(fontSize: 40,color: Colors.white)*/,),
                             );
 
 

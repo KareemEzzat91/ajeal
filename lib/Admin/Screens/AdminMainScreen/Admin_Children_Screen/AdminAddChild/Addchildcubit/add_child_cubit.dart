@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 
@@ -11,6 +13,69 @@ class AddChildCubit extends Cubit<AddChildState> {
   static int id = 0;
   final Map<String, List<Goals>> selectedGoals = {}; // لتخزين الأهداف المختارة //id == ParentsPhone
   List<Map<String, Child>> Children = []; // id = ParentsPhone + id
+  void saveToFirestore()async {
+    emit(AddLoadingState());
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      print("User not logged in");
+      return;
+    }
+    final userDoc = FirebaseFirestore.instance.collection("users").doc(userId);
+    for (var childMap in Children) {
+      await Future.forEach(childMap.entries, (MapEntry<String, Child> childEntry) async {
+        await userDoc.collection("children").doc(childEntry.key).set(childEntry.value.toMap());
+      });
+    }
+    // حفظ الـ ID
+    userDoc.set({"lastChildId": id}, SetOptions(merge: true));
+    print("Data saved successfully!");
+    emit(AddScuccesState());
+  }
+
+  void getAllDataFromFirestore() async {
+     final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      print("User is not authenticated.");
+      return;
+    }
+
+    try {
+       final userDoc = await FirebaseFirestore.instance.collection("users").doc(userId).get();
+
+      if (userDoc.exists) {
+        print("User Data: ${userDoc.data()}");
+
+        // جلب جميع الوثائق في مجموعة الأطفال (children)
+        final childrenSnapshot = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(userId)
+            .collection("children")
+            .get();
+
+        for (var childDoc in childrenSnapshot.docs) {
+          print("Child Data: ${childDoc.data()}");
+
+          // إذا كان هناك مجموعات فرعية إضافية لكل طفل
+          final goalsSnapshot = await FirebaseFirestore.instance
+              .collection("users")
+              .doc(userId)
+              .collection("children")
+              .doc(childDoc.id)
+              .collection("goals")
+              .get();
+
+          for (var goalDoc in goalsSnapshot.docs) {
+            print("Goal Data for child ${childDoc.id}: ${goalDoc.data()}");
+          }
+        }
+      } else {
+        print("No document found for user.");
+      }
+    } catch (e) {
+      print("Error retrieving data: $e");
+    }
+  }
+
   List<Map<String, dynamic>> scheduleSesoins = [];
 
   void saveChild(String name, String age, DateTime dateOfBirth,
@@ -85,7 +150,7 @@ class AddChildCubit extends Cubit<AddChildState> {
     final prompt = """
   Create a schedule for sessions lasting $durationInDays days for the child $childName with the following goals: ${goals.join(', ')}.
   Start Date: ${startDate.toIso8601String()}, End Date: ${endDate.toIso8601String()}.
-  Distribute the goals across the weekly sessions, considering the number of sessions per week (3 weekly sessions). Please return the schedule in JSON format with the following structure:
+  Distribute the goals across the weekly sessions, considering the number of sessions per week (3 weekly sessions session every three days ). Please return the schedule in JSON format with the following structure:
   {
     "weeks": [
       {
@@ -165,13 +230,30 @@ class Child {
     required this.id,
     required this.name,
     required this.age,
+    required this.dateOfBirth,
     required this.startDate,
     required this.endDate,
     required this.period,
-    required this.dateOfBirth,
     required this.parentOccupation,
-    required this.scheduleSesoins,
     required this.notes,
-    this.selectedGoals = const [], // قائمة الأهداف المحددة
+    required this.selectedGoals,
+    required this.scheduleSesoins,
   });
+
+  // تحويل الـ Child إلى Map لتخزينه في Firestore
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'age': age,
+      'dateOfBirth': dateOfBirth.toIso8601String(),
+      'startDate': startDate.toIso8601String(),
+      'endDate': endDate.toIso8601String(),
+      'period': period,
+      'parentOccupation': parentOccupation,
+      'notes': notes,
+      'goals': selectedGoals.map((goal) => goal.toMap()).toList(),
+      'scheduleSesoins': scheduleSesoins,
+    };
+  }
 }

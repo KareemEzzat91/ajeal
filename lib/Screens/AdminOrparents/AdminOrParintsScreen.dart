@@ -31,7 +31,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>welcomescreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const welcomescreen()));
                     },
                     child: Container(
                       margin: const EdgeInsets.all(10),
