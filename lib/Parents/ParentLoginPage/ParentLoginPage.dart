@@ -26,7 +26,6 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
         if (userDoc.data()!.isNotEmpty) {
           // جلب بيانات الطفل المرتبطة بالكود
           final child =Child.fromJson(userDoc.data()!);
-          print(child.selectedGoals.length);
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>ParentHomePage(parentCode:parentCode ,child:child)));
 
 

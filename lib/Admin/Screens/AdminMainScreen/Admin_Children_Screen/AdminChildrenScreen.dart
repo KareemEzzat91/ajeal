@@ -31,10 +31,10 @@ class Adminchildrenscreen extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<AddChildCubit, AddChildState>(
-
-        builder: ( context,  state) {
-          return  ListView.builder(
+      body: FutureBuilder <List<Map<String, Child>>>(
+          future: bloc.getAllDataFromFirestore(), // Call the method to get the Future
+        builder: (context, snapshot) {
+          return ListView.builder(
             itemCount: bloc.Children.length, // عدد الأطفال
             itemBuilder: (context, index) {
               final map = bloc.Children[index];//<String><Child>
@@ -46,8 +46,7 @@ class Adminchildrenscreen extends StatelessWidget {
               );
             },
           );
-
-        },
+        }
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

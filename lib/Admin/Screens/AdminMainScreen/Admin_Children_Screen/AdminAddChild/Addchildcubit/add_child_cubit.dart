@@ -14,6 +14,8 @@ class AddChildCubit extends Cubit<AddChildState> {
   static int id = 0;
   final Map<String, List<Goals>> selectedGoals = {}; // لتخزين الأهداف المختارة //id == ParentsPhone
   List<Map<String, Child>> Children = []; // id =  ParentsPhone+ id
+  List<Map<String, dynamic>> scheduleSesoins = [];
+
   void saveToFirestore()async {
     emit(AddLoadingState());
     final userId = FirebaseAuth.instance.currentUser?.uid;
@@ -26,6 +28,7 @@ class AddChildCubit extends Cubit<AddChildState> {
       await Future.forEach(childMap.entries, (MapEntry<String, Child> childEntry) async {
         await userDoc.collection("children").doc(childEntry.key).set(childEntry.value.toMap());
       });
+
     }
     // حفظ الـ ID
     userDoc.set({"lastChildId": id}, SetOptions(merge: true));
@@ -33,11 +36,13 @@ class AddChildCubit extends Cubit<AddChildState> {
     emit(AddScuccesState());
   }
 
-  void getAllDataFromFirestore() async {
-     final userId = FirebaseAuth.instance.currentUser?.uid;
+  Future<List<Map<String, Child>>>? getAllDataFromFirestore() async {
+     Children = []; // id =  ParentsPhone+ id
+
+    final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) {
       print("User is not authenticated.");
-      return;
+      return [];
     }
 
     try {
@@ -53,60 +58,66 @@ class AddChildCubit extends Cubit<AddChildState> {
             .collection("children")
             .get();
 
+
         for (var childDoc in childrenSnapshot.docs) {
-          print("Child Data: ${childDoc.data()}");
+          final child = Child.fromJson(childDoc.data());
+            Children.add({"parentOccupation": child}); // Add the child with a key
 
-          // إذا كان هناك مجموعات فرعية إضافية لكل طفل
-          final goalsSnapshot = await FirebaseFirestore.instance
-              .collection("users")
-              .doc(userId)
-              .collection("children")
-              .doc(childDoc.id)
-              .collection("goals")
-              .get();
-
-          for (var goalDoc in goalsSnapshot.docs) {
-            print("Goal Data for child ${childDoc.id}: ${goalDoc.data()}");
-          }
         }
+
+        return Children;
       } else {
         print("No document found for user.");
       }
+      return[];
     } catch (e) {
       print("Error retrieving data: $e");
+      return [];
     }
   }
 
-  List<Map<String, dynamic>> scheduleSesoins = [];
 
   void saveChild(String name, String age, DateTime dateOfBirth,
       DateTime startDate, DateTime endDate, String period,
       String parentOccupation, String notes, context) async {
     emit(AddLoadingState());
 
+try {
+  scheduleSesoins = await generateSchedule(startDate, endDate, period, name, selectedGoals[parentOccupation]!);
+  print(scheduleSesoins);
+
+  // إنشاء الطفل الجديد
+  final newChild = Child(
+    id: id++,
+    name: name,
+    age: age,
+    dateOfBirth: dateOfBirth,
+    startDate: startDate,
+    endDate: endDate,
+    period: period,
+    parentOccupation: parentOccupation,
+    notes: notes,
+    scheduleSesoins: scheduleSesoins,
+    selectedGoals: selectedGoals[parentOccupation]!,
+  );
+  final userid= FirebaseAuth.instance.currentUser!.uid;
+  await FirebaseFirestore.instance.collection("users").doc(userid).collection("children").
+  doc('$parentOccupation$id').set(newChild.toMap());
+  saveToFirestore();
+
+
+
+  Navigator.pop(context);
+  emit(AddScuccesState());
+}catch(e){
+  emit(AddFailureState(e.toString()));
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+  Navigator.pop(context);
+
+
+}
     // دعوة الدالة لإنشاء الجدول الزمني
-    scheduleSesoins = await generateSchedule(startDate, endDate, period, name, selectedGoals[parentOccupation]!);
-    print(scheduleSesoins);
 
-    // إنشاء الطفل الجديد
-    final newChild = Child(
-      id: id++,
-      name: name,
-      age: age,
-      dateOfBirth: dateOfBirth,
-      startDate: startDate,
-      endDate: endDate,
-      period: period,
-      parentOccupation: parentOccupation,
-      notes: notes,
-      scheduleSesoins: scheduleSesoins,
-      selectedGoals: selectedGoals[parentOccupation]!,
-    );
-
-    Children.add({'$parentOccupation$id': newChild});
-
-    Navigator.pop(context);
-    emit(AddScuccesState());
   }
 
   void AddGoal(Goals goal, String childId, BuildContext context) {

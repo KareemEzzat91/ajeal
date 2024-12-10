@@ -17,20 +17,11 @@ class Goals {
   // Factory constructor to create a Goals object from a Map
   factory Goals.fromMap(Map<String, dynamic> data) {
     return Goals(
-      goalName: data['goalName'] ?? '', // Default to empty string if 'goalName' is null
-      goalDescription: data['goalDescription'] ?? '', // Default to empty string if 'goalDescription' is null
-      sessions: (data['sessions'] as List?)
-          ?.map((session) => Map<String, dynamic>.from(session))
-          .toList() ??
-          [], // Default to an empty list if 'sessions' is null
-      evaluations: (data['evaluations'] as List?)
-          ?.map((evaluation) => Map<String, dynamic>.from(evaluation))
-          .toList() ??
-          [], // Default to an empty list if 'evaluations' is null
-      progressData: (data['progressData'] as List?)
-          ?.map((progress) => (progress as num).toDouble())
-          .toList() ??
-          [], // Default to an empty list if 'progressData' is null
+      goalName: data['goalName'] ?? '',
+      goalDescription: data['goalDescription'] ?? '',
+      sessions: (data['sessions'] as List?)?.map((session) => Map<String, dynamic>.from(session)).toList() ?? [],
+      evaluations: (data['evaluations'] as List?)?.map((evaluation) => Map<String, dynamic>.from(evaluation)).toList() ?? [], // Default to an empty list if 'evaluations' is null
+      progressData: (data['progressData'] as List?)?.map((progress) => (progress as num).toDouble()).toList() ?? [], // Default to an empty list if 'progressData' is null
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenSelectGooals/GoalDetailScreen.dart';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/SessionDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
 import 'package:flutter/material.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
@@ -80,7 +81,7 @@ class ParentHomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SessionSchedulePage(parentCode: parentCode),
+                    builder: (context) => SessionSchedulePage( scheduleSesoins: child.scheduleSesoins,),
                   ),
                 );
               },
@@ -148,7 +149,7 @@ class ChildGoalsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("goals.length:+${goals.length}");
+    print("goals.length:+${goals}");
     return Scaffold(
       appBar: AppBar(title: Text("Child's Goals & Progress")),
       body:  Padding(
@@ -157,6 +158,8 @@ class ChildGoalsPage extends StatelessWidget {
           shrinkWrap: true,
           itemCount: goals.length,
           itemBuilder: (context, index) {
+            final goal =goals[index];
+            goal.goalDescription;
             return GestureDetector(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (c)=>GoalDetailScreen(goal: goals[index],)));
@@ -240,15 +243,64 @@ class ChatScreen extends StatelessWidget {
 }
 
 class SessionSchedulePage extends StatelessWidget {
-  final String parentCode;
-
-  const SessionSchedulePage({required this.parentCode});
+  final List<Map<String, dynamic>> scheduleSesoins;
+  const SessionSchedulePage({super.key, required this.scheduleSesoins});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Schedule Child's Sessions")),
-      body: Center(child: Text("Session Schedule Functionality Here")),
+      body:               ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: scheduleSesoins.length,
+        itemBuilder: (context, index) {
+          final session = scheduleSesoins[index];
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SessionDetailScreen(
+                    sessionName: session['session'],
+                    date: session['date'],
+                    goals: List<String>.from(session['goals']),
+                  ),
+                ),
+              );
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.blue[50],
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.blueAccent),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'جلسة: ${session['session']}',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'التاريخ: ${session['date']}',
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'الأهداف: ${session['goals'].join(', ')}',
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

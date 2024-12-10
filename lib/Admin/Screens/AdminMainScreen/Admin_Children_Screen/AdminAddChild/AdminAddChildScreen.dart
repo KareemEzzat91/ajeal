@@ -308,7 +308,7 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
-                          ),Spacer(),InkWell(child: Icon(Icons.delete,color: Colors.white,),onTap: (){
+                          ),const Spacer(),InkWell(child: const Icon(Icons.delete,color: Colors.white,),onTap: (){
                             setState(() {
                               Selecteditems.removeAt(index);
                             });
