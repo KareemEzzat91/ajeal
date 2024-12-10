@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,7 +13,7 @@ class AddChildCubit extends Cubit<AddChildState> {
   AddChildCubit() : super(AddChildInitial());
   static int id = 0;
   final Map<String, List<Goals>> selectedGoals = {}; // لتخزين الأهداف المختارة //id == ParentsPhone
-  List<Map<String, Child>> Children = []; // id = ParentsPhone + id
+  List<Map<String, Child>> Children = []; // id =  ParentsPhone+ id
   void saveToFirestore()async {
     emit(AddLoadingState());
     final userId = FirebaseAuth.instance.currentUser?.uid;
@@ -213,47 +214,3 @@ class AddChildCubit extends Cubit<AddChildState> {
 
   }
 
-class Child {
-  int id;
-  String name;
-  String age;
-  DateTime dateOfBirth;
-  DateTime startDate;
-  DateTime endDate;
-  String period;
-  String parentOccupation;
-  String notes;
-  List<Goals> selectedGoals;
-  List<Map<String, dynamic>> scheduleSesoins;
-
-  Child({
-    required this.id,
-    required this.name,
-    required this.age,
-    required this.dateOfBirth,
-    required this.startDate,
-    required this.endDate,
-    required this.period,
-    required this.parentOccupation,
-    required this.notes,
-    required this.selectedGoals,
-    required this.scheduleSesoins,
-  });
-
-  // تحويل الـ Child إلى Map لتخزينه في Firestore
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'age': age,
-      'dateOfBirth': dateOfBirth.toIso8601String(),
-      'startDate': startDate.toIso8601String(),
-      'endDate': endDate.toIso8601String(),
-      'period': period,
-      'parentOccupation': parentOccupation,
-      'notes': notes,
-      'goals': selectedGoals.map((goal) => goal.toMap()).toList(),
-      'scheduleSesoins': scheduleSesoins,
-    };
-  }
-}
