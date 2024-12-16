@@ -26,7 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
       final messageText = _messageController.text;
-      final senderId = FirebaseAuth.instance.currentUser?.uid ?? widget.parentId;
+      final senderId = widget.isparent? widget.parentId: FirebaseAuth.instance.currentUser?.uid ?? widget.parentId;
 
       final messageRef = FirebaseFirestore.instance
           .collection('Chats')
@@ -91,7 +91,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final message = messages[index].data() as Map<String, dynamic>;
-                    final isDoctorMessage = message['sender_id'] == widget.doctorId;
+                    final isDoctorMessage = message['sender_id'] == widget.parentId;// اهلا  sendrid = dr_id
 
                     return ChatBubble(
                       message: message['text'],
@@ -157,6 +157,7 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isdark =Theme.of(context).brightness==Brightness.dark;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -168,10 +169,10 @@ class ChatBubble extends StatelessWidget {
               backgroundImage: NetworkImage(
                   'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'),
             ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Container(
-            padding: EdgeInsets.all(12),
-            constraints: BoxConstraints(maxWidth: 250),
+            padding: const EdgeInsets.all(12),
+            constraints: const BoxConstraints(maxWidth: 250),
             decoration: BoxDecoration(
               color: isDoctorMessage ? Colors.blue[100] : Colors.green[100],
               borderRadius: BorderRadius.circular(16),
@@ -186,11 +187,11 @@ class ChatBubble extends StatelessWidget {
                 SizedBox(height: 4),
                 Text(
                   message,
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16,color: isdark?Colors.white:Colors.black),
                 ),
                 SizedBox(height: 4),
                 Text(
-                  time,
+                  convertTo12Hour(time),
                   style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
@@ -200,4 +201,21 @@ class ChatBubble extends StatelessWidget {
       ),
     );
   }
+}
+String convertTo12Hour(String time) {
+  try {  List<String> parts = time.split(':');
+  int hours = int.parse(parts[0]);
+  int minutes = int.parse(parts[1]);
+
+  // تحويل الساعة إلى صيغة 12 ساعة
+  String period = hours >= 12 ? "PM" : "AM";
+  hours = hours > 12 ? hours - 12 : hours;
+
+  // تقريب الدقائق
+  minutes = (minutes + 0.5).toInt(); // تقريبي
+
+  return "$hours:${minutes.toString().padLeft(2, '0')} $period";}catch(e){
+    return "N/A";
+  }
+
 }

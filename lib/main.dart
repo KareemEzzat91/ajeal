@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
             ],
             supportedLocales: S.delegate.supportedLocales,
             theme: state.themeData,
-            locale: state.Loc, // Use the updated lang
+            locale: const Locale("ar"), // Use the updated lang
             home: const AdminOrParentsScreen(),
           );
         },
