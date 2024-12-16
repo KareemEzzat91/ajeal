@@ -1,7 +1,6 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/ParentHomeScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +25,9 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
         if (userDoc.data()!.isNotEmpty) {
           // جلب بيانات الطفل المرتبطة بالكود
           final child =Child.fromJson(userDoc.data()!);
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>ParentHomePage(parentCode:parentCode ,child:child)));
+          final Adminid=userId;
+
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>ParentHomePage(parentCode:parentCode ,child:child,AdminId: Adminid,)));
 
 
 

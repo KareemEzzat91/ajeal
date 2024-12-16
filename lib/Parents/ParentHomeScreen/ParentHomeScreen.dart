@@ -1,14 +1,18 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenSelectGooals/GoalDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/SessionDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
+import 'package:ajeal/Parents/ParentHomeScreen/ParentHomeScreen.dart';
+import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/Allparentschats/GlobalchatScreen.dart';
+import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/ParentAdminchat/ParentAdminchatscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
 
 class ParentHomePage extends StatelessWidget {
   final String parentCode;
   final Child child;
+  final String AdminId;
 
-  const ParentHomePage({required this.parentCode, required this.child});
+  const ParentHomePage({required this.parentCode, required this.child, required this.AdminId});
 
 
   @override
@@ -19,74 +23,91 @@ class ParentHomePage extends StatelessWidget {
         title: Text("Welcome, Parent"),
         backgroundColor: Colors.teal,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Greeting
-            Text(
-              "Hello, ${child.name}!",
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              "Age: ${child.age}",
-              style: TextStyle(fontSize: 18, color: Colors.grey),
-            ),
-            SizedBox(height: 20),
-
-            // Child's Progress Section
-            _buildProgressSection(),
-
-            // Goals Button
-            SizedBox(height: 20),
-            _buildNavigationButton(
-              context,
-              label: "View Child's Goals & Progress",
-              onPressed: () {
-                // Navigate to Goals Page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChildGoalsPage( goals:child.selectedGoals ,),
-                  ),
-                );
-              },
-            ),
-
-            // Chat Button
-            SizedBox(height: 20),
-            _buildNavigationButton(
-              context,
-              label: "Chat with Admin/Teacher",
-              onPressed: () {
-                // Navigate to Chat Page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatScreen(parentCode: parentCode),
-                  ),
-                );
-              },
-            ),
-
-            // Session Schedule Button
-            SizedBox(height: 20),
-            _buildNavigationButton(
-              context,
-              label: "Schedule Child's Sessions",
-              onPressed: () {
-                // Navigate to Session Schedule Page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SessionSchedulePage( scheduleSesoins: child.scheduleSesoins,),
-                  ),
-                );
-              },
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Greeting
+              Text(
+                "Hello, ${child.name}!",
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Text(
+                "Age: ${child.age}",
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+              SizedBox(height: 20),
+        
+              // Child's Progress Section
+              _buildProgressSection(),
+        
+              // Goals Button
+              SizedBox(height: 20),
+              _buildNavigationButton(
+                context,
+                label: "View Child's Goals & Progress",
+                onPressed: () {
+                  // Navigate to Goals Page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChildGoalsPage( goals:child.selectedGoals ,),
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 20),
+              _buildNavigationButton(
+                context,
+                label: "Schedule Child's Sessions",
+                onPressed: () {
+                  // Navigate to Session Schedule Page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SessionSchedulePage( scheduleSesoins: child.scheduleSesoins,),
+                    ),
+                  );
+                },
+              ),
+        
+              // Chat Button
+              SizedBox(height: 20),
+              _buildNavigationButton(
+                context,
+                label: "Chat with Teacher",
+                onPressed: () {
+                  // Navigate to Chat Page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatScreen(isparent: true,chatId:AdminId+child.parentOccupation,doctorId:AdminId ,parentId:child.parentOccupation+1.toString() ,),
+                    ),
+                  );
+                },
+              ),
+        
+              // Session Schedule Button
+              SizedBox(height: 20),
+              _buildNavigationButton(
+                context,
+                label: "Global Chat",
+                onPressed: () {
+                  // Navigate to Chat Page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GlobalChatScreen(),
+                    ),
+                  );
+                },
+              ),
+        
+            ],
+          ),
         ),
       ),
     );
@@ -228,19 +249,6 @@ class ChildGoalsPage extends StatelessWidget {
   }
 }
 
-class ChatScreen extends StatelessWidget {
-  final String parentCode;
-
-  const ChatScreen({required this.parentCode});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Chat with Admin/Teacher")),
-      body: Center(child: Text("Chat Functionality Here")),
-    );
-  }
-}
 
 class SessionSchedulePage extends StatelessWidget {
   final List<Map<String, dynamic>> scheduleSesoins;

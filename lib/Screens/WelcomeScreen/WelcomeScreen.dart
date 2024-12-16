@@ -1,5 +1,6 @@
 import 'package:ajeal/Parents/ParentLoginPage/ParentLoginPage.dart';
 import 'package:ajeal/generated/l10n.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ class welcomescreen extends StatelessWidget {
             const Image(image: AssetImage("assets/images/Rectangle 27.png"),fit: BoxFit.cover,width: double.infinity,),
             const SizedBox(height: 28,),
 
-            buildTextButton(S.of(context).Login,Color(0xffFFCB7C),context),
+            buildTextButton("Login".tr(),Color(0xffFFCB7C),context),
             const SizedBox(height: 15,),
             Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(40),border: Border.all(color: Colors.green)),child: buildTextButton(S.of(context).Register,Color(0xfffff),context))
     ],

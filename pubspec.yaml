@@ -40,6 +40,7 @@ dependencies:
   flashy_tab_bar2: ^0.0.10
   intl: ^0.19.0
   dart_openai: ^5.1.0
+  shared_preferences: ^2.3.3
   envied: ^1.0.0
   flutter_gemini: ^2.0.5
 
@@ -50,6 +51,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  easy_localization: ^3.0.7
 
 
 dev_dependencies:
@@ -77,7 +79,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
-  #   - images/a_dot_ham.jpeg
+    - assets/translations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -4,6 +4,7 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Objectives_Screen/Admi
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Profile_Screen/AdminProfileScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Reports_Screen/Admin_Reports_Screen.dart';
 import 'package:ajeal/generated/l10n.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,23 +42,23 @@ class _AdminmainScreenState extends State<AdminmainScreen> {
         items: [
           FlashyTabBarItem(
             icon: Icon(Icons.child_care_rounded),
-            title: Text(S.of(context).ChildrenPage),
+            title: Text("ChildrenPage".tr()),
           ),
           FlashyTabBarItem(
             icon: Icon(Icons.analytics_outlined),
-            title: Text(S.of(context).ReportsPage),
+            title: Text("ReportsPage".tr()),
           ),
           FlashyTabBarItem(
             icon: Icon(Icons.emoji_objects_outlined),
-            title: Text(S.of(context).ObjectivesPage),
+            title: Text("ObjectivesPage".tr()),
           ),
           FlashyTabBarItem(
             icon: Icon(Icons.comment_rounded),
-            title: Text(S.of(context).CommunicationPage),
+            title: Text("CommunicationPage".tr()),
           ),
           FlashyTabBarItem(
             icon: Icon(Icons.person),
-            title: Text(S.of(context).ProfilePage),
+            title: Text("ProfilePage".tr()),
           ),
         ],
       ),

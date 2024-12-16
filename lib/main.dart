@@ -3,6 +3,8 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminA
 import 'package:ajeal/Screens/AdminOrparents/AdminOrParintsScreen.dart';
  import 'package:ajeal/firebase_options.dart';
 import 'package:ajeal/generated/l10n.dart';
+import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
+import 'package:ajeal/maincubit/main_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +20,6 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   runApp(const MyApp());
 }
 
@@ -26,22 +27,32 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+
     return  MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context)=>MainCubit()),
         BlocProvider(create: (context) => SignCubit()),
         BlocProvider(create: (context)=>AddChildCubit()),
+        BlocProvider(create: (context) => ThemesCubit()..setInitialTheme()), // إضافة BlocProvider للثيم
+
+
 
       ],
-      child:  GetMaterialApp(
-        locale: const Locale("ar"),
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: S.delegate.supportedLocales,
-        home: const AdminOrParentsScreen(),
+      child:  BlocBuilder<ThemesCubit,ThemState>(
+        builder: (context, state) {
+          return GetMaterialApp(
+            localizationsDelegates: const [
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: S.delegate.supportedLocales,
+            theme: state.themeData,
+            locale: state.Loc, // Use the updated lang
+            home: const AdminOrParentsScreen(),
+          );
+        },
       ),
     );
   }

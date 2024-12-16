@@ -1,6 +1,10 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/add_child_cubit.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/SessionDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
+import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/ParentAdminchat/ParentAdminchatscreen.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenSelectGooals/GoalDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
@@ -23,12 +27,16 @@ class ChildDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   final  AdminId=FirebaseAuth.instance.currentUser?.uid;
     return Scaffold(
       appBar: AppBar(
         title: Text(
           "تفاصيل $childName",
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
+        leading: IconButton(onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (c)=>ChatScreen(isparent: false,chatId:AdminId!+child.parentOccupation,doctorId:AdminId ,parentId:child.parentOccupation+1.toString() ,)));
+        }, icon: const Icon(Icons.chat)),
         centerTitle: true,
         backgroundColor: Colors.blueAccent,
         elevation: 0,

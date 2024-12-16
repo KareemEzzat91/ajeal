@@ -1,14 +1,23 @@
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/LoginScreen.dart';
 import 'package:ajeal/Screens/WelcomeScreen/WelcomeScreen.dart';
 import 'package:ajeal/generated/l10n.dart';
+import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdminOrParentsScreen extends StatelessWidget {
   const AdminOrParentsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final iSDarkMode = Theme.of(context).brightness ==Brightness.dark;
+
+    final Loc =Localizations.localeOf(context).languageCode;
+
+    final bloc2 = context.read<ThemesCubit>();
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -124,8 +133,15 @@ Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AdminLo
                     ),
                   ),
                 ),
+
               ],
             ),
+            TextButton(onPressed: (){
+              bloc2.changelang(Loc);
+            }, child: const Text("Change Langauge ")),
+            TextButton(onPressed: (){
+              bloc2.toggleTheme(!iSDarkMode);
+            }, child: const Text("Change Theme "))
           ],
         ),
       ),
