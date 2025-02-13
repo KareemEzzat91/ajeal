@@ -1,15 +1,21 @@
+import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/ParentAdminchat/ParentAdminchatscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class GlobalChatScreen extends StatefulWidget {
+  final String childName; // لتحديد الدردشة
+  final String doctorId;
+  final String parentId;
+  final bool isparent;
+  const GlobalChatScreen({super.key,required this.childName, required this.doctorId, required this.parentId, required this.isparent});
+
   @override
   _GlobalChatScreenState createState() => _GlobalChatScreenState();
 }
 
 class _GlobalChatScreenState extends State<GlobalChatScreen> {
   final TextEditingController _messageController = TextEditingController();
-  final String doctorId = 'doctor123'; // Example Doctor ID
-  final String parentId = 'parent456'; // Example Parent ID
+
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +25,11 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundImage: NetworkImage('https://www.example.com/doctor-avatar.png'),
+              backgroundImage: NetworkImage('https://thumbs.dreamstime.com/b/global-chat-logo-template-design-world-207780009.jpg'),
             ),
             SizedBox(width: 8),
-            Text('Dr. Sarah'),
+            Text('Global Chat'),
             Spacer(),
-            Text('🟢 Online', style: TextStyle(color: Colors.green)),
           ],
         ),
         backgroundColor: Colors.blue[700],
@@ -33,41 +38,54 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
         children: [
           // Chat Messages Displayed
           Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('global_chat')
-                  .doc('messages')
-                  .collection('messages')
-                  .orderBy('timestamp', descending: false)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('global_chat')
+                    .doc('messages')
+                    .collection('messages')
+                    .orderBy('timestamp', descending: false)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text('No messages yet.'));
-                }
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text('No messages yet.', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)));
+                  }
 
-                final messages = snapshot.data!.docs;
+                  final messages = snapshot.data!.docs;
 
-                return ListView.builder(
-                  padding: const EdgeInsets.all(10),
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    final message = messages[index].data() as Map<String, dynamic>;
-                    final isDoctorMessage = message['sender_id'] == doctorId;
-                    return ChatBubble(
-                      message: message['text'],
-                      sender: isDoctorMessage ? 'Doctor' : 'Parent',
-                      time: message['timestamp'] != null
-                          ? (message['timestamp'] as Timestamp).toDate().toString().split(' ')[1]
-                          : 'N/A',
-                      isDoctorMessage: isDoctorMessage,
-                    );
-                  },
-                );
-              },
+                  return ListView.builder(
+                    padding: const EdgeInsets.all(10),
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      final message = messages[index].data() as Map<String, dynamic>;
+                      final isDoctorMessage = message['sender_id'] == widget.doctorId;
+                      final isMyMessage = message['sender_id'] == widget.parentId;
+
+                      return GestureDetector(
+                        onTap: (){  
+                          widget.isparent==false &&message["sender_id"]!=widget.doctorId ?Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(chatId: widget.doctorId+ message['sender_id'], doctorId: widget.doctorId, parentId: message['sender_id'], isparent: false))) :null;
+                        },
+                        child: ChatBubble(
+                          message: message['text'],
+                          sender: isDoctorMessage ? "Doctor" : message["senderName"],
+                          time: message['timestamp'] != null
+                              ? (message['timestamp'] as Timestamp).toDate().toString().split(' ')[1]
+                              : 'N/A',
+                          messageType: isDoctorMessage ? MessageType.doctor : (isMyMessage ? MessageType.myMessage : MessageType.otherUser),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
           // Message Input Section
@@ -76,26 +94,46 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
             child: Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.attach_file),
+                  icon: const Icon(Icons.attach_file, color: Colors.blueAccent),
                   onPressed: () {
                     // Handle attachments
                   },
                 ),
                 Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      hintText: 'Type your message...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      controller: _messageController,
+                      decoration: InputDecoration(
+                        hintText: 'Type your message...',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: sendMessage,
+                const SizedBox(width: 8),
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.blueAccent,
+                  child: IconButton(
+                    icon: const Icon(Icons.send, color: Colors.white),
+                    onPressed: sendMessage,
+                  ),
                 ),
               ],
             ),
@@ -117,8 +155,9 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
           .collection('messages');
 
       await messageRef.add({
-        'sender_id': parentId,  // Or doctorId if doctor is sending
+        'sender_id': widget.isparent? widget.parentId: widget.doctorId,  // Or doctorId if doctor is sending
         'text': messageText,
+        'senderName':widget.isparent?widget.childName:"Doctor",
         'timestamp': FieldValue.serverTimestamp(),
       });
 
@@ -127,44 +166,76 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
   }
 }
 
+enum MessageType {
+  doctor,
+  myMessage,
+  otherUser,
+}
+
 class ChatBubble extends StatelessWidget {
   final String message;
   final String sender;
   final String time;
-  final bool isDoctorMessage;
+  final MessageType messageType;
 
   const ChatBubble({
     required this.message,
     required this.sender,
     required this.time,
-    required this.isDoctorMessage,
+    required this.messageType,
   });
 
   @override
   Widget build(BuildContext context) {
+    Color bubbleColor;
+    CrossAxisAlignment alignment;
+    MainAxisAlignment rowAlignment;
+    Widget? avatar;
+
+    switch (messageType) {
+      case MessageType.doctor:
+        bubbleColor = Colors.blue[100]!;
+        alignment = CrossAxisAlignment.start;
+        rowAlignment = MainAxisAlignment.start;
+        avatar = const CircleAvatar(
+          radius: 20,
+          backgroundImage: AssetImage('assets/images/Mohsen.jpg'),
+        );
+        break;
+      case MessageType.myMessage:
+        bubbleColor = Colors.green[100]!;
+        alignment = CrossAxisAlignment.end;
+        rowAlignment = MainAxisAlignment.end;
+        avatar = null;
+        break;
+      case MessageType.otherUser:
+        bubbleColor = Colors.grey[300]!;
+        alignment = CrossAxisAlignment.start;
+        rowAlignment = MainAxisAlignment.start;
+        avatar = const CircleAvatar(
+          radius: 20,
+          backgroundColor: Colors.grey,
+          child: Icon(Icons.person, color: Colors.white),
+        );
+        break;
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
-        mainAxisAlignment:
-        isDoctorMessage ? MainAxisAlignment.start : MainAxisAlignment.end,
+        mainAxisAlignment: rowAlignment,
         children: [
-          if (isDoctorMessage)
-            const CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage('https://www.example.com/doctor-avatar.png'),
-            ),
-          const SizedBox(width: 8),
+          if (avatar != null) avatar,
+          if (avatar != null) const SizedBox(width: 8),
           Container(
             padding: const EdgeInsets.all(12),
-            constraints: BoxConstraints(maxWidth: 250),
+            constraints: const BoxConstraints(maxWidth: 250),
             decoration: BoxDecoration(
-              color: isDoctorMessage ? Colors.blue[100] : Colors.green[100],
+              color: bubbleColor,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(
-              crossAxisAlignment: isDoctorMessage
-                  ? CrossAxisAlignment.start
-                  : CrossAxisAlignment.end,
+              crossAxisAlignment: alignment,
               children: [
                 Text(
                   sender,
@@ -187,4 +258,22 @@ class ChatBubble extends StatelessWidget {
       ),
     );
   }
+}
+
+String convertTo12Hour(String time) {
+  try {  List<String> parts = time.split(':');
+  int hours = int.parse(parts[0]);
+  int minutes = int.parse(parts[1]);
+
+  // تحويل الساعة إلى صيغة 12 ساعة
+  String period = hours >= 12 ? "PM" : "AM";
+  hours = hours > 12 ? hours - 12 : hours;
+
+  // تقريب الدقائق
+  minutes = (minutes + 0.5).toInt(); // تقريبي
+
+  return "$hours:${minutes.toString().padLeft(2, '0')} $period";}catch(e){
+    return "N/A";
+  }
+
 }

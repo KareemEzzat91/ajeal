@@ -3,10 +3,10 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Communicate_Screen/Adm
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Objectives_Screen/AdminObjectevesScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Profile_Screen/AdminProfileScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Reports_Screen/Admin_Reports_Screen.dart';
-import 'package:ajeal/generated/l10n.dart';
+import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/Allparentschats/GlobalchatScreen.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 class AdminmainScreen extends StatefulWidget {
   const AdminmainScreen({super.key});
@@ -18,12 +18,11 @@ class AdminmainScreen extends StatefulWidget {
 class _AdminmainScreenState extends State<AdminmainScreen> {
    int _selectedIndex =0;
    List Screens =[
-     Adminchildrenscreen(),
-     AdminReportsScreen (),
-     Adminobjectevesscreen(),
-
-     Admincommunicatescreen(),
-     Adminprofilescreen(),
+     const Adminchildrenscreen(),
+     const AdminReportsScreen (),
+     const Adminobjectevesscreen(),
+      GlobalChatScreen(childName: '', doctorId: FirebaseAuth.instance.currentUser!.uid, parentId: '', isparent: false),
+     const Adminprofilescreen(),
 
 
 
@@ -41,23 +40,23 @@ class _AdminmainScreenState extends State<AdminmainScreen> {
         }),
         items: [
           FlashyTabBarItem(
-            icon: Icon(Icons.child_care_rounded),
+            icon: const Icon(Icons.child_care_rounded),
             title: Text("ChildrenPage".tr()),
           ),
           FlashyTabBarItem(
-            icon: Icon(Icons.analytics_outlined),
+            icon: const Icon(Icons.analytics_outlined),
             title: Text("ReportsPage".tr()),
           ),
           FlashyTabBarItem(
-            icon: Icon(Icons.emoji_objects_outlined),
+            icon: const Icon(Icons.emoji_objects_outlined),
             title: Text("ObjectivesPage".tr()),
           ),
           FlashyTabBarItem(
-            icon: Icon(Icons.comment_rounded),
+            icon: const Icon(Icons.comment_rounded),
             title: Text("CommunicationPage".tr()),
           ),
           FlashyTabBarItem(
-            icon: Icon(Icons.person),
+            icon: const Icon(Icons.person),
             title: Text("ProfilePage".tr()),
           ),
         ],

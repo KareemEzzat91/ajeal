@@ -159,6 +159,7 @@ try {
     final durationInDays = endDate.difference(startDate).inDays;
     final sessionsPerWeek = 3; // عدد الجلسات الأسبوعية
 
+    
     final prompt = """
   Create a schedule for sessions lasting $durationInDays days for the child $childName with the following goals: ${goals.join(', ')}.
   Start Date: ${startDate.toIso8601String()}, End Date: ${endDate.toIso8601String()}.

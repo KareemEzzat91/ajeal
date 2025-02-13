@@ -1,4 +1,5 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenScreen.dart';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/AdminmainScreen/AdminmainScreen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class SignCubit extends Cubit<SignState> {
             {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const Adminchildrenscreen()),
+            MaterialPageRoute(builder: (context) => const AdminmainScreen()),
           );
             }
           else {

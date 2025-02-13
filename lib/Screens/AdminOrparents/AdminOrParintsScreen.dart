@@ -23,7 +23,7 @@ class AdminOrParentsScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
              Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0),
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: Text(
                 S.of(context).AdminOrParents,
                 style: const TextStyle(
@@ -57,7 +57,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                             color: Colors.black.withOpacity(0.2),
                             spreadRadius: 2,
                             blurRadius: 8,
-                            offset: Offset(0, 4),
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
@@ -70,7 +70,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                               size: 70,
                               color: Colors.white,
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Text(
                               S.of(context).Parents,
                               style: const TextStyle(
@@ -105,7 +105,7 @@ Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AdminLo
                             color: Colors.black.withOpacity(0.2),
                             spreadRadius: 2,
                             blurRadius: 8,
-                            offset: Offset(0, 4),
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
@@ -118,7 +118,7 @@ Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AdminLo
                               size: 70,
                               color: Colors.white,
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Text(
                               S.of(context).Admin,
                               style: const TextStyle(

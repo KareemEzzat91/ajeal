@@ -57,7 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
                ,
             ),
             const SizedBox(width: 8),
-            widget.isparent ?  Text('Dr. Mohammed',style: TextStyle(fontSize: 15),):const Text("Parents",style: TextStyle(fontSize: 15)),
+            widget.isparent ?  const Text('Dr. Mohammed',style: TextStyle(fontSize: 15),):const Text("Parents",style: TextStyle(fontSize: 15)),
             const Spacer(),
             const Text('🟢 Online', style: TextStyle(color: Colors.green,fontSize: 12)),
           ],

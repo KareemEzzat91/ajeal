@@ -1,7 +1,6 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenSelectGooals/GoalDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/SessionDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
-import 'package:ajeal/Parents/ParentHomeScreen/ParentHomeScreen.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/Allparentschats/GlobalchatScreen.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/ParentAdminchat/ParentAdminchatscreen.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,6 @@ class ParentHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(child.scheduleSesoins.length);
     return Scaffold(
       appBar: AppBar(
         title: Text("Welcome, Parent"),
@@ -100,7 +98,7 @@ class ParentHomePage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => GlobalChatScreen(),
+                      builder: (context) => GlobalChatScreen(childName:child.name,isparent: true,doctorId:AdminId ,parentId:child.parentOccupation+1.toString() ,),
                     ),
                   );
                 },

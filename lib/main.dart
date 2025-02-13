@@ -3,6 +3,7 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminA
 import 'package:ajeal/Screens/AdminOrparents/AdminOrParintsScreen.dart';
  import 'package:ajeal/firebase_options.dart';
 import 'package:ajeal/generated/l10n.dart';
+import 'package:ajeal/helpers/AIhelper/SecretKey/secretkey.dart';
 import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
 import 'package:ajeal/maincubit/main_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,7 +15,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 void main() async{
 
-  Gemini.init(apiKey: "AIzaSyAydD4VLkskA7IZDfu6tKo3lgxhfjW-grQ");
+  Gemini.init(apiKey: Env.apiKey);
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
