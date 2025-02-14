@@ -1,6 +1,7 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/AdminmainScreen/AdminmainScreen.dart';
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -30,6 +31,16 @@ class SignCubit extends Cubit<SignState> {
         if (user != null) {
           if (user.emailVerified)
             {
+            final doctorIdsnap= await FirebaseFirestore.instance.collection("users").doc(user.uid).get();
+            final  doctorId= doctorIdsnap['Doctor_id'];
+             
+            FirebaseFirestore .instance.collection("Doctors").doc(doctorId).set({"Doctor_id": user.uid});
+
+
+
+
+
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const AdminmainScreen()),
@@ -72,10 +83,18 @@ class SignCubit extends Cubit<SignState> {
         );
 
         User? user = response.user;
+        final doctorId= nameController.text+MobileController.text;
 
         if (user != null) {
           user.sendEmailVerification();
           emit (SignFaliureState("your account done please verfiy your account check mail"));
+          FirebaseFirestore.instance.collection("users").doc(user.uid).set({
+            'Doctor_Name': nameController.text ,
+            'Doctor_id' :doctorId//name+phone number
+          });
+          // Doctor_id
+          FirebaseFirestore.instance.collection("Doctors").doc(doctorId).set({"Doctor_id": user.uid});
+
           emit(SignSuccesState());
         } else {
           emit(SignFaliureState("User creation failed"));

@@ -3,7 +3,6 @@ import 'package:ajeal/helpers/responsive/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'LoginScreen.dart';
 import 'cubit/sign_cubit.dart';
 
@@ -194,7 +193,7 @@ class Signupscreen extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => AdminLoginScreen()),
                       );
 
-                    }, child:  Text("Login",style: TextStyle(color: Color(0xff0186c7),fontSize: TextSize(context,isExtraSmallSize:13,isMobileSize: 15,isMobileLarge:18,isIpadSize: 20,isTabletSize: 22,isLargeTabletSize: 30,defaultSize: 18  ),fontWeight: FontWeight.bold),))
+                    }, child:  Text("Login",style: TextStyle(color: const Color(0xff0186c7),fontSize: TextSize(context,isExtraSmallSize:13,isMobileSize: 15,isMobileLarge:18,isIpadSize: 20,isTabletSize: 22,isLargeTabletSize: 30,defaultSize: 18  ),fontWeight: FontWeight.bold),))
                   ],)
 
 

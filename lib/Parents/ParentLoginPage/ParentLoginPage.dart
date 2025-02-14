@@ -18,22 +18,31 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
       final parentCode = _parentCodeController.text;
 
       if (parentCode.isNotEmpty) {
-        final userId = _admincodeController.text;
+        final adminID = _admincodeController.text;
         // تحقق من الـ parentCode
-        final userDoc = await FirebaseFirestore.instance.collection("users").doc(userId).collection("children").doc(parentCode).get();
+        final DoctorKeysnapshot = await FirebaseFirestore.instance.collection("Doctors").doc(adminID).get() ; 
+        if (DoctorKeysnapshot.data()!.isNotEmpty) {
+          final doctorkey =DoctorKeysnapshot['Doctor_id'];
+          final userDoc = await FirebaseFirestore.instance.collection("users")
+              .doc(doctorkey).collection("children").doc(parentCode)
+              .get();
+          if (userDoc.data()!.isNotEmpty) {
+            // جلب بيانات الطفل المرتبطة بالكود
+            final child =Child.fromJson(userDoc.data()!);
+            final Adminid=doctorkey;
 
-        if (userDoc.data()!.isNotEmpty) {
-          // جلب بيانات الطفل المرتبطة بالكود
-          final child =Child.fromJson(userDoc.data()!);
-          final Adminid=userId;
-
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>ParentHomePage(parentCode:parentCode ,child:child,AdminId: Adminid,)));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>ParentHomePage(parentCode:parentCode ,child:child,AdminId: Adminid,)));
 
 
 
-        } else {
-          print("Invalid parent code");
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please Enter The Right code")));
+          }
         }
+
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please Enter The Right code")));
+
       }
     }catch(e){
 
