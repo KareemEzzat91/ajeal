@@ -66,7 +66,7 @@ class ParentHomePage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SessionSchedulePage( scheduleSesoins: child.scheduleSesoins,),
+                      builder: (context) => SessionSchedulePage(childId:child.parentOccupation+"${child.id+1}" ,scheduleSesoins: child.scheduleSesoins,),
                     ),
                   );
                 },
@@ -162,7 +162,7 @@ class ParentHomePage extends StatelessWidget {
 }
 
 class ChildGoalsPage extends StatelessWidget {
-  final List<Goals> goals;
+  final List<Goal> goals;
 
   const ChildGoalsPage({ required this.goals});
 
@@ -249,8 +249,9 @@ class ChildGoalsPage extends StatelessWidget {
 
 
 class SessionSchedulePage extends StatelessWidget {
+  final String childId;
   final List<Map<String, dynamic>> scheduleSesoins;
-  const SessionSchedulePage({super.key, required this.scheduleSesoins});
+  const SessionSchedulePage({super.key, required this.scheduleSesoins, required this.childId});
 
   @override
   Widget build(BuildContext context) {
@@ -268,9 +269,13 @@ class SessionSchedulePage extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => SessionDetailScreen(
+                    childId: childId,
                     sessionName: session['session'],
                     date: session['date'],
                     goals: List<String>.from(session['goals']),
+                      notes: session['notes']??'',
+                      rate: session['rate']??0.toDouble(),
+                      tasks : List.from(session['tasks']??[])
                   ),
                 ),
               );

@@ -2,14 +2,11 @@
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/ResetPasswordScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/SignUpScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/cubit/sign_cubit.dart';
-import 'package:ajeal/Admin/Screens/AdminMainScreen/AdminmainScreen/AdminmainScreen.dart';
 import 'package:ajeal/helpers/customtextfiled/customtextfiled.dart';
 import 'package:ajeal/helpers/responsive/responsive.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class AdminLoginScreen extends StatelessWidget {
    AdminLoginScreen({super.key,});
@@ -64,97 +61,10 @@ class AdminLoginScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8,),
                   Text("قم بادخال المعلومات اسفل ",style: TextStyle(color: Colors.grey.shade400,fontSize:Responsive.TextSize(context,isExtraSmallSize:10,isMobileSize: 17,isMobileLarge:19,isIpadSize: 26,isTabletSize: 25,isLargeTabletSize: 40,defaultSize: 15  )),)
-                  ,Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: InkWell( onTap: (){
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>AdminmainScreen()));
-                          }
-                           ,
-                            child: Container(
-                              height:height/11.5,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.grey, // You can customize the color of the border
-                                    width: 0.35 // Adjust the width of the border
-                                ),
-                                borderRadius: BorderRadius.circular(20), // Optional: Rounded corners
-                              ),
-                              child:  Row(
-                                children: [
-                                  const SizedBox(width: 20),
-                                  Icon(Icons.facebook, color: Colors.blue,size: Responsive.TextSize(context,isExtraSmallSize:30,isMobileSize: 35,isMobileLarge:40,isIpadSize: 60,isTabletSize: 80,isLargeTabletSize: 90,defaultSize: 35  ),), // 35// Added color to the icon
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    "Facebook",
-                                    style: TextStyle(color: Colors.black,fontSize:Responsive.TextSize(context,isExtraSmallSize:14,isMobileSize: 17,isMobileLarge:26,isIpadSize: 54,isTabletSize: 64,isLargeTabletSize: 70,defaultSize: 18  ),fontWeight: FontWeight.bold),//17
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10,),
-                        Expanded(
-                          child: InkWell(
-                            onTap:() {},
-
-                            child: Container(
-                              height:height/11.5,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.grey, // You can customize the color of the border
-                                  width: 0.35, // Adjust the width of the border
-                                ),
-                                borderRadius: BorderRadius.circular(20), // Optional: Rounded corners
-                              ),
-                              child: Row(
-                                children: [
-                                  const SizedBox(width: 10),
-/*
-                                  Image.asset("assets/images/Google-Symbol.png",width: Responsive.TextSize(context,isExtraSmallSize:40,isMobileSize: 45,isMobileLarge:60,isIpadSize: 88,isTabletSize: 90,isLargeTabletSize: 130,defaultSize: 43  ),),
-*/
-                                  const SizedBox(width: 4),
-                                   Text(
-                                    "Google",
-                                    style: TextStyle(color: Colors.black,fontSize:Responsive.TextSize(context,isExtraSmallSize:17,isMobileSize: 20,isMobileLarge:26,isIpadSize: 57,isTabletSize: 60,isLargeTabletSize: 70,defaultSize: 18  ),fontWeight: FontWeight.bold ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          color: Colors.black.withOpacity(0.6),
-                          thickness: 1,
-                        ),
-                      ),
-                      const SizedBox(width: 8), // Add some spacing
-                       Text(
-                        "Or Login With",
-                        style: TextStyle(color: Colors.black.withOpacity(0.6),fontSize:Responsive.TextSize(context,isExtraSmallSize:13,isMobileSize: 15,isMobileLarge:18,isIpadSize: 20,isTabletSize: 22,isLargeTabletSize: 30,defaultSize: 18  ) ),
-                      ),
-                      const SizedBox(width: 8), // Add some spacing
-                      Expanded(
-                        child: Divider(
-                          color: Colors.black.withOpacity(0.6),
-                          thickness: 1,
-                        ),
-                      ),
-                    ],
+                  ,const Padding(
+                    padding: EdgeInsets.all(20.0),
                   ),
 
-                  SizedBox(height: height*0.04,),
                   Form(
                       key: _key,
                       child: Column(

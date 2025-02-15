@@ -31,7 +31,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
             final child =Child.fromJson(userDoc.data()!);
             final Adminid=doctorkey;
 
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>ParentHomePage(parentCode:parentCode ,child:child,AdminId: Adminid,)));
+            Navigator.pushReplacement( context, MaterialPageRoute(builder: (c)=>ParentHomePage(parentCode:parentCode ,child:child,AdminId: Adminid,)));
 
 
 

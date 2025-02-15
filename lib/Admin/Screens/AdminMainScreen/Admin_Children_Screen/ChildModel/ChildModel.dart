@@ -10,7 +10,7 @@ class Child {
   String period;
   String parentOccupation;
   String notes;
-  List<Goals> selectedGoals;
+  List<Goal> selectedGoals;
   List<Map<String, dynamic>> scheduleSesoins;
 
   Child({
@@ -54,7 +54,7 @@ class Child {
       period: json['period'],
       parentOccupation: json['parentOccupation'],
       notes: json['notes'],
-      selectedGoals: (json['goals'] as List?)?.map((goal) => Goals.fromMap(Map<String, dynamic>.from(goal))).toList() ?? [],
+      selectedGoals: (json['goals'] as List?)?.map((goal) => Goal.fromMap(Map<String, dynamic>.from(goal))).toList() ?? [],
       scheduleSesoins: (json['scheduleSesoins'] as List?)?.map((e) => Map<String, dynamic>.from(e)).toList() ?? [], // If 'scheduleSesoins' is null, use an empty list
     );
   }

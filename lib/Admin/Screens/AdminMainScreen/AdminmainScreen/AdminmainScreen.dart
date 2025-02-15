@@ -1,5 +1,4 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenScreen.dart';
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Communicate_Screen/AdminCommunicateScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Objectives_Screen/AdminObjectevesScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Profile_Screen/AdminProfileScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Reports_Screen/Admin_Reports_Screen.dart';

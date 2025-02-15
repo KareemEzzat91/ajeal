@@ -26,7 +26,7 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
   DateTime? StartDate;
   DateTime? EndDate;
   int  age =2 ;
-  List <Goals>Selecteditems = [ ];
+  List <Goal>Selecteditems = [ ];
   Future<void> _selectDate( context, DateTime? dateType) async {
     final DateTime? picked = await showDatePicker(
       context: context,

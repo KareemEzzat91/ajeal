@@ -1,10 +1,7 @@
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/add_child_cubit.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/SessionDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/ParentAdminchat/ParentAdminchatscreen.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenSelectGooals/GoalDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
@@ -13,7 +10,7 @@ class ChildDetailScreen extends StatelessWidget {
   final Child child;
   final String childName;
   final String birthDate;
-  final List<Goals> goals;
+  final List<Goal> goals;
   final String progress;
 
   const ChildDetailScreen({
@@ -97,9 +94,15 @@ class ChildDetailScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => SessionDetailScreen(
+
+                            childId: child.parentOccupation+'${child.id+1}',
+
                             sessionName: session['session'],
                             date: session['date'],
                             goals: List<String>.from(session['goals']),
+                            notes: session['notes']??'',
+                            rate: session['rate']??0.0,
+                            tasks : List.from(session['tasks']??[])
                           ),
                         ),
                       );

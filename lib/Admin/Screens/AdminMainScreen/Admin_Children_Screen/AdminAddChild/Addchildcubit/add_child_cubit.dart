@@ -12,7 +12,7 @@ part 'add_child_state.dart';
 class AddChildCubit extends Cubit<AddChildState> {
   AddChildCubit() : super(AddChildInitial());
   static int id = 0;
-  final Map<String, List<Goals>> selectedGoals = {}; // لتخزين الأهداف المختارة //id == ParentsPhone
+  final Map<String, List<Goal>> selectedGoals = {}; // لتخزين الأهداف المختارة //id == ParentsPhone
   List<Map<String, Child>> Children = []; // id =  ParentsPhone+ id
   List<Map<String, dynamic>> scheduleSesoins = [];
 
@@ -120,7 +120,7 @@ try {
 
   }
 
-  void AddGoal(Goals goal, String childId, BuildContext context) {
+  void AddGoal(Goal goal, String childId, BuildContext context) {
     emit(NumberofItemsPlusstate());
     if (selectedGoals.containsKey(childId)) {
       if (selectedGoals[childId]!.length < 10) {
@@ -146,7 +146,7 @@ try {
       DateTime endDate,
       String duration,
       String childName,
-      List<Goals> goalsList,
+      List<Goal> goalsList,
       ) async {
     final List<String> goals = [];
     final List<String> goalsDescription = [];
@@ -157,28 +157,42 @@ try {
     }
 
     final durationInDays = endDate.difference(startDate).inDays;
-    final sessionsPerWeek = 3; // عدد الجلسات الأسبوعية
+  //  final sessionsPerWeek = 3; // عدد الجلسات الأسبوعية
 
     
-    final prompt = """
-  Create a schedule for sessions lasting $durationInDays days for the child $childName with the following goals: ${goals.join(', ')}.
-  Start Date: ${startDate.toIso8601String()}, End Date: ${endDate.toIso8601String()}.
-  Distribute the goals across the weekly sessions, considering the number of sessions per week (3 weekly sessions session every three days ). Please return the schedule in JSON format with the following structure:
-  {
-    "weeks": [
-      {
-        "session": 1,
-        "date": "2024-01-01",
-        "goals": ["${goalsDescription[0]}", "${goalsDescription[0]}"]
-      },
-      {
-        "session": 2,
-        "date": "2024-01-03",
-        "goals": ["${goalsDescription[0]}", "${goalsDescription[0]}"]
-      },
-      ...
-    ]
-  }
+    final prompt = """Create a detailed schedule for therapy sessions lasting **$durationInDays days** for the child **$childName**. The schedule should include the following goals:
+
+1. **أهداف تنمية الذاكرة السمعية** (Auditory Memory Development)
+2. **أهداف تنمية الذاكرة البصرية** (Visual Memory Development)
+3. **أهداف تنمية الكتابة** (Writing Development)
+4. **أهداف تنمية القراءة** (Reading Development)
+5. **أهداف تنمية الحساب** (Math Development)
+6. **أهداف تنمية الإدراك** (Perception Development)
+7. **أهداف تنمية الانتباه** (Attention Development)
+
+**Requirements:**
+1. The schedule should cover the period from **${startDate.toIso8601String()}** to **${endDate.toIso8601String()}**.
+2. There should be **3 sessions per week**, with each session occurring every **3 days**.
+3. Distribute the goals evenly across the sessions, ensuring that each goal is addressed multiple times throughout the schedule.
+4. Use the **exact names of the goals** as provided above.
+5. Return the schedule in **JSON format** with the following structure:
+
+```json
+{
+  "weeks": [
+    {
+      "session": 1,
+      "date": "YYYY-MM-DD",
+      "goals": ["هدف 1", "هدف 2"]
+    },
+    {
+      "session": 2,
+      "date": "YYYY-MM-DD",
+      "goals": ["هدف 3", "هدف 4"]
+    },
+    ...
+  ]
+}
   """;
 
     final gemini = Gemini.instance;
@@ -209,6 +223,10 @@ try {
               "session": week['session'],
               "date": week['date'],
               "goals": List<String>.from(week['goals']),
+              'rate':0,
+              "notes":"",
+              "tasks" :[],
+
             });
           } else {
             print("Invalid week format: $week");
@@ -224,5 +242,8 @@ try {
     }
   }
 
+  void saveTask(){
+
+  }
   }
 
