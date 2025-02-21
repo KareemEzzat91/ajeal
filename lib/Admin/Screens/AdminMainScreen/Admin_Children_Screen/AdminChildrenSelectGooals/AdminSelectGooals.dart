@@ -1,6 +1,5 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/add_child_cubit.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenSelectGooals/GoalDetailScreen.dart';
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/goal_lists/goal_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +20,7 @@ class AdminSelectGoals extends StatelessWidget {
 
               builder: (BuildContext context, state) {
                 return Text(
-                    "${(bloc.selectedGoals[Phone]?.length ?? 0) > 9 ? "You have reached the max" : (bloc.selectedGoals[Phone]?.length ?? 0)} / 10"
+                    "${(bloc.selectedGoals[Phone]?.length ?? 0) > 6 ? "You have reached the max" : (bloc.selectedGoals[Phone]?.length ?? 0)} / 7"
                 );
          },)
         ],

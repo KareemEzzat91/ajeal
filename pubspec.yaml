@@ -43,6 +43,10 @@ dependencies:
   shared_preferences: ^2.3.3
   envied: ^1.0.0
   flutter_gemini: ^2.0.5
+  cached_network_image: ^3.4.1
+  shimmer: ^3.0.0
+  flutter_charts: ^0.5.2
+
 
 
   flutter_localizations:

@@ -1,3 +1,4 @@
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/DailyNotesScreen/DailyNotesScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/SessionDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/ParentAdminchat/ParentAdminchatscreen.dart';
@@ -34,6 +35,11 @@ class ChildDetailScreen extends StatelessWidget {
         leading: IconButton(onPressed: (){
           Navigator.push(context, MaterialPageRoute(builder: (c)=>ChatScreen(isparent: false,chatId:AdminId!+child.parentOccupation,doctorId:AdminId ,parentId:child.parentOccupation+1.toString() ,)));
         }, icon: const Icon(Icons.chat)),
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>DailyNotesScreen(userType: 'Doctor',childID: '${child.parentOccupation}${child.id+1}',)));
+          }, icon: const Icon(Icons.add_task_outlined,color: Colors.black,))
+        ],
         centerTitle: true,
         backgroundColor: Colors.blueAccent,
         elevation: 0,
@@ -44,11 +50,11 @@ class ChildDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Center(
+               Center(
                 child: CircleAvatar(
                   radius: 60,
                   backgroundImage: NetworkImage(
-                    "https://avatarfiles.alphacoders.com/143/143832.jpg",
+                    child.gender=="Male"?"https://img.freepik.com/premium-photo/professional-portrait-studio-photograph-adorable-mixedrace-child-generative-ai_895561-2847.jpg":"https://avatarfiles.alphacoders.com/143/143832.jpg",
                   ),
                 ),
               ),
@@ -95,7 +101,7 @@ class ChildDetailScreen extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) => SessionDetailScreen(
 
-                            childId: child.parentOccupation+'${child.id+1}',
+                            childId: '${child.parentOccupation}${child.id+1}',
 
                             sessionName: session['session'],
                             date: session['date'],

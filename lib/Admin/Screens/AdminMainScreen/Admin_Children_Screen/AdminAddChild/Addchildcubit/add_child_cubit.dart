@@ -76,60 +76,95 @@ class AddChildCubit extends Cubit<AddChildState> {
     }
   }
 
-
-  void saveChild(String name, String age, DateTime dateOfBirth,
-      DateTime startDate, DateTime endDate, String period,
-      String parentOccupation, String notes, context) async {
+  void saveChild(
+      String name,
+      String age,
+      DateTime dateOfBirth,
+      DateTime startDate,
+      DateTime endDate,
+      String period,
+      String parentOccupation,
+      String notes,
+      String school,
+      String fatherOccupation,
+      String motherOccupation,
+      String familyMembers,
+      String residence,
+      String motherAgeDuringPregnancy,
+      String relationshipBetweenParents,
+      String familyRelationship,
+      String motherNature,
+      String gender,
+      BuildContext context,
+      ) async {
     emit(AddLoadingState());
 
-try {
-  scheduleSesoins = await generateSchedule(startDate, endDate, period, name, selectedGoals[parentOccupation]!);
-  print(scheduleSesoins);
+    try {
+      scheduleSesoins = await generateSchedule(startDate, endDate, period, name, selectedGoals[parentOccupation]!);
+      final uid= FirebaseAuth.instance.currentUser!.uid;
+      final doctorIdsnap= await FirebaseFirestore.instance.collection("users").doc(uid).get();
+      final  doctorId= doctorIdsnap['Doctor_id'];
+      final  doctorName= doctorIdsnap['Doctor_Name'];
 
-  // إنشاء الطفل الجديد
-  final newChild = Child(
-    id: id++,
-    name: name,
-    age: age,
-    dateOfBirth: dateOfBirth,
-    startDate: startDate,
-    endDate: endDate,
-    period: period,
-    parentOccupation: parentOccupation,
-    notes: notes,
-    scheduleSesoins: scheduleSesoins,
-    selectedGoals: selectedGoals[parentOccupation]!,
-  );
-  final userid= FirebaseAuth.instance.currentUser!.uid;
-  await FirebaseFirestore.instance.collection("users").doc(userid).collection("children").
-  doc('$parentOccupation$id').set(newChild.toMap());
-  saveToFirestore();
+      // إنشاء الطفل الجديد
+      final newChild = Child(
+        id: id++,
+        name: name,
+        age: age,
+        dateOfBirth: dateOfBirth,
+        startDate: startDate,
+        endDate: endDate,
+        period: period,
+        parentOccupation: parentOccupation,
+        notes: notes,
+        school: school,
+        fatherOccupation: fatherOccupation,
+        motherOccupation: motherOccupation,
+        familyMembers: familyMembers,
+        residence: residence,
+        motherAgeDuringPregnancy: motherAgeDuringPregnancy,
+        relationshipBetweenParents: relationshipBetweenParents,
+        familyRelationship: familyRelationship,
+        motherNature: motherNature,
+        selectedGoals: selectedGoals[parentOccupation]!,
+        scheduleSesoins: scheduleSesoins,
+        doctorId: doctorId,
+        doctorName: doctorName,
+        dailyNotes:[{}],
+        gender: gender,
 
 
+      );
 
-  Navigator.pop(context);
-  emit(AddScuccesState());
-}catch(e){
-  emit(AddFailureState(e.toString()));
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
-  Navigator.pop(context);
+      final userid = FirebaseAuth.instance.currentUser!.uid;
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userid)
+          .collection("children")
+          .doc('$parentOccupation$id')
+          .set(newChild.toMap());
 
+      saveToFirestore();
 
-}
-    // دعوة الدالة لإنشاء الجدول الزمني
-
+      Navigator.pop(context);
+      emit(AddScuccesState());
+    } catch (e) {
+      emit(AddFailureState(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      Navigator.pop(context);
+    }
   }
 
   void AddGoal(Goal goal, String childId, BuildContext context) {
     emit(NumberofItemsPlusstate());
     if (selectedGoals.containsKey(childId)) {
-      if (selectedGoals[childId]!.length < 10) {
+      if (selectedGoals[childId]!.length < 7 &&!selectedGoals.containsKey(goal) ) {
         selectedGoals[childId]!.add(goal);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'You have reached the max limit of 10 goals for this child.',
+              'You have reached the max limit of 7 goals for this child.',
               style: TextStyle(color: Colors.blue[400]),
             ),
           ),

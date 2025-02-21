@@ -1,8 +1,10 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/AdminmainScreen/AdminmainScreen.dart';
+import 'package:ajeal/Screens/AdminOrparents/AdminOrParintsScreen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 part 'sign_state.dart';
@@ -32,18 +34,15 @@ class SignCubit extends Cubit<SignState> {
             {
             final doctorIdsnap= await FirebaseFirestore.instance.collection("users").doc(user.uid).get();
             final  doctorId= doctorIdsnap['Doctor_id'];
-             
-            FirebaseFirestore .instance.collection("Doctors").doc(doctorId).set({"Doctor_id": user.uid});
+            final  doctorName= doctorIdsnap['Doctor_Name'];
 
-
-
-
-
-
-          Navigator.pushReplacement(
+            FirebaseFirestore .instance.collection("Doctors").doc(doctorId).update({"Doctor_id": user.uid});
+             saveToken(doctorId,doctorName);
+          Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const AdminmainScreen()),
+            MaterialPageRoute(builder: (context) =>  AdminmainScreen(doctorId :doctorId,doctorName:doctorName )),(Route<dynamic> route) => false
           );
+
             }
           else {
               user.sendEmailVerification();
@@ -62,6 +61,23 @@ class SignCubit extends Cubit<SignState> {
       // إذا حدث خطأ في عملية تسجيل الدخول
       emit(SignFaliureState(e.toString()));
     }
+  }
+  void saveToken(String doctorId ,String doctorName)async{
+    try {
+    final pref = await SharedPreferences.getInstance();
+    pref.setBool("AdminLogin", true);
+    pref.setString("adminDoctorId", doctorId);
+    pref.setString("adminDoctorName", doctorName);
+    }catch(e){
+    }
+  }
+  void logout(context) async{
+  await  FirebaseAuth.instance.signOut();
+  final pref = await SharedPreferences.getInstance();
+  pref.setBool("AdminLogin", false);
+  pref.remove("doctorId");
+  pref.remove("doctorName");
+  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>const AdminOrParentsScreen()),(Route<dynamic> route) => false );
   }
   void SignUp(
       BuildContext context,
@@ -93,7 +109,7 @@ class SignCubit extends Cubit<SignState> {
           });
           // Doctor_id
           FirebaseFirestore.instance.collection("Doctors").doc(doctorId).set({"Doctor_id": user.uid});
-
+          saveToken(doctorId,nameController.text);
           emit(SignSuccesState());
         } else {
           emit(SignFaliureState("User creation failed"));
