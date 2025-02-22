@@ -25,10 +25,10 @@ class AdminOrParentsScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
                 child: Text(
                   S.of(context).AdminOrParents,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor,
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -158,7 +158,7 @@ class AdminOrParentsScreen extends StatelessWidget {
         label,
         style: TextStyle(
           fontSize: 18,
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: Colors.black,
         ),
       ),
     );

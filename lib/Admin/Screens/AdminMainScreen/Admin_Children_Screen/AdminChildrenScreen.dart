@@ -2,73 +2,159 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminA
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/AdminAddChildScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/ChildDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pull_down_button/pull_down_button.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
-class AdminChildrenScreen extends StatelessWidget {
+class AppColors {
+  static const primary = Color(0xff0186c7); // اللون الأساسي الجديد
+  static const secondary = Color(0xff1e3a5c); // اللون الثانوي الجديد
+  static const background = Color(0xFFF8FAFC); // لون الخلفية
+  static const surface = Colors.white; // لون السطح
+  static const text = Color(0xFF1E293B); // لون النص الأساسي
+  static const textSecondary = Color(0xFF64748B); // لون النص الثانوي
+  static const error = Color(0xFFEF4444); // لون الخطأ
+  static const success = Color(0xFF22C55E); // لون النجاح
+}
+
+class AdminChildrenScreen extends StatefulWidget {
   final String doctorId;
   final String doctorName;
 
   const AdminChildrenScreen({
     Key? key,
     required this.doctorId,
-    required this.doctorName
+    required this.doctorName,
   }) : super(key: key);
+
+  @override
+  State<AdminChildrenScreen> createState() => _AdminChildrenScreenState();
+}
+
+class _AdminChildrenScreenState extends State<AdminChildrenScreen> with TickerProviderStateMixin {
+  late AnimationController _fabAnimationController;
+  late AnimationController _filterAnimationController;
+  bool _isListView = true;
+  String _currentFilter = 'all';
+
+  @override
+  void initState() {
+    super.initState();
+    _fabAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _filterAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+  }
+
+  @override
+  void dispose() {
+    _fabAnimationController.dispose();
+    _filterAnimationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<AddChildCubit>();
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: AppColors.background,
       appBar: _buildAppBar(context, bloc),
-      body: _buildBody(bloc),
-      floatingActionButton: _buildFAB(context),
+      body: Column(
+        children: [
+          _buildFilterBar(),
+          Expanded(child: _buildBody(bloc)),
+        ],
+      ),
+      floatingActionButton: _buildAnimatedFAB(context),
     );
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context, AddChildCubit bloc) {
     return AppBar(
       elevation: 0,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       title: const Text(
         'قائمة الأطفال',
         style: TextStyle(
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w700,
           fontSize: 24,
-          color: Colors.black87,
+          color: AppColors.text,
+          letterSpacing: -0.5,
         ),
-      ),
+      ).animate().fadeIn(duration: 600.ms).slideY(begin: -0.2, end: 0),
       centerTitle: true,
-      actions: [
-        _buildSaveButton(context, bloc),
-      ],
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1),
-        child: Container(
-          color: Colors.grey[200],
-          height: 1,
+      leading: IconButton(
+        icon: Icon(
+          _isListView ? Icons.grid_view : Icons.view_list,
+          color: AppColors.primary,
         ),
+        onPressed: () {
+          setState(() => _isListView = !_isListView);
+        },
       ),
     );
   }
 
-  Widget _buildSaveButton(BuildContext context, AddChildCubit bloc) {
+  Widget _buildFilterBar() {
+    return Container(
+      height: 60,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        border: Border(
+          bottom: BorderSide(
+            color: AppColors.textSecondary.withOpacity(0.1),
+          ),
+        ),
+      ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            _buildFilterChip('all', 'All'),
+            _buildFilterChip('active', 'Active'),
+            _buildFilterChip('completed', 'Completed'),
+            _buildFilterChip('pending', 'Pending'),
+          ],
+        ),
+      ),
+    ).animate().slideY(begin: -1, end: 0, duration: 500.ms, curve: Curves.easeOut);
+  }
+
+  Widget _buildFilterChip(String filter, String label) {
+    final isSelected = _currentFilter == filter;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: TextButton.icon(
-        onPressed: () {
-          bloc.saveToFirestore();
-          _showSuccessSnackBar(context);
+      padding: const EdgeInsets.only(right: 8),
+      child: FilterChip(
+        selected: isSelected,
+        label: Text(label),
+        onSelected: (selected) {
+          setState(() => _currentFilter = filter);
+          _filterAnimationController.forward(from: 0);
         },
-        icon: const Icon(Icons.save_outlined, color: Colors.blue),
-        label: const Text(
-          'حفظ',
-          style: TextStyle(
-            color: Colors.blue,
-            fontWeight: FontWeight.bold,
+        backgroundColor: AppColors.surface,
+        selectedColor: AppColors.primary.withOpacity(0.1),
+        labelStyle: TextStyle(
+          color: isSelected ? AppColors.primary : AppColors.textSecondary,
+          fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(
+            color: isSelected ? AppColors.primary : AppColors.textSecondary.withOpacity(0.2),
           ),
         ),
       ),
@@ -86,11 +172,12 @@ class AdminChildrenScreen extends StatelessWidget {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return _buildEmptyState();
         }
-        return _buildChildrenList(bloc);
+        return _isListView
+            ? _buildChildrenList(bloc)
+            : _buildChildrenGrid(bloc);
       },
     );
   }
-
   Widget _buildLoadingState() {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
@@ -172,6 +259,29 @@ class AdminChildrenScreen extends StatelessWidget {
       ),
     );
   }
+  Widget _buildChildrenGrid(AddChildCubit bloc) {
+    return GridView.builder(
+      padding: const EdgeInsets.all(16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.75,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+      ),
+      itemCount: bloc.Children.length,
+      itemBuilder: (context, index) {
+        final map = bloc.Children[index];
+        final id = map.keys.first;
+        final child = map[id]!;
+        return ChildGridCard(
+          child: child,
+          onTap: () => _navigateToDetails(context, child),
+        ).animate()
+            .fadeIn(delay: (index * 100).ms)
+            .slideY(begin: 0.2, end: 0);
+      },
+    );
+  }
 
   Widget _buildChildrenList(AddChildCubit bloc) {
     return ListView.builder(
@@ -181,49 +291,63 @@ class AdminChildrenScreen extends StatelessWidget {
         final map = bloc.Children[index];
         final id = map.keys.first;
         final child = map[id]!;
-        return ChildCard(child: child);
+        return ChildCard(
+          child: child,
+          onTap: () => _navigateToDetails(context, child),
+        ).animate()
+            .fadeIn(delay: (index * 100).ms)
+            .slideX(begin: 0.2, end: 0);
       },
     );
   }
 
-  Widget _buildFAB(BuildContext context) {
+  Widget _buildAnimatedFAB(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () {
+        _fabAnimationController.forward(from: 0);
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (c) => AdminAddChildScreen(
-              doctorId: doctorId,
-              doctorName: doctorName,
+              doctorId: widget.doctorId,
+              doctorName: widget.doctorName,
             ),
           ),
         );
       },
-      backgroundColor: Colors.blue,
+      backgroundColor: AppColors.primary,
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
       icon: const Icon(Icons.add, color: Colors.white),
       label: const Text(
         'إضافة طفل',
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
       ),
-    );
+    ).animate(controller: _fabAnimationController)
+        .scale(
+      duration: 100.ms,
+      curve: Curves.easeOut,
+    )
+        .then()
+        .shake(hz: 4, curve: Curves.easeOut);
   }
 
-  void _showSuccessSnackBar(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Row(
-          children: [
-            Icon(Icons.check_circle, color: Colors.white),
-            SizedBox(width: 8),
-            Text("تم الحفظ بنجاح"),
-          ],
+  void _navigateToDetails(BuildContext context, Child child) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChildDetailScreen(
+          child: child,
+          childName: child.name,
+          birthDate: "${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
+          goals: child.selectedGoals,
+          progress: "50%",
         ),
-        backgroundColor: Colors.green,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        margin: const EdgeInsets.all(16),
       ),
     );
   }
@@ -231,20 +355,25 @@ class AdminChildrenScreen extends StatelessWidget {
 
 class ChildCard extends StatelessWidget {
   final Child child;
+  final VoidCallback onTap;
 
-  const ChildCard({Key? key, required this.child}) : super(key: key);
+  const ChildCard({
+    Key? key,
+    required this.child,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 16,
             offset: const Offset(0, 4),
           ),
         ],
@@ -252,25 +381,23 @@ class ChildCard extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: () => _navigateToDetails(context),
+          borderRadius: BorderRadius.circular(24),
+          onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildAvatar(),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildChildInfo(),
-                      const SizedBox(height: 12),
-                      _buildProgressIndicator(),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    _buildAvatar(),
+                    const SizedBox(width: 16),
+                    Expanded(child: _buildChildInfo()),
+                    _buildMoreButton(context),
+                  ],
                 ),
-                _buildNavigationIcon(),
+                const SizedBox(height: 20),
+                _buildProgressIndicator(),
               ],
             ),
           ),
@@ -281,34 +408,32 @@ class ChildCard extends StatelessWidget {
 
   Widget _buildAvatar() {
     return Hero(
-      tag: 'child_avatar_${child.name}',
+      tag: 'child_avatar_${child.id}',
       child: Container(
-        width: 70,
-        height: 70,
+        width: 64,
+        height: 64,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.blue.withOpacity(0.2),
+            color: AppColors.primary.withOpacity(0.1),
             width: 3,
           ),
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(35),
+          borderRadius: BorderRadius.circular(32),
           child: CachedNetworkImage(
             imageUrl: child.gender == "Male"
                 ? "https://img.freepik.com/premium-photo/professional-portrait-studio-photograph-adorable-mixedrace-child-generative-ai_895561-2847.jpg"
                 : "https://avatarfiles.alphacoders.com/143/143832.jpg",
             fit: BoxFit.cover,
             placeholder: (context, url) => Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
+              baseColor: Colors.grey[200]!,
               highlightColor: Colors.grey[100]!,
-              child: Container(
-                color: Colors.white,
-              ),
+              child: Container(color: Colors.white),
             ),
             errorWidget: (context, url, error) => Container(
-              color: Colors.grey[200],
-              child: const Icon(Icons.person, size: 40),
+              color: Colors.grey[100],
+              child: Icon(Icons.person, size: 32, color: Colors.grey[400]),
             ),
           ),
         ),
@@ -324,16 +449,16 @@ class ChildCard extends StatelessWidget {
           child.name,
           style: const TextStyle(
             fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            fontWeight: FontWeight.w600,
+            color: AppColors.text,
           ),
         ),
         const SizedBox(height: 4),
         Text(
           "تاريخ الميلاد: ${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
-            color: Colors.grey[600],
+            color: AppColors.textSecondary,
           ),
         ),
       ],
@@ -348,66 +473,298 @@ class ChildCard extends StatelessWidget {
           children: [
             Expanded(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(8),
                 child: LinearProgressIndicator(
-                  value: 50 / 100,
-                  backgroundColor: Colors.grey[200],
-                  color: Colors.blue,
+                  value: 0.5,
+                  backgroundColor: AppColors.primary.withOpacity(0.1),
+                  color: AppColors.primary,
                   minHeight: 8,
                 ),
               ),
             ),
-            const SizedBox(width: 8),
-            Text(
+            const SizedBox(width: 12),
+            const Text(
               "50%",
               style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[700],
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppColors.text,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 4),
-        Text(
+        const SizedBox(height: 8),
+        const Text(
           "تقدم الأهداف",
           style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[600],
+            fontSize: 14,
+            color: AppColors.textSecondary,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildNavigationIcon() {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: const Icon(
-        Icons.arrow_forward_ios,
-        color: Colors.blue,
-        size: 18,
-      ),
-    );
-  }
+  Widget _buildMoreButton(BuildContext context) {
+    return PullDownButton(
+      itemBuilder: (context) => [
+        PullDownMenuItem(
+          onTap: () {},
+          title: 'Edit',
+          icon: CupertinoIcons.pencil,
+          iconColor: AppColors.primary,
+        ),
+        PullDownMenuItem(
+          onTap: () async {
+            // Controllers for doctorName and doctorId
+            TextEditingController doctorNameController = TextEditingController();
+            TextEditingController doctorIdController = TextEditingController();
 
-  void _navigateToDetails(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ChildDetailScreen(
-          child: child,
-          childName: child.name,
-          birthDate: "${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
-          goals: child.selectedGoals,
-          progress: "50%",
+            // Show QuickAlert with two fields
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.custom,
+              barrierDismissible: true,
+              confirmBtnText: 'Save',
+              customAsset: 'assets/images/giphy.gif',
+              widget: Column(
+                children: [
+                  // Field for Doctor Name
+                  TextFormField(
+                    controller: doctorNameController,
+                    decoration: const InputDecoration(
+                      alignLabelWithHint: true,
+                      hintText: 'Enter Doctor Name',
+                      prefixIcon: Icon(Icons.person_outline),
+                    ),
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.text,
+                  ),
+                  const SizedBox(height: 10), // Spacing between fields
+                  // Field for Doctor ID
+                  TextFormField(
+                    controller: doctorIdController,
+                    decoration: const InputDecoration(
+                      alignLabelWithHint: true,
+                      hintText: 'Enter Doctor ID',
+                      prefixIcon: Icon(Icons.numbers_outlined),
+                    ),
+                    textInputAction: TextInputAction.done,
+                    keyboardType: TextInputType.text,
+                  ),
+                ],
+              ),
+              onConfirmBtnTap: () async {
+                // Validate inputs
+                if (doctorNameController.text.isEmpty || doctorIdController.text.isEmpty) {
+                  await QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.error,
+                    text: 'Please fill all fields',
+                  );
+                  return;
+                }
+
+                // Close the dialog
+                Navigator.pop(context);
+
+                // Show success message
+                await Future.delayed(const Duration(milliseconds: 500));
+                await QuickAlert.show(
+                  context: context,
+                  type: QuickAlertType.success,
+                  text: "Doctor '${doctorNameController.text}' has been assigned!",
+                );
+
+                // Save data to Firestore
+                try {
+                  final uid = FirebaseAuth.instance.currentUser!.uid;
+                  final doctorSnap = await FirebaseFirestore.instance
+                      .collection('Doctors')
+                      .doc(doctorIdController.text)
+                      .get();
+
+                  if (!doctorSnap.exists) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Doctor ID does not exist")),
+                    );
+                    return;
+                  }
+
+                  // Update child data
+                  child.doctorId = doctorIdController.text;
+                  child.doctorName = doctorNameController.text;
+
+                  // Save to Firestore
+                  await FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(doctorSnap['Doctor_id'])
+                      .collection("children")
+                      .doc(child.parentOccupation)
+                      .set(child.toMap());
+
+                  // Delete from current user's collection
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(uid)
+                      .collection("children")
+                      .doc(child.parentOccupation)
+                      .delete();
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Child transferred successfully!")),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Error: $e")),
+                  );
+                }
+              },
+            );
+          },
+          title: 'Transfer',
+          icon: CupertinoIcons.arrow_2_circlepath,
+        ),        PullDownMenuItem(
+          onTap: () {},
+          title: 'Remove',
+          icon: CupertinoIcons.delete,
+          iconColor: AppColors.error,
+        ),
+      ],
+      buttonBuilder: (context, showMenu) => CupertinoButton(
+        onPressed: showMenu,
+        padding: EdgeInsets.zero,
+        child: const Icon(
+          CupertinoIcons.ellipsis_circle,
+          color: AppColors.primary,
         ),
       ),
     );
   }
+}
+
+class ChildGridCard extends StatelessWidget {
+  final Child child;
+  final VoidCallback onTap;
+
+  const ChildGridCard({
+    Key? key,
+    required this.child,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(24),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Avatar
+                Hero(
+                  tag: 'child_avatar_${child.id}',
+                  child: Container(
+                    width: double.infinity,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: AppColors.primary.withOpacity(0.1),
+                        width: 2,
+                      ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: CachedNetworkImage(
+                        imageUrl: child.gender == "Male"
+                            ? "https://img.freepik.com/premium-photo/professional-portrait-studio-photograph-adorable-mixedrace-child-generative-ai_895561-2847.jpg"
+                            : "https://avatarfiles.alphacoders.com/143/143832.jpg",
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Shimmer.fromColors(
+                          baseColor: Colors.grey[200]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(color: Colors.white),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: Colors.grey[100],
+                          child: Icon(Icons.person, size: 32, color: Colors.grey[400]),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                // Name
+                Text(
+                  child.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.text,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                // Birthdate
+                Text(
+                  "تاريخ الميلاد: ${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.textSecondary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 12),
+                // Progress
+                Row(
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: LinearProgressIndicator(
+                          value: 0.5,
+                          backgroundColor: AppColors.primary.withOpacity(0.1),
+                          color: AppColors.primary,
+                          minHeight: 8,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      "50%",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.text,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 }

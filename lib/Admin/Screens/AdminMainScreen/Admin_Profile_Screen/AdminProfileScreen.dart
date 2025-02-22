@@ -47,7 +47,7 @@ class AdminProfileScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             // معلومات الحساب
-            const ProfileInfoTile(icon: Icons.person, title: "الاسم", value: "محمد أحمد"),
+            const ProfileInfoTile(icon: Icons.person, title: "الاسم", value: "محمد "),
             const ProfileInfoTile(icon: Icons.email, title: "البريد الإلكتروني", value: "admin@example.com"),
             const ProfileInfoTile(icon: Icons.phone, title: "رقم الهاتف", value: "+20 123 456 789"),
             const ProfileInfoTile(icon: Icons.badge, title: "الدور الوظيفي", value: "مدير"),

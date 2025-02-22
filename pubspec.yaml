@@ -46,6 +46,9 @@ dependencies:
   cached_network_image: ^3.4.1
   shimmer: ^3.0.0
   flutter_charts: ^0.5.2
+  pull_down_button: ^0.10.2
+  quickalert: ^1.1.0
+  flutter_animate: ^4.5.2
 
 
 

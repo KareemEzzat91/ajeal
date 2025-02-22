@@ -1,175 +1,236 @@
-
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/ResetPasswordScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/SignUpScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/cubit/sign_cubit.dart';
-import 'package:ajeal/helpers/customtextfiled/customtextfiled.dart';
-import 'package:ajeal/helpers/responsive/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class AdminLoginScreen extends StatelessWidget {
-   AdminLoginScreen({super.key,});
-  final bool issignedin =false;
+  AdminLoginScreen({super.key});
 
-
-   late final String? Function(String?)? validator ;
-  final _nameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _key = GlobalKey<FormState>();
-
 
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<SignCubit>();
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-    return  BlocListener <SignCubit, SignState>(
-      listener: (BuildContext context, state) {
+    final size = MediaQuery.of(context).size;
+
+    return BlocListener<SignCubit, SignState>(
+      listener: (context, state) {
         if (state is SignFaliureState) {
           Get.snackbar(
             "Error",
             state.error,
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.red.withOpacity(0.9),
             colorText: Colors.white,
+            borderRadius: 10,
+            margin: const EdgeInsets.all(10),
+            snackPosition: SnackPosition.TOP,
           );
         }
-
       },
       child: Scaffold(
-        backgroundColor: Color(0xffF1F0EB),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset("assets/images/Untitled design.png",scale: 0.5,height:height/4,width: width/2, )
-               ,    Row(
-                    children: [
-                      Text("لنقم بتسجيل دخولك ",style :TextStyle(
-                        fontSize:Responsive.TextSize(context,isExtraSmallSize:18,isMobileSize: 25,isMobileLarge:30,isIpadSize: 40,isTabletSize: 43,isLargeTabletSize: 50,defaultSize: 20  ),shadows: const [
-                        Shadow(
-                          offset: Offset(2, 2),
-                          blurRadius: 4,
-                          color: Colors.black38,
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xffF1F0EB),
+                Colors.white,
+              ],
+            ),
+          ),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Logo Section
+                    Center(
+                      child: Hero(
+                        tag: 'logo',
+                        child: Image.asset(
+                          "assets/images/Untitled design.png",
+                          height: size.height * 0.2,
+                          fit: BoxFit.contain,
                         ),
-                      ],
-                      ),),
-                    ],
-                  ),
-                  const SizedBox(height: 8,),
-                  Text("قم بادخال المعلومات اسفل ",style: TextStyle(color: Colors.grey.shade400,fontSize:Responsive.TextSize(context,isExtraSmallSize:10,isMobileSize: 17,isMobileLarge:19,isIpadSize: 26,isTabletSize: 25,isLargeTabletSize: 40,defaultSize: 15  )),)
-                  ,const Padding(
-                    padding: EdgeInsets.all(20.0),
-                  ),
+                      ),
+                    ),
 
-                  Form(
-                      key: _key,
+                    const SizedBox(height: 32),
+
+                    // Welcome Text
+                    Text(
+                      "لنقم بتسجيل دخولك",
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    Text(
+                      "قم بادخال المعلومات اسفل",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+
+                    const SizedBox(height: 32),
+
+                    // Login Form
+                    Form(
+                      key: _formKey,
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CustomTextField(
-                              icon: const Icon(Icons.email_outlined,color:  Color(0xff0186c7)),
-                              controller: _nameController,
-                              height: height,
-                              text: "Email",
-                              validator: (val) {
-                                if (!val!.isEmail) {
-                                  return "this should be valid Email.";
-                                } else if (val.length < 10) {
-                                  return " email should be more than 10 letters";
-                                }
-                                return null;
-                              },
-                            ),
+                          // Email Field
+                          _buildTextField(
+                            controller: _emailController,
+                            label: "Email",
+                            icon: Icons.email_outlined,
+                            validator: (val) {
+                              if (!val!.isEmail) return "Please enter a valid email";
+                              return null;
+                            },
                           ),
-                          SizedBox(
-                            height: height * .01,
-                          ),
-                          Padding(
 
-                            padding: const EdgeInsets.all(8.0),
-                            child: CustomTextField(
-                              icon: const Icon(Icons.lock,color:  Color(0xff0186c7)),
-                              height: height,
-                              controller: _passwordController,
-                              text: "Password",
-                              isPassword: true,
-                              validator: (val) {
-                                if (val!.length < 6) {
-                                  return "Password should be more than 7 letters";
-                                }
-                                return null;
-                              },
+                          const SizedBox(height: 16),
+
+                          // Password Field
+                          _buildTextField(
+                            controller: _passwordController,
+                            label: "Password",
+                            icon: Icons.lock_outline,
+                            isPassword: true,
+                            validator: (val) {
+                              if (val!.length < 6) return "Password must be at least 6 characters";
+                              return null;
+                            },
+                          ),
+
+                          // Forgot Password
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const ResetPasswordScreen()),
+                              ),
+                              child: Text(
+                                "لا تتذكر الباسورد",
+                                style: TextStyle(
+                                  color: Color(0xff0186c7),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
+                          ),
+
+                          const SizedBox(height: 24),
+
+                          // Login Button
+                          BlocBuilder<SignCubit, SignState>(
+                            builder: (context, state) {
+                              return ElevatedButton(
+                                onPressed: state is SignLoadingState
+                                    ? null
+                                    : () => bloc.Login(context, _formKey, _emailController, _passwordController),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color(0xff0186c7),
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  minimumSize: Size(size.width, 0),
+                                  elevation: 2,
+                                ),
+                                child: state is SignLoadingState
+                                    ? const CircularProgressIndicator(color: Colors.white)
+                                    : const Text(
+                                  "تسجيل الدخول",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+
+                          const SizedBox(height: 24),
+
+                          // Register Link
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Don't have an account? ",
+                                style: TextStyle(color: Colors.grey.shade700),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => SignupScreen()),
+                                ),
+                                child: const Text(
+                                  "Register Now",
+                                  style: TextStyle(
+                                    color: Color(0xff0186c7),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
-                      )
-
-                  ),
-                  Row(children: [const Spacer(),InkWell(onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const ResetPasswordScreen()));
-                  }, child:   Text("لا تتذكر الباسورد ",style:TextStyle(color: Color(0xff0186c7),fontWeight: FontWeight.bold,fontSize: Responsive.TextSize(context,isExtraSmallSize:13,isMobileSize: 15,isMobileLarge:18,isIpadSize: 20,isTabletSize: 22,isLargeTabletSize: 30,defaultSize: 18  ))/*GoogleFonts.agbalumo(color: Color(0xff0186c7))*/ ,))],)
-                  ,const SizedBox(height:40,),
-                GestureDetector(
-                  onTap: (){
-                    bloc.Login(context,_key,_nameController,_passwordController);
-
-                  },
-                  child: Container (height: 70,
-                      decoration: BoxDecoration(
-                        color: const Color(0xff0186c7),
-                          borderRadius: BorderRadius.circular(15), // Optional: Rounded corners
-                        boxShadow: const [BoxShadow(
-                          color: Colors.grey,
-                          offset:Offset(0.5, 0.5)
-                        )]
-
                       ),
-
-                    child: Row(mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        BlocBuilder <SignCubit, SignState>(
-
-                          builder: (BuildContext context, SignState state) {
-                            if (state is SignLoadingState)
-                              {
-                                return const CircularProgressIndicator();
-                              }
-                            return  Center(
-                              child: Text(
-                                "تسجيل الدخول",style:TextStyle(fontSize: Responsive.TextSize(context,isExtraSmallSize:25,isMobileSize: 30,isMobileLarge:35,isIpadSize: 70,isTabletSize: 90,isLargeTabletSize: 100,defaultSize: 40  ),color: Colors.white,) /*GoogleFonts.agbalumo(fontSize: 40,color: Colors.white)*/,),
-                            );
-
-
-                          },
-                        )],),
-                  ),
-                )
-                ,const SizedBox(height:30,)
-
-                , Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-
-                     Text("Dont have any account ? ",style: TextStyle(fontSize: Responsive.TextSize(context,isExtraSmallSize:13,isMobileSize: 15,isMobileLarge:18,isIpadSize: 20,isTabletSize: 22,isLargeTabletSize: 30,defaultSize: 18  )),),
-                    InkWell(onTap: (){
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => Signupscreen()),
-                      );
-
-                    }, child:  Text("Register Now",style:TextStyle(color: Color(0xff0186c7),fontWeight: FontWeight.bold,fontSize: Responsive.TextSize(context,isExtraSmallSize:13,isMobileSize: 15,isMobileLarge:18,isIpadSize: 20,isTabletSize: 22,isLargeTabletSize: 30,defaultSize: 18  )) /*GoogleFonts.agbalumo(color: Color(0xff0186c7))*/,))
-                  ],)
-
-
-                ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    bool isPassword = false,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      obscureText: isPassword,
+      validator: validator,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: Color(0xff0186c7)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xff0186c7)),
+        ),
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
     );
   }

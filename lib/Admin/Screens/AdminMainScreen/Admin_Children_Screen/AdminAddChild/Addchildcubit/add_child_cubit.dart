@@ -105,10 +105,11 @@ class AddChildCubit extends Cubit<AddChildState> {
       final doctorIdsnap= await FirebaseFirestore.instance.collection("users").doc(uid).get();
       final  doctorId= doctorIdsnap['Doctor_id'];
       final  doctorName= doctorIdsnap['Doctor_Name'];
+      var  lastChildId= doctorIdsnap['lastChildId'];
 
       // إنشاء الطفل الجديد
       final newChild = Child(
-        id: id++,
+        id: lastChildId++,
         name: name,
         age: age,
         dateOfBirth: dateOfBirth,
@@ -141,7 +142,7 @@ class AddChildCubit extends Cubit<AddChildState> {
           .collection("users")
           .doc(userid)
           .collection("children")
-          .doc('$parentOccupation$id')
+          .doc(parentOccupation)
           .set(newChild.toMap());
 
       saveToFirestore();

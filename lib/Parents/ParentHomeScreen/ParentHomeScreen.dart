@@ -313,7 +313,7 @@ class ParentHomePage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SessionSchedulePage(
-                childId: "${child.parentOccupation}${child.id + 1}",
+                childId: child.parentOccupation,
                 scheduleSesoins: child.scheduleSesoins,
               ),
             ),
@@ -333,7 +333,7 @@ class ParentHomePage extends StatelessWidget {
                 isparent: true,
                 chatId: AdminId + child.parentOccupation,
                 doctorId: AdminId,
-                parentId: child.parentOccupation + 1.toString(),
+                parentId: child.parentOccupation ,
               ),
             ),
           ),
@@ -352,7 +352,7 @@ class ParentHomePage extends StatelessWidget {
                 childName: child.name,
                 isparent: true,
                 doctorId: AdminId,
-                parentId: child.parentOccupation + 1.toString(),
+                parentId: child.parentOccupation ,
               ),
             ),
           ),
@@ -488,6 +488,5 @@ class ParentHomePage extends StatelessWidget {
   }
 
 }
-// Previous ParentHomePage code remains the same...
 
 
