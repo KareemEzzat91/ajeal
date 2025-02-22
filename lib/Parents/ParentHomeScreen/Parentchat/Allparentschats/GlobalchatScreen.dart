@@ -243,10 +243,11 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
             context,
             MaterialPageRoute(
               builder: (context) => ChatScreen(
+                role: "doctor",
                 chatId: widget.doctorId + message['sender_id'],
                 doctorId: widget.doctorId,
                 parentId: message['sender_id'],
-                isparent: false,
+                isParent: false,
               ),
             ),
           );

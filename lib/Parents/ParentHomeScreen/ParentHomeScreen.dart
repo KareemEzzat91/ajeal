@@ -330,7 +330,8 @@ class ParentHomePage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => ChatScreen(
-                isparent: true,
+                role:"parent",
+                isParent: true,
                 chatId: AdminId + child.parentOccupation,
                 doctorId: AdminId,
                 parentId: child.parentOccupation,

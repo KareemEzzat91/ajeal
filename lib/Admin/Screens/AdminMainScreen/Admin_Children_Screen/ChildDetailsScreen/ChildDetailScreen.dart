@@ -46,10 +46,12 @@ class ChildDetailScreen extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (c) => ChatScreen(
-                  isparent: false,
+                  role: "doctor",
                   chatId: AdminId! + child.parentOccupation,
                   doctorId: AdminId,
                   parentId: child.parentOccupation + 1.toString(),
+                  isParent:false ,
+
                 ),
               ),
             );
