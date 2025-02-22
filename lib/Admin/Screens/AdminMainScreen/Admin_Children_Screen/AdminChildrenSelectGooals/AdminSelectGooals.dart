@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdminSelectGoals extends StatelessWidget {
-   final String Phone ;
-   AdminSelectGoals({super.key, required this.Phone});
+  final String Phone;
+  const AdminSelectGoals({super.key, required this.Phone});
 
-
-   @override
+  @override
   Widget build(BuildContext context) {
     final bloc = context.read<AddChildCubit>();
     return Scaffold(
@@ -17,12 +16,11 @@ class AdminSelectGoals extends StatelessWidget {
         title: const Text("اختيار الأهداف"),
         actions: [
           BlocBuilder<AddChildCubit, AddChildState>(
-
-              builder: (BuildContext context, state) {
-                return Text(
-                    "${(bloc.selectedGoals[Phone]?.length ?? 0) > 6 ? "You have reached the max" : (bloc.selectedGoals[Phone]?.length ?? 0)} / 7"
-                );
-         },)
+            builder: (BuildContext context, state) {
+              return Text(
+                  "${(bloc.selectedGoals[Phone]?.length ?? 0) > 6 ? "You have reached the max" : (bloc.selectedGoals[Phone]?.length ?? 0)} / 7");
+            },
+          )
         ],
       ),
       body: PopScope(
@@ -32,10 +30,11 @@ class AdminSelectGoals extends StatelessWidget {
             return;
           }
 
-
-          const bool shouldPop =  true;
-          if (context.mounted && shouldPop &&bloc.selectedGoals[Phone]!=null) {
-             Navigator.pop(context,bloc.selectedGoals[Phone]);
+          const bool shouldPop = true;
+          if (context.mounted &&
+              shouldPop &&
+              bloc.selectedGoals[Phone] != null) {
+            Navigator.pop(context, bloc.selectedGoals[Phone]);
           }
         },
         child: Padding(
@@ -43,10 +42,14 @@ class AdminSelectGoals extends StatelessWidget {
           child: ListView.builder(
             itemCount: Goals_Lists.goalList.length,
             itemBuilder: (context, index) {
-
               return GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (c)=>GoalDetailScreen(goal:  Goals_Lists.goalList[index],)));
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (c) => GoalDetailScreen(
+                                goal: Goals_Lists.goalList[index],
+                              )));
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -59,7 +62,7 @@ class AdminSelectGoals extends StatelessWidget {
                           color: Colors.grey.withOpacity(0.2),
                           spreadRadius: 2,
                           blurRadius: 5,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
@@ -78,8 +81,8 @@ class AdminSelectGoals extends StatelessWidget {
                             height: 200,
                           ),
                         ),
-                         Padding(
-                          padding: EdgeInsets.all(12.0),
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -90,12 +93,11 @@ class AdminSelectGoals extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 8),
-                               Text(
-                                 Goals_Lists.goalList[index].goalDescription,
-                                style: const TextStyle(fontSize: 14, color: Colors.grey),
-                
-                
+                              const SizedBox(height: 8),
+                              Text(
+                                Goals_Lists.goalList[index].goalDescription,
+                                style: const TextStyle(
+                                    fontSize: 14, color: Colors.grey),
                               ),
                             ],
                           ),
@@ -107,16 +109,15 @@ class AdminSelectGoals extends StatelessWidget {
                             children: [
                               ElevatedButton(
                                 onPressed: () {
-                
-                                  bloc.AddGoal(  Goals_Lists.goalList[index],Phone,context);
+                                  bloc.AddGoal(Goals_Lists.goalList[index],
+                                      Phone, context);
                                   // اكتب هنا وظيفة التحديد
                                 },
                                 child: const Text("اختر الهدف"),
                               ),
                               IconButton(
                                 icon: const Icon(Icons.info_outline),
-                                onPressed: () {
-                                },
+                                onPressed: () {},
                               ),
                             ],
                           ),

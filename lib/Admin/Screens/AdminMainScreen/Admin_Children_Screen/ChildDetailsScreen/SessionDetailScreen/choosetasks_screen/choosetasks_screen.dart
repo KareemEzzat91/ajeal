@@ -11,7 +11,7 @@ class ChooseTasksScreen extends StatefulWidget {
 }
 
 class _ChooseTasksScreenState extends State<ChooseTasksScreen> {
-  List<Task> _selectedTasks = []; // قائمة المهام المختارة
+  final List<Task> _selectedTasks = []; // قائمة المهام المختارة
 
   void _toggleTaskSelection(Task task) {
     setState(() {
@@ -25,7 +25,8 @@ class _ChooseTasksScreenState extends State<ChooseTasksScreen> {
 
   void _saveSelectedTasks() {
     // يمكنك هنا حفظ المهام المختارة أو إعادتها إلى الشاشة السابقة
-    Navigator.pop(context, _selectedTasks); // إرجاع المهام المختارة إلى الشاشة السابقة
+    Navigator.pop(
+        context, _selectedTasks); // إرجاع المهام المختارة إلى الشاشة السابقة
   }
 
   @override
@@ -75,9 +76,11 @@ class _ChooseTasksScreenState extends State<ChooseTasksScreen> {
                       ),
                       subtitle: Text(
                         task.taskDescription,
-                        style: const TextStyle(fontSize: 14, color: Colors.grey),
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey),
                       ),
-                      trailing: const Icon(Icons.task, color: Colors.blueAccent),
+                      trailing:
+                          const Icon(Icons.task, color: Colors.blueAccent),
                     ),
                   );
                 },
@@ -88,7 +91,8 @@ class _ChooseTasksScreenState extends State<ChooseTasksScreen> {
               onPressed: _saveSelectedTasks,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

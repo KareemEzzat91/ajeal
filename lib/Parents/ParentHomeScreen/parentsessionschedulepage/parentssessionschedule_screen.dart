@@ -5,7 +5,7 @@ class SessionSchedulePage extends StatelessWidget {
   final String childId;
   final List<Map<String, dynamic>> scheduleSesoins;
 
-  const SessionSchedulePage({
+  const SessionSchedulePage({super.key, 
     required this.childId,
     required this.scheduleSesoins,
   });
@@ -28,7 +28,7 @@ class SessionSchedulePage extends StatelessWidget {
           ),
         ],
       ),
-     );
+    );
   }
 
   Widget _buildAppBar() {
@@ -74,7 +74,7 @@ class SessionSchedulePage extends StatelessWidget {
 
     final nextSession = scheduleSesoins.first;
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [Colors.blue.shade400, Colors.blue.shade600],
@@ -115,7 +115,7 @@ class SessionSchedulePage extends StatelessWidget {
               fontSize: 16,
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -136,7 +136,7 @@ class SessionSchedulePage extends StatelessWidget {
 
   Widget _buildEmptyState() {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
@@ -148,7 +148,7 @@ class SessionSchedulePage extends StatelessWidget {
             size: 48,
             color: Colors.grey,
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             "No Sessions Scheduled",
             style: TextStyle(
@@ -157,7 +157,7 @@ class SessionSchedulePage extends StatelessWidget {
               color: Colors.grey.shade700,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             "Schedule your first session by clicking the button below",
             textAlign: TextAlign.center,
@@ -173,10 +173,10 @@ class SessionSchedulePage extends StatelessWidget {
   Widget _buildSessionsList() {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (context, index) {
+        (context, index) {
           final session = scheduleSesoins[index];
           return Padding(
-            padding: EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.only(bottom: 16),
             child: _buildSessionCard(context, session),
           );
         },
@@ -202,7 +202,7 @@ class SessionSchedulePage extends StatelessWidget {
                 date: session['date'],
                 goals: List<String>.from(session['goals']),
                 notes: session['notes'] ?? 0,
-                rate: session['rate']??0.0,
+                rate: session['rate'] ?? 0.0,
                 tasks: List.from(session['tasks'] ?? []),
               ),
             ),
@@ -210,7 +210,7 @@ class SessionSchedulePage extends StatelessWidget {
         },
         borderRadius: BorderRadius.circular(16),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -230,17 +230,17 @@ class SessionSchedulePage extends StatelessWidget {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Icon(Icons.calendar_today, size: 16, color: Colors.grey),
-                  SizedBox(width: 8),
+                  const Icon(Icons.calendar_today, size: 16, color: Colors.grey),
+                  const SizedBox(width: 8),
                   Text(
                     session['date'],
                     style: TextStyle(
                       color: Colors.grey.shade700,
                     ),
                   ),
-                  Spacer(),
-                  Icon(Icons.access_time, size: 16, color: Colors.grey),
-                  SizedBox(width: 8),
+                  const Spacer(),
+                  const Icon(Icons.access_time, size: 16, color: Colors.grey),
+                  const SizedBox(width: 8),
                   Text(
                     "45 min", // Example duration
                     style: TextStyle(
@@ -249,7 +249,7 @@ class SessionSchedulePage extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               const Text(
                 "Goals:",
                 style: TextStyle(
@@ -257,13 +257,13 @@ class SessionSchedulePage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: List<String>.from(session['goals']).map((goal) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: Colors.blue.shade50,
                       borderRadius: BorderRadius.circular(20),
@@ -279,7 +279,7 @@ class SessionSchedulePage extends StatelessWidget {
                 }).toList(),
               ),
               if (session['notes'] != null && session['notes'].isNotEmpty) ...[
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 const Text(
                   "Notes:",
                   style: TextStyle(
@@ -287,7 +287,7 @@ class SessionSchedulePage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   session['notes'],
                   style: TextStyle(
@@ -297,7 +297,7 @@ class SessionSchedulePage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -312,7 +312,7 @@ class SessionSchedulePage extends StatelessWidget {
                             date: session['date'],
                             goals: List<String>.from(session['goals']),
                             notes: session['notes'] ?? '',
-                            rate: session['rate']??0.0,
+                            rate: session['rate'] ?? 0.0,
                             tasks: List.from(session['tasks'] ?? []),
                           ),
                         ),
@@ -332,7 +332,7 @@ class SessionSchedulePage extends StatelessWidget {
 
   Widget _buildSessionStatus() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: Colors.green.shade50,
         borderRadius: BorderRadius.circular(20),

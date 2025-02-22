@@ -16,7 +16,7 @@ class SessionDetailScreen extends StatefulWidget {
   final List tasks;
 
   const SessionDetailScreen({
-    Key? key,
+    super.key,
     required this.sessionName,
     required this.date,
     required this.goals,
@@ -24,7 +24,7 @@ class SessionDetailScreen extends StatefulWidget {
     required this.rate,
     required this.notes,
     required this.tasks,
-  }) : super(key: key);
+  });
 
   @override
   State<SessionDetailScreen> createState() => _SessionDetailScreenState();
@@ -60,8 +60,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
   Goal getGoal(String goalName) {
     return Goals_Lists.goalList.firstWhere(
-          (goal) => goal.goalName == goalName,
-      orElse: () => throw("Error"),
+      (goal) => goal.goalName == goalName,
+      orElse: () => throw ("Error"),
     );
   }
 
@@ -409,7 +409,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               const SizedBox(height: 16),
               ...List.generate(
                 widget.goals.length,
-                    (index) => _buildGoalItem(index),
+                (index) => _buildGoalItem(index),
               ),
               const SizedBox(height: 16),
               _buildRatingSection(),
@@ -434,12 +434,12 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               child: _isSaving
                   ? const CircularProgressIndicator(color: Colors.white)
                   : const Text(
-                "حفظ التفاصيل",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+                      "حفظ التفاصيل",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
             ),
           ),
         ],

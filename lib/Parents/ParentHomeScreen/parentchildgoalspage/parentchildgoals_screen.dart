@@ -1,12 +1,11 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenSelectGooals/GoalDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChildGoalsPage extends StatelessWidget {
   final List<Goal> goals;
 
-  const ChildGoalsPage({required this.goals});
+  const ChildGoalsPage({super.key, required this.goals});
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +14,13 @@ class ChildGoalsPage extends StatelessWidget {
         slivers: [
           _buildAppBar(),
           SliverPadding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             sliver: SliverToBoxAdapter(
               child: _buildGoalsOverview(),
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: _buildGoalsList(),
           ),
         ],
@@ -31,8 +30,8 @@ class ChildGoalsPage extends StatelessWidget {
           // Add functionality to track new goal
           _showAddGoalDialog(context);
         },
-        icon: Icon(Icons.add),
-        label: Text("Track New Goal"),
+        icon: const Icon(Icons.add),
+        label: const Text("Track New Goal"),
         backgroundColor: Colors.teal,
       ),
     );
@@ -44,7 +43,7 @@ class ChildGoalsPage extends StatelessWidget {
       floating: false,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
-        title: Text(
+        title: const Text(
           "Goals & Progress",
           style: TextStyle(color: Colors.white),
         ),
@@ -77,7 +76,7 @@ class ChildGoalsPage extends StatelessWidget {
   Widget _buildGoalsOverview() {
     int completedGoals = goals.length ~/ 2; // Example calculation
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -100,11 +99,11 @@ class ChildGoalsPage extends StatelessWidget {
                   "In Progress", (goals.length - completedGoals).toString()),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           LinearProgressIndicator(
             value: completedGoals / goals.length,
             backgroundColor: Colors.grey.shade200,
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.teal),
+            valueColor: const AlwaysStoppedAnimation<Color>(Colors.teal),
             minHeight: 8,
             borderRadius: BorderRadius.circular(4),
           ),
@@ -118,7 +117,7 @@ class ChildGoalsPage extends StatelessWidget {
       children: [
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.teal,
@@ -126,7 +125,7 @@ class ChildGoalsPage extends StatelessWidget {
         ),
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
             color: Colors.grey,
           ),
@@ -138,10 +137,10 @@ class ChildGoalsPage extends StatelessWidget {
   Widget _buildGoalsList() {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (context, index) {
+        (context, index) {
           final goal = goals[index];
           return Padding(
-            padding: EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.only(bottom: 16),
             child: _buildGoalCard(context, goal),
           );
         },
@@ -170,7 +169,7 @@ class ChildGoalsPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
               child: Stack(
                 children: [
                   Image.network(
@@ -184,7 +183,7 @@ class ChildGoalsPage extends StatelessWidget {
                     left: 0,
                     right: 0,
                     child: Container(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
@@ -197,7 +196,7 @@ class ChildGoalsPage extends StatelessWidget {
                       ),
                       child: Text(
                         goal.goalName,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -209,7 +208,7 @@ class ChildGoalsPage extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -222,7 +221,7 @@ class ChildGoalsPage extends StatelessWidget {
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -236,7 +235,7 @@ class ChildGoalsPage extends StatelessWidget {
                             ),
                           );
                         },
-                        child: Text("View Details"),
+                        child: const Text("View Details"),
                       ),
                     ],
                   ),
@@ -251,7 +250,7 @@ class ChildGoalsPage extends StatelessWidget {
 
   Widget _buildGoalTag(String label, Color color) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
@@ -270,7 +269,7 @@ class ChildGoalsPage extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Track New Goal"),
+        title: const Text("Track New Goal"),
         content: const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -293,17 +292,17 @@ class ChildGoalsPage extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("Cancel"),
+            child: const Text("Cancel"),
           ),
           ElevatedButton(
             onPressed: () {
               // Add goal tracking logic
               Navigator.pop(context);
             },
-            child: Text("Add Goal"),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.teal,
             ),
+            child: const Text("Add Goal"),
           ),
         ],
       ),

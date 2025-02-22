@@ -5,6 +5,4 @@ part 'main_state.dart';
 
 class MainCubit extends Cubit<MainState> {
   MainCubit() : super(MainInitial());
-
-
 }

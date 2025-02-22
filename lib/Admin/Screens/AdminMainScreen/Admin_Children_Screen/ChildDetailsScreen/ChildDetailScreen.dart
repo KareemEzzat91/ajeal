@@ -210,7 +210,8 @@ class ChildDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSessionCard(BuildContext context, Map<String, dynamic> session, int index) {
+  Widget _buildSessionCard(
+      BuildContext context, Map<String, dynamic> session, int index) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: 2,
@@ -273,7 +274,8 @@ class ChildDetailScreen extends StatelessWidget {
     );
   }
 
-  void _navigateToSessionDetail(BuildContext context, Map<String, dynamic> session) {
+  void _navigateToSessionDetail(
+      BuildContext context, Map<String, dynamic> session) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -338,7 +340,8 @@ class ChildDetailScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(12)),
                 child: Image.network(
                   "https://www.ces-schools.net/wp-content/uploads/2020/07/AdobeStock_234287116-1024x683.jpeg",
                   height: 140,

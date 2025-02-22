@@ -61,7 +61,13 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
               Expanded(
                 child: _buildDropdown(
                   value: selectedPeriod,
-                  items: ['Today', 'This Week', 'This Month', 'This Year', 'Custom'],
+                  items: [
+                    'Today',
+                    'This Week',
+                    'This Month',
+                    'This Year',
+                    'Custom'
+                  ],
                   onChanged: (value) {
                     setState(() {
                       selectedPeriod = value!;
@@ -74,7 +80,13 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
               Expanded(
                 child: _buildDropdown(
                   value: selectedReport,
-                  items: ['Overview', 'Children', 'Goals', 'Sessions', 'Progress'],
+                  items: [
+                    'Overview',
+                    'Children',
+                    'Goals',
+                    'Sessions',
+                    'Progress'
+                  ],
                   onChanged: (value) {
                     setState(() {
                       selectedReport = value!;
@@ -192,7 +204,8 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
                 children: [
                   Icon(icon, color: primaryColor, size: 24),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: isPositive ? Colors.green[50] : Colors.red[50],
                       borderRadius: BorderRadius.circular(12),
@@ -329,7 +342,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
                 ),
                 child: Icon(icon, color: color, size: 28),
               ),
-              const SizedBox(height: 12), 
+              const SizedBox(height: 12),
               Expanded(
                 child: Text(
                   title,
@@ -339,9 +352,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
                     color: secondaryColor,
                   ),
                   overflow: TextOverflow.ellipsis,
-
                 ),
-
               ),
               const SizedBox(height: 4),
               Expanded(
@@ -379,7 +390,8 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
             leading: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.primaries[index % Colors.primaries.length].withOpacity(0.1),
+                color: Colors.primaries[index % Colors.primaries.length]
+                    .withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(

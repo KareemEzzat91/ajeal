@@ -7,7 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AdminAddChildScreen extends StatefulWidget {
   final String doctorId;
   final String doctorName;
-  const AdminAddChildScreen({super.key, required this.doctorId, required this.doctorName});
+  const AdminAddChildScreen(
+      {super.key, required this.doctorId, required this.doctorName});
 
   @override
   _AdminAddChildScreenState createState() => _AdminAddChildScreenState();
@@ -16,25 +17,31 @@ class AdminAddChildScreen extends StatefulWidget {
 class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
-  final TextEditingController parentOccupationController = TextEditingController();
-  final TextEditingController goalsController =  TextEditingController();
+  final TextEditingController parentOccupationController =
+      TextEditingController();
+  final TextEditingController goalsController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
   final TextEditingController periodController = TextEditingController();
   final TextEditingController schoolController = TextEditingController();
-  final TextEditingController fatherOccupationController = TextEditingController();
-  final TextEditingController motherOccupationController = TextEditingController();
+  final TextEditingController fatherOccupationController =
+      TextEditingController();
+  final TextEditingController motherOccupationController =
+      TextEditingController();
   final TextEditingController familyMembersController = TextEditingController();
   final TextEditingController residenceController = TextEditingController();
-  final TextEditingController motherAgeDuringPregnancyController = TextEditingController();
-  final TextEditingController relationshipBetweenParentsController = TextEditingController();
-  final TextEditingController familyRelationshipController = TextEditingController();
+  final TextEditingController motherAgeDuringPregnancyController =
+      TextEditingController();
+  final TextEditingController relationshipBetweenParentsController =
+      TextEditingController();
+  final TextEditingController familyRelationshipController =
+      TextEditingController();
   final TextEditingController motherNatureController = TextEditingController();
   final _key = GlobalKey<FormState>();
   DateTime? selectedDate;
   DateTime? startDate;
   DateTime? endDate;
   int age = 2;
-  String selectedGender="Male";
+  String selectedGender = "Male";
   List<Goal> selectedItems = [];
   Future<void> _selectDate(BuildContext context, DateTime? dateType) async {
     final DateTime? picked = await showDatePicker(
@@ -67,19 +74,22 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
       });
     }
   }
+
   void _updateAge() {
     if (selectedDate != null) {
       final currentDate = DateTime.now();
       age = currentDate.year - selectedDate!.year;
 
       if (currentDate.month < selectedDate!.month ||
-          (currentDate.month == selectedDate!.month && currentDate.day < selectedDate!.day)) {
+          (currentDate.month == selectedDate!.month &&
+              currentDate.day < selectedDate!.day)) {
         age--;
       }
 
       ageController.text = age.toString();
     }
   }
+
   String _calculatePeriod(DateTime start, DateTime end) {
     final difference = end.difference(start);
     final years = (difference.inDays ~/ 365);
@@ -192,7 +202,6 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                         ),
                       ],
                     ),
-
                     _buildSection(
                       "Treatment Period",
                       [
@@ -216,7 +225,6 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                         ),
                       ],
                     ),
-
                     _buildSection(
                       "Family Information",
                       [
@@ -240,7 +248,6 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                         ),
                       ],
                     ),
-
                     _buildSection(
                       "Additional Information",
                       [
@@ -263,7 +270,6 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                         ),
                       ],
                     ),
-
                     _buildSection(
                       "Goals",
                       [
@@ -294,7 +300,6 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                         _buildGoalsList(),
                       ],
                     ),
-
                     const SizedBox(height: 32),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(

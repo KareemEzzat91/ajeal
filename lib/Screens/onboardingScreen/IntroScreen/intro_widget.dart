@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../helpers/responsive/responsive.dart';
 
-
 class IntroWidget extends StatelessWidget {
   const IntroWidget({
     super.key,
@@ -25,7 +24,8 @@ class IntroWidget extends StatelessWidget {
   final VoidCallback onTab;
   final int index;
 
-  double getTextSize(BuildContext context, double mobileSize, double tabletSize, double desktopSize) {
+  double getTextSize(BuildContext context, double mobileSize, double tabletSize,
+      double desktopSize) {
     if (Responsive.isExtraSmall(context)) {
       return mobileSize;
     } else if (Responsive.isMobile(context)) {
@@ -72,8 +72,12 @@ class IntroWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
-                  topLeft: index == 0 ? const Radius.circular(100) : const Radius.circular(0),
-                  topRight: index == 2 ? const Radius.circular(100) : const Radius.circular(0),
+                  topLeft: index == 0
+                      ? const Radius.circular(100)
+                      : const Radius.circular(0),
+                  topRight: index == 2
+                      ? const Radius.circular(100)
+                      : const Radius.circular(0),
                 ),
               ),
               child: Padding(
@@ -84,12 +88,20 @@ class IntroWidget extends StatelessWidget {
                     AnimatedPositioned(
                       left: isout
                           ? width + 100
-                          : Responsive.isExtraSmall(context) ? width * 0.12 :
-                      Responsive.isMobile(context) ? width * 0.08 :
-                      Responsive.isMobileLarge(context) ? width * 0.02 :
-                      Responsive.isIpad(context) ? width * 0.20 :
-                      Responsive.isTablet(context) ? width * 0.11 :
-                      Responsive.isLargeTablet(context) ? width * 0.18 : width * 0.23,
+                          : Responsive.isExtraSmall(context)
+                              ? width * 0.12
+                              : Responsive.isMobile(context)
+                                  ? width * 0.08
+                                  : Responsive.isMobileLarge(context)
+                                      ? width * 0.02
+                                      : Responsive.isIpad(context)
+                                          ? width * 0.20
+                                          : Responsive.isTablet(context)
+                                              ? width * 0.11
+                                              : Responsive.isLargeTablet(
+                                                      context)
+                                                  ? width * 0.18
+                                                  : width * 0.23,
                       top: height * 0.06,
                       duration: const Duration(milliseconds: 250),
                       child: Text(
@@ -106,7 +118,7 @@ class IntroWidget extends StatelessWidget {
                       duration: const Duration(milliseconds: 250),
                       top: height * 0.12,
                       right: isout ? width + 100 : -40,
-                      child: Container(
+                      child: SizedBox(
                         width: width,
                         child: Text(
                           description,
@@ -133,58 +145,65 @@ class IntroWidget extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: skip
                   ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () {
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
 /*
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => LoginScreen()),
                       );
 */
-                    },
-                    child: Text(
-                      'Skip ',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: getTextSize(context, 16, 30, 40),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: onTab,
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: hexToColor(color),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Icon(
-                        Icons.arrow_circle_right,
-                        color: Colors.white,
-                        size: getTextSize(context, 30, 60, 80),
-                      ),
-                    ),
-                  ),
-                ],
-              )
+                          },
+                          child: Text(
+                            'Skip ',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: getTextSize(context, 16, 30, 40),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: onTab,
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: hexToColor(color),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: Icon(
+                              Icons.arrow_circle_right,
+                              color: Colors.white,
+                              size: getTextSize(context, 30, 60, 80),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                   : SizedBox(
-                height: 46,
-                child: MaterialButton(
-                  color: hexToColor(color),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  onPressed: () {
+                      height: 46,
+                      child: MaterialButton(
+                        color: hexToColor(color),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        onPressed: () {
 /*
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => LoginScreen()),
                     );
 */
-                  },
-                  child:  Text('Get Started', style: TextStyle(color: Colors.white,fontSize: getTextSize(context, 20, 30, 50),),),
-                ),
-              ),
+                        },
+                        child: Text(
+                          'Get Started',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: getTextSize(context, 20, 30, 50),
+                          ),
+                        ),
+                      ),
+                    ),
             ),
           ),
         ],
@@ -195,5 +214,6 @@ class IntroWidget extends StatelessWidget {
 
 Color hexToColor(String hex) {
   assert(RegExp(r'^#([0-9a-fA-F]{6})|([0-9a-fA-F]{8})$').hasMatch(hex));
-  return Color(int.parse(hex.substring(1), radix: 16) + (hex.length == 7 ? 0xFF000000 : 0x00000000));
+  return Color(int.parse(hex.substring(1), radix: 16) +
+      (hex.length == 7 ? 0xFF000000 : 0x00000000));
 }

@@ -46,7 +46,7 @@ class GoalDetailScreen extends StatelessWidget {
               _buildSectionTitle("المهام:"),
               ...goal.tasks.map((task) {
                 return _buildTaskTile(task);
-              }).toList(),
+              }),
             ],
           ),
         ),

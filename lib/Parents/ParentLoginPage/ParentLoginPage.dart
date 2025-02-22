@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ParentLoginPage extends StatefulWidget {
+  const ParentLoginPage({super.key});
+
   @override
   _ParentLoginPageState createState() => _ParentLoginPageState();
 }
@@ -35,7 +37,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
 
         if (doctorSnapshot.exists && doctorSnapshot.data()!.isNotEmpty) {
           print(20);
-           final doctorKey = doctorSnapshot.data()!['Doctor_id'];
+          final doctorKey = doctorSnapshot.data()!['Doctor_id'];
           print(doctorKey);
           final userDoc = await FirebaseFirestore.instance
               .collection("users")
@@ -46,18 +48,17 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
 
           if (userDoc.exists && userDoc.data()!.isNotEmpty) {
             final child = Child.fromJson(userDoc.data()!);
-            saveToken(parentCode,child,doctorKey);
+            saveToken(parentCode, child, doctorKey);
             Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (c) => ParentHomePage(
-                  parentCode: parentCode,
-                  child: child,
-                  AdminId: doctorKey,
+                context,
+                MaterialPageRoute(
+                  builder: (c) => ParentHomePage(
+                    parentCode: parentCode,
+                    child: child,
+                    AdminId: doctorKey,
+                  ),
                 ),
-              ),
-                    (Route<dynamic> route) => false
-            );
+                (Route<dynamic> route) => false);
           } else {
             _showErrorSnackBar("Invalid parent code. Please try xagain.");
           }
@@ -66,20 +67,24 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
         }
       }
     } catch (e) {
-      _showErrorSnackBar("An error occurred. Please try again later.${e.toString()}");
+      _showErrorSnackBar(
+          "An error occurred. Please try again later.${e.toString()}");
     } finally {
       setState(() => _isLoading = false);
     }
   }
-  void saveToken(String parentCode, Child child, String doctorKey,)async{
+
+  void saveToken(
+    String parentCode,
+    Child child,
+    String doctorKey,
+  ) async {
     try {
       final pref = await SharedPreferences.getInstance();
       pref.setBool("ParentLogin", true);
       pref.setString("parentCode", parentCode);
       pref.setString("parentDoctorKey", doctorKey);
-
-    }catch(e){
-    }
+    } catch (e) {}
   }
 
   void _showErrorSnackBar(String message) {
@@ -131,7 +136,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
             color: Colors.teal.shade50,
             shape: BoxShape.circle,
           ),
-          child: Icon(
+          child: const Icon(
             Icons.family_restroom,
             size: 50,
             color: Colors.teal,
@@ -141,16 +146,16 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
         Text(
           "Welcome Back!",
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Colors.teal,
-          ),
+                fontWeight: FontWeight.bold,
+                color: Colors.teal,
+              ),
         ),
         const SizedBox(height: 8),
         Text(
           "Please sign in to continue",
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: Colors.grey,
-          ),
+                color: Colors.grey,
+              ),
         ),
       ],
     );
@@ -164,7 +169,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
           decoration: InputDecoration(
             labelText: "Parent Code",
             hintText: "Enter your parent code",
-            prefixIcon: Icon(Icons.person_outline, color: Colors.teal),
+            prefixIcon: const Icon(Icons.person_outline, color: Colors.teal),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
@@ -174,7 +179,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.teal),
+              borderSide: const BorderSide(color: Colors.teal),
             ),
           ),
           validator: (value) {
@@ -191,7 +196,8 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
           decoration: InputDecoration(
             labelText: "Admin Code",
             hintText: "Enter admin code",
-            prefixIcon: Icon(Icons.admin_panel_settings_outlined, color: Colors.teal),
+            prefixIcon:
+                const Icon(Icons.admin_panel_settings_outlined, color: Colors.teal),
             suffixIcon: IconButton(
               icon: Icon(
                 _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
@@ -210,7 +216,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.teal),
+              borderSide: const BorderSide(color: Colors.teal),
             ),
           ),
           validator: (value) {
@@ -235,22 +241,22 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
         ),
       ),
       child: _isLoading
-          ? SizedBox(
-        height: 20,
-        width: 20,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-        ),
-      )
+          ? const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            )
           : const Text(
-        "Sign In",
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      ),
+              "Sign In",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
     );
   }
 

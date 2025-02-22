@@ -30,16 +30,17 @@ class AdminChildrenScreen extends StatefulWidget {
   final String doctorName;
 
   const AdminChildrenScreen({
-    Key? key,
+    super.key,
     required this.doctorId,
     required this.doctorName,
-  }) : super(key: key);
+  });
 
   @override
   State<AdminChildrenScreen> createState() => _AdminChildrenScreenState();
 }
 
-class _AdminChildrenScreenState extends State<AdminChildrenScreen> with TickerProviderStateMixin {
+class _AdminChildrenScreenState extends State<AdminChildrenScreen>
+    with TickerProviderStateMixin {
   late AnimationController _fabAnimationController;
   late AnimationController _filterAnimationController;
   bool _isListView = true;
@@ -131,7 +132,9 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen> with TickerPr
           ],
         ),
       ),
-    ).animate().slideY(begin: -1, end: 0, duration: 500.ms, curve: Curves.easeOut);
+    )
+        .animate()
+        .slideY(begin: -1, end: 0, duration: 500.ms, curve: Curves.easeOut);
   }
 
   Widget _buildFilterChip(String filter, String label) {
@@ -154,7 +157,9 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen> with TickerPr
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(
-            color: isSelected ? AppColors.primary : AppColors.textSecondary.withOpacity(0.2),
+            color: isSelected
+                ? AppColors.primary
+                : AppColors.textSecondary.withOpacity(0.2),
           ),
         ),
       ),
@@ -178,6 +183,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen> with TickerPr
       },
     );
   }
+
   Widget _buildLoadingState() {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
@@ -259,6 +265,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen> with TickerPr
       ),
     );
   }
+
   Widget _buildChildrenGrid(AddChildCubit bloc) {
     return GridView.builder(
       padding: const EdgeInsets.all(16),
@@ -276,9 +283,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen> with TickerPr
         return ChildGridCard(
           child: child,
           onTap: () => _navigateToDetails(context, child),
-        ).animate()
-            .fadeIn(delay: (index * 100).ms)
-            .slideY(begin: 0.2, end: 0);
+        ).animate().fadeIn(delay: (index * 100).ms).slideY(begin: 0.2, end: 0);
       },
     );
   }
@@ -294,9 +299,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen> with TickerPr
         return ChildCard(
           child: child,
           onTap: () => _navigateToDetails(context, child),
-        ).animate()
-            .fadeIn(delay: (index * 100).ms)
-            .slideX(begin: 0.2, end: 0);
+        ).animate().fadeIn(delay: (index * 100).ms).slideX(begin: 0.2, end: 0);
       },
     );
   }
@@ -328,11 +331,12 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen> with TickerPr
           fontWeight: FontWeight.w600,
         ),
       ),
-    ).animate(controller: _fabAnimationController)
-        .scale(
-      duration: 100.ms,
-      curve: Curves.easeOut,
     )
+        .animate(controller: _fabAnimationController)
+        .scale(
+          duration: 100.ms,
+          curve: Curves.easeOut,
+        )
         .then()
         .shake(hz: 4, curve: Curves.easeOut);
   }
@@ -344,7 +348,8 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen> with TickerPr
         builder: (context) => ChildDetailScreen(
           child: child,
           childName: child.name,
-          birthDate: "${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
+          birthDate:
+              "${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
           goals: child.selectedGoals,
           progress: "50%",
         ),
@@ -358,10 +363,10 @@ class ChildCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const ChildCard({
-    Key? key,
+    super.key,
     required this.child,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -517,7 +522,8 @@ class ChildCard extends StatelessWidget {
         PullDownMenuItem(
           onTap: () async {
             // Controllers for doctorName and doctorId
-            TextEditingController doctorNameController = TextEditingController();
+            TextEditingController doctorNameController =
+                TextEditingController();
             TextEditingController doctorIdController = TextEditingController();
 
             // Show QuickAlert with two fields
@@ -556,7 +562,8 @@ class ChildCard extends StatelessWidget {
               ),
               onConfirmBtnTap: () async {
                 // Validate inputs
-                if (doctorNameController.text.isEmpty || doctorIdController.text.isEmpty) {
+                if (doctorNameController.text.isEmpty ||
+                    doctorIdController.text.isEmpty) {
                   await QuickAlert.show(
                     context: context,
                     type: QuickAlertType.error,
@@ -573,7 +580,8 @@ class ChildCard extends StatelessWidget {
                 await QuickAlert.show(
                   context: context,
                   type: QuickAlertType.success,
-                  text: "Doctor '${doctorNameController.text}' has been assigned!",
+                  text:
+                      "Doctor '${doctorNameController.text}' has been assigned!",
                 );
 
                 // Save data to Firestore
@@ -612,10 +620,11 @@ class ChildCard extends StatelessWidget {
                       .delete();
 
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Child transferred successfully!")),
+                    const SnackBar(
+                        content: Text("Child transferred successfully!")),
                   );
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  ScaffoldMessenger.of( context).showSnackBar(
                     SnackBar(content: Text("Error: $e")),
                   );
                 }
@@ -624,7 +633,8 @@ class ChildCard extends StatelessWidget {
           },
           title: 'Transfer',
           icon: CupertinoIcons.arrow_2_circlepath,
-        ),        PullDownMenuItem(
+        ),
+        PullDownMenuItem(
           onTap: () {},
           title: 'Remove',
           icon: CupertinoIcons.delete,
@@ -648,10 +658,10 @@ class ChildGridCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const ChildGridCard({
-    Key? key,
+    super.key,
     required this.child,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -704,7 +714,8 @@ class ChildGridCard extends StatelessWidget {
                         ),
                         errorWidget: (context, url, error) => Container(
                           color: Colors.grey[100],
-                          child: Icon(Icons.person, size: 32, color: Colors.grey[400]),
+                          child: Icon(Icons.person,
+                              size: 32, color: Colors.grey[400]),
                         ),
                       ),
                     ),
@@ -766,5 +777,4 @@ class ChildGridCard extends StatelessWidget {
       ),
     );
   }
-
 }

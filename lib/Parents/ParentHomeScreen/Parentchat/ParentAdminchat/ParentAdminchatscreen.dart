@@ -8,7 +8,7 @@ class ChatScreen extends StatefulWidget {
   final String parentId;
   final bool isparent;
 
-  ChatScreen({
+  const ChatScreen({super.key, 
     required this.chatId,
     required this.doctorId,
     required this.parentId,
@@ -26,7 +26,9 @@ class _ChatScreenState extends State<ChatScreen> {
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
       final messageText = _messageController.text;
-      final senderId = widget.isparent? widget.parentId: FirebaseAuth.instance.currentUser?.uid ?? widget.parentId;
+      final senderId = widget.isparent
+          ? widget.parentId
+          : FirebaseAuth.instance.currentUser?.uid ?? widget.parentId;
 
       final messageRef = FirebaseFirestore.instance
           .collection('Chats')
@@ -52,14 +54,21 @@ class _ChatScreenState extends State<ChatScreen> {
             CircleAvatar(
               radius: 25,
               backgroundImage: widget.isparent
-                  ? const AssetImage('assets/images/Mohsen.jpg') as ImageProvider:const NetworkImage(
-                  "https://static.vecteezy.com/system/resources/previews/019/818/399/original/happy-family-with-children-mother-father-and-kids-cute-cartoon-characters-isolated-colorful-illustration-in-flat-style-free-png.png")
-               ,
+                  ? const AssetImage('assets/images/Mohsen.jpg')
+                      as ImageProvider
+                  : const NetworkImage(
+                      "https://static.vecteezy.com/system/resources/previews/019/818/399/original/happy-family-with-children-mother-father-and-kids-cute-cartoon-characters-isolated-colorful-illustration-in-flat-style-free-png.png"),
             ),
             const SizedBox(width: 8),
-            widget.isparent ?  const Text('Dr. Mohammed',style: TextStyle(fontSize: 15),):const Text("Parents",style: TextStyle(fontSize: 15)),
+            widget.isparent
+                ? const Text(
+                    'Dr. Mohammed',
+                    style: TextStyle(fontSize: 15),
+                  )
+                : const Text("Parents", style: TextStyle(fontSize: 15)),
             const Spacer(),
-            const Text('🟢 Online', style: TextStyle(color: Colors.green,fontSize: 12)),
+            const Text('🟢 Online',
+                style: TextStyle(color: Colors.green, fontSize: 12)),
           ],
         ),
         backgroundColor: Colors.blue[700],
@@ -87,17 +96,22 @@ class _ChatScreenState extends State<ChatScreen> {
                 final messages = snapshot.data!.docs;
 
                 return ListView.builder(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
-                    final message = messages[index].data() as Map<String, dynamic>;
-                    final isDoctorMessage = message['sender_id'] == widget.parentId;// اهلا  sendrid = dr_id
+                    final message =
+                        messages[index].data() as Map<String, dynamic>;
+                    final isDoctorMessage = message['sender_id'] ==
+                        widget.parentId; // اهلا  sendrid = dr_id
 
                     return ChatBubble(
                       message: message['text'],
-                      sender: isDoctorMessage ? 'Parent':'Doctor' ,
+                      sender: isDoctorMessage ? 'Parent' : 'Doctor',
                       time: message['timestamp'] != null
-                          ? (message['timestamp'] as Timestamp).toDate().toString().split(' ')[1]
+                          ? (message['timestamp'] as Timestamp)
+                              .toDate()
+                              .toString()
+                              .split(' ')[1]
                           : 'N/A',
                       isDoctorMessage: isDoctorMessage,
                     );
@@ -112,7 +126,7 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.attach_file),
+                  icon: const Icon(Icons.attach_file),
                   onPressed: () {
                     // إضافة وظيفة المرفقات هنا
                   },
@@ -125,12 +139,13 @@ class _ChatScreenState extends State<ChatScreen> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      contentPadding:
+                          const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: sendMessage, // إرسال الرسالة
                 ),
               ],
@@ -148,7 +163,7 @@ class ChatBubble extends StatelessWidget {
   final String time;
   final bool isDoctorMessage;
 
-  const ChatBubble({
+  const ChatBubble({super.key, 
     required this.message,
     required this.sender,
     required this.time,
@@ -157,11 +172,12 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isdark =Theme.of(context).brightness==Brightness.dark;
+    final isdark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
-        mainAxisAlignment: isDoctorMessage ? MainAxisAlignment.start : MainAxisAlignment.end,
+        mainAxisAlignment:
+            isDoctorMessage ? MainAxisAlignment.start : MainAxisAlignment.end,
         children: [
           if (isDoctorMessage)
             const CircleAvatar(
@@ -178,21 +194,25 @@ class ChatBubble extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(
-              crossAxisAlignment: isDoctorMessage ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+              crossAxisAlignment: isDoctorMessage
+                  ? CrossAxisAlignment.start
+                  : CrossAxisAlignment.end,
               children: [
                 Text(
                   sender,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   message,
-                  style: TextStyle(fontSize: 16,color: isdark?Colors.white:Colors.black),
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: isdark ? Colors.white : Colors.black),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   convertTo12Hour(time),
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
             ),
@@ -202,20 +222,22 @@ class ChatBubble extends StatelessWidget {
     );
   }
 }
+
 String convertTo12Hour(String time) {
-  try {  List<String> parts = time.split(':');
-  int hours = int.parse(parts[0]);
-  int minutes = int.parse(parts[1]);
+  try {
+    List<String> parts = time.split(':');
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1]);
 
-  // تحويل الساعة إلى صيغة 12 ساعة
-  String period = hours >= 12 ? "PM" : "AM";
-  hours = hours > 12 ? hours - 12 : hours;
+    // تحويل الساعة إلى صيغة 12 ساعة
+    String period = hours >= 12 ? "PM" : "AM";
+    hours = hours > 12 ? hours - 12 : hours;
 
-  // تقريب الدقائق
-  minutes = (minutes + 0.5).toInt(); // تقريبي
+    // تقريب الدقائق
+    minutes = (minutes + 0.5).toInt(); // تقريبي
 
-  return "$hours:${minutes.toString().padLeft(2, '0')} $period";}catch(e){
+    return "$hours:${minutes.toString().padLeft(2, '0')} $period";
+  } catch (e) {
     return "N/A";
   }
-
 }

@@ -41,10 +41,10 @@ class DailyNotesScreen extends StatefulWidget {
   final String childID;
 
   const DailyNotesScreen({
-    Key? key,
+    super.key,
     required this.userType,
     required this.childID,
-  }) : super(key: key);
+  });
 
   @override
   _DailyNotesScreenState createState() => _DailyNotesScreenState();
@@ -72,7 +72,8 @@ class _DailyNotesScreenState extends State<DailyNotesScreen> {
           .get();
 
       if (snapshot.exists && snapshot.data()?['notes'] != null) {
-        final notesData = List<Map<String, dynamic>>.from(snapshot.data()!['notes']);
+        final notesData =
+            List<Map<String, dynamic>>.from(snapshot.data()!['notes']);
         setState(() {
           notes = notesData.map((note) => Note.fromMap(note)).toList();
         });
@@ -195,170 +196,171 @@ class _DailyNotesScreenState extends State<DailyNotesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        title: Text(
-          "Daily Notes",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.grey.shade800,
-            fontSize: 24,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: CircleAvatar(
-              backgroundColor: getSenderColor(widget.userType),
-              child: Icon(
-                getSenderIcon(widget.userType),
-                color: getSenderIconColor(widget.userType),
-                size: 20,
-              ),
+        backgroundColor: Colors.grey.shade100,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          title: Text(
+            "Daily Notes",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.grey.shade800,
+              fontSize: 24,
             ),
           ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                // Search Bar
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.shade200,
-                        offset: const Offset(0, 2),
-                        blurRadius: 6,
+          centerTitle: true,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: CircleAvatar(
+                backgroundColor: getSenderColor(widget.userType),
+                child: Icon(
+                  getSenderIcon(widget.userType),
+                  color: getSenderIconColor(widget.userType),
+                  size: 20,
+                ),
+              ),
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  // Search Bar
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.shade200,
+                          offset: const Offset(0, 2),
+                          blurRadius: 6,
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: "Search notes...",
+                        prefixIcon:
+                            Icon(Icons.search, color: Colors.grey.shade600),
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                      ),
+                      onChanged: (value) => setState(() {}),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Date Navigation
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _DateNavigationButton(
+                        icon: Icons.arrow_back_ios,
+                        onPressed: () {
+                          setState(() {
+                            selectedDate =
+                                selectedDate.subtract(const Duration(days: 1));
+                          });
+                        },
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: selectedDate,
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (picked != null) {
+                            setState(() => selectedDate = picked);
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade100,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_today,
+                                size: 16,
+                                color: Colors.grey.shade700,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                DateFormat('MMM dd, yyyy').format(selectedDate),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey.shade800,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      _DateNavigationButton(
+                        icon: Icons.arrow_forward_ios,
+                        onPressed: () {
+                          setState(() {
+                            selectedDate =
+                                selectedDate.add(const Duration(days: 1));
+                          });
+                        },
                       ),
                     ],
                   ),
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: "Search notes...",
-                      prefixIcon: Icon(Icons.search, color: Colors.grey.shade600),
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                    ),
-                    onChanged: (value) => setState(() {}),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                // Date Navigation
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _DateNavigationButton(
-                      icon: Icons.arrow_back_ios,
-                      onPressed: () {
-                        setState(() {
-                          selectedDate = selectedDate.subtract(const Duration(days: 1));
-                        });
-                      },
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        final picked = await showDatePicker(
-                          context: context,
-                          initialDate: selectedDate,
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                        );
-                        if (picked != null) {
-                          setState(() => selectedDate = picked);
-                        }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.calendar_today,
-                              size: 16,
-                              color: Colors.grey.shade700,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              DateFormat('MMM dd, yyyy').format(selectedDate),
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.grey.shade800,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    _DateNavigationButton(
-                      icon: Icons.arrow_forward_ios,
-                      onPressed: () {
-                        setState(() {
-                          selectedDate = selectedDate.add(const Duration(days: 1));
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : getFilteredNotes().isEmpty
-                ? _EmptyState()
-                : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: getFilteredNotes().length,
-              itemBuilder: (context, index) {
-                final note = getFilteredNotes()[index];
-                return _NoteCard(
-                  note: note,
-                  userType: widget.userType,
-                  onDelete: () async {
-                    setState(() {
-                      notes.removeWhere((n) => n.id == note.id);
-                    });
-                    await saveDailyNotes();
-                  },
-                  senderColor: getSenderColor(note.sender),
-                  senderIcon: getSenderIcon(note.sender),
-                  senderIconColor: getSenderIconColor(note.sender),
-                );
-              },
+            Expanded(
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : getFilteredNotes().isEmpty
+                      ? _EmptyState()
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: getFilteredNotes().length,
+                          itemBuilder: (context, index) {
+                            final note = getFilteredNotes()[index];
+                            return _NoteCard(
+                              note: note,
+                              userType: widget.userType,
+                              onDelete: () async {
+                                setState(() {
+                                  notes.removeWhere((n) => n.id == note.id);
+                                });
+                                await saveDailyNotes();
+                              },
+                              senderColor: getSenderColor(note.sender),
+                              senderIcon: getSenderIcon(note.sender),
+                              senderIconColor: getSenderIconColor(note.sender),
+                            );
+                          },
+                        ),
             ),
-          ),
-        ],
-      ),
-      floatingActionButton:  FloatingActionButton.extended(
-        onPressed: () => _showAddNoteDialog(),
-        backgroundColor: Colors.blue,
-        icon: const Icon(Icons.add),
-        label: const Text('Add Note'),
-      )
-
-    );
+          ],
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => _showAddNoteDialog(),
+          backgroundColor: Colors.blue,
+          icon: const Icon(Icons.add),
+          label: const Text('Add Note'),
+        ));
   }
 
   Future<void> _showAddNoteDialog() async {

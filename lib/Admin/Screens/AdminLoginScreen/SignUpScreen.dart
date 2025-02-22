@@ -34,7 +34,7 @@ class SignupScreen extends StatelessWidget {
       },
       child: Scaffold(
         body: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -47,7 +47,8 @@ class SignupScreen extends StatelessWidget {
           child: SafeArea(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -68,10 +69,11 @@ class SignupScreen extends StatelessWidget {
                     // Welcome Text
                     Text(
                       "Register Now!",
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
                     ),
 
                     const SizedBox(height: 8),
@@ -79,8 +81,8 @@ class SignupScreen extends StatelessWidget {
                     Text(
                       "Enter Your Information Below",
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.grey.shade600,
-                      ),
+                            color: Colors.grey.shade600,
+                          ),
                     ),
 
                     const SizedBox(height: 24),
@@ -96,7 +98,9 @@ class SignupScreen extends StatelessWidget {
                             label: "Full Name",
                             icon: Icons.person_outline,
                             validator: (val) {
-                              if (val?.isEmpty ?? true) return "Name is required";
+                              if (val?.isEmpty ?? true) {
+                                return "Name is required";
+                              }
                               return null;
                             },
                           ),
@@ -109,8 +113,12 @@ class SignupScreen extends StatelessWidget {
                             label: "Email",
                             icon: Icons.email_outlined,
                             validator: (val) {
-                              if (!val!.isEmail) return "Please enter a valid email";
-                              if (val.length < 10) return "Email should be at least 10 characters";
+                              if (!val!.isEmail) {
+                                return "Please enter a valid email";
+                              }
+                              if (val.length < 10) {
+                                return "Email should be at least 10 characters";
+                              }
                               return null;
                             },
                           ),
@@ -124,7 +132,9 @@ class SignupScreen extends StatelessWidget {
                             icon: Icons.lock_outline,
                             isPassword: true,
                             validator: (val) {
-                              if (val!.length < 6) return "Password must be at least 6 characters";
+                              if (val!.length < 6) {
+                                return "Password must be at least 6 characters";
+                              }
                               return null;
                             },
                           ),
@@ -138,7 +148,9 @@ class SignupScreen extends StatelessWidget {
                             icon: Icons.phone_outlined,
                             keyboardType: TextInputType.phone,
                             validator: (val) {
-                              if (val?.length != 11) return "Please enter a valid 11-digit mobile number";
+                              if (val?.length != 11) {
+                                return "Please enter a valid 11-digit mobile number";
+                              }
                               return null;
                             },
                           ),
@@ -152,17 +164,18 @@ class SignupScreen extends StatelessWidget {
                                 onPressed: state is SignLoadingState
                                     ? null
                                     : () => bloc.SignUp(
-                                  context,
-                                  _formKey,
-                                  _emailController,
-                                  _nameController,
-                                  _passwordController,
-                                  _mobileController,
-                                ),
+                                          context,
+                                          _formKey,
+                                          _emailController,
+                                          _nameController,
+                                          _passwordController,
+                                          _mobileController,
+                                        ),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xff0186c7),
+                                  backgroundColor: const Color(0xff0186c7),
                                   foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -171,20 +184,20 @@ class SignupScreen extends StatelessWidget {
                                 ),
                                 child: state is SignLoadingState
                                     ? const SizedBox(
-                                  height: 24,
-                                  width: 24,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2,
-                                  ),
-                                )
+                                        height: 24,
+                                        width: 24,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2,
+                                        ),
+                                      )
                                     : const Text(
-                                  "Sign Up",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                        "Sign Up",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                               );
                             },
                           ),
@@ -202,7 +215,8 @@ class SignupScreen extends StatelessWidget {
                               TextButton(
                                 onPressed: () => Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(builder: (_) => AdminLoginScreen()),
+                                  MaterialPageRoute(
+                                      builder: (_) => AdminLoginScreen()),
                                 ),
                                 child: const Text(
                                   "Login",
@@ -242,7 +256,7 @@ class SignupScreen extends StatelessWidget {
       validator: validator,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, color: Color(0xff0186c7)),
+        prefixIcon: Icon(icon, color: const Color(0xff0186c7)),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade300),
@@ -261,7 +275,8 @@ class SignupScreen extends StatelessWidget {
         ),
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
     );
   }

@@ -15,7 +15,7 @@ class ParentHomePage extends StatelessWidget {
   final String AdminId;
 
   const ParentHomePage(
-      {required this.parentCode, required this.child, required this.AdminId});
+      {super.key, required this.parentCode, required this.child, required this.AdminId});
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +25,16 @@ class ParentHomePage extends StatelessWidget {
           _buildAppBar(context),
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildProfileHeader(),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   _buildQuickStats(),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   _buildProgressSection(),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   _buildActionCards(context),
                 ],
               ),
@@ -93,13 +93,13 @@ class ParentHomePage extends StatelessWidget {
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.notifications),
+          icon: const Icon(Icons.notifications),
           onPressed: () {
             // Add notifications functionality
           },
         ),
         IconButton(
-          icon: Icon(Icons.settings),
+          icon: const Icon(Icons.settings),
           onPressed: () {
             // Add settings functionality
           },
@@ -110,7 +110,7 @@ class ParentHomePage extends StatelessWidget {
 
   Widget _buildProfileHeader() {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -129,28 +129,28 @@ class ParentHomePage extends StatelessWidget {
             backgroundColor: Colors.teal.shade100,
             child: Text(
               child.name[0].toUpperCase(),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 30,
                 color: Colors.teal,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   child.name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   "Age: ${child.age}",
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     color: Colors.grey,
                   ),
@@ -193,7 +193,7 @@ class ParentHomePage extends StatelessWidget {
       String title, String value, IconData icon, Color color) {
     return Container(
       width: 100,
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
@@ -201,7 +201,7 @@ class ParentHomePage extends StatelessWidget {
       child: Column(
         children: [
           Icon(icon, color: color),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             value,
             style: TextStyle(
@@ -224,7 +224,7 @@ class ParentHomePage extends StatelessWidget {
 
   Widget _buildProgressSection() {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [Colors.teal.shade400, Colors.teal.shade600],
@@ -242,13 +242,13 @@ class ParentHomePage extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           LinearProgressIndicator(
             value: 0.75,
             backgroundColor: Colors.white.withOpacity(0.3),
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -302,7 +302,7 @@ class ParentHomePage extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         _buildActionCard(
           context,
           "Schedule Sessions",
@@ -319,7 +319,7 @@ class ParentHomePage extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         _buildActionCard(
           context,
           "Chat with Teacher",
@@ -333,12 +333,12 @@ class ParentHomePage extends StatelessWidget {
                 isparent: true,
                 chatId: AdminId + child.parentOccupation,
                 doctorId: AdminId,
-                parentId: child.parentOccupation ,
+                parentId: child.parentOccupation,
               ),
             ),
           ),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         _buildActionCard(
           context,
           "Global Chat",
@@ -352,23 +352,24 @@ class ParentHomePage extends StatelessWidget {
                 childName: child.name,
                 isparent: true,
                 doctorId: AdminId,
-                parentId: child.parentOccupation ,
+                parentId: child.parentOccupation,
               ),
             ),
           ),
-        ), SizedBox(height: 16),
+        ),
+        const SizedBox(height: 16),
         _buildActionCard(
           context,
           "Daily Notes",
           "Write Your Daily Notes",
           Icons.note_add_sharp,
           Colors.brown,
-              () => Navigator.push(
+          () => Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => DailyNotesScreen(
-              childID:parentCode ,
-              userType:"Parent" ,
+                childID: parentCode,
+                userType: "Parent",
               ),
             ),
           ),
@@ -376,6 +377,7 @@ class ParentHomePage extends StatelessWidget {
       ],
     );
   }
+
 //          IconButton(onPressed: (){
 //             Navigator.push(context, MaterialPageRoute(builder: (context)=>DailyNotesScreen(userType: 'Doctor',childID: '${child.parentOccupation}${child.id+1}',)));
 //           }, icon: const Icon(Icons.add_task_outlined,color: Colors.black,))
@@ -396,18 +398,18 @@ class ParentHomePage extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: color.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -421,7 +423,7 @@ class ParentHomePage extends StatelessWidget {
                     ),
                     Text(
                       subtitle,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
                         color: Colors.grey,
                       ),
@@ -429,7 +431,7 @@ class ParentHomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(Icons.arrow_forward_ios, size: 16),
+              const Icon(Icons.arrow_forward_ios, size: 16),
             ],
           ),
         ),
@@ -441,52 +443,52 @@ class ParentHomePage extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Emergency Contact"),
+        title: const Text("Emergency Contact"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(Icons.phone, color: Colors.red),
-              title: Text("Call Emergency Number"),
+              leading: const Icon(Icons.phone, color: Colors.red),
+              title: const Text("Call Emergency Number"),
               onTap: () {
                 // Add emergency call functionality
               },
             ),
             ListTile(
-              leading: Icon(Icons.message, color: Colors.orange),
-              title: Text("Message Teacher"),
+              leading: const Icon(Icons.message, color: Colors.orange),
+              title: const Text("Message Teacher"),
               onTap: () {
                 // Add quick message functionality
               },
             ),
             ElevatedButton.icon(
-                    icon: const Icon(Icons.logout),
-                    label: const Text("تسجيل الخروج"),
-                    onPressed: (){
-                    logout(context);
-                    },
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-                  )
-
-
+              icon: const Icon(Icons.logout),
+              label: const Text("تسجيل الخروج"),
+              onPressed: () {
+                logout(context);
+              },
+              style:
+                  ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+            )
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("Close"),
+            child: const Text("Close"),
           ),
         ],
       ),
     );
   }
-  void logout(context) async{
-    await  FirebaseAuth.instance.signOut();
+
+  void logout(context) async {
+    await FirebaseAuth.instance.signOut();
     final pref = await SharedPreferences.getInstance();
     pref.setBool("ParentLogin", false);
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>const AdminOrParentsScreen()),(Route<dynamic> route) => false );
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const AdminOrParentsScreen()),
+        (Route<dynamic> route) => false);
   }
-
 }
-
-

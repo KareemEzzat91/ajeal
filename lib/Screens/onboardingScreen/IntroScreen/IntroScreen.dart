@@ -8,9 +8,9 @@ import 'intro_widget.dart';
 class AppScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-  };
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }
 
 class IntroScreen extends StatefulWidget {
@@ -21,17 +21,16 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroScreen> {
-
-
-  final PageController  _pageController = PageController();
+  final PageController _pageController = PageController();
 
   int _activePage = 0;
 
-  void onNextPage(){
-    if(_activePage  < _pages.length - 1) {
+  void onNextPage() {
+    if (_activePage < _pages.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 500),
-        curve: Curves.fastEaseInToSlowEaseOut,);
+        curve: Curves.fastEaseInToSlowEaseOut,
+      );
     }
   }
 
@@ -48,21 +47,20 @@ class _IntroScreenState extends State<IntroScreen> {
       'color': '#5babde',
       'title': 'Find Your Perfect Job',
       'image': 'assets/images/image2.jpg',
-      'description': ' Find thousands of job listings\n tailored to your skills and preferences. '
-         ,
+      'description':
+          ' Find thousands of job listings\n tailored to your skills and preferences. ',
       'skip': true
     },
     {
       'color': '#0186c7',
       'title': 'Step Into Your Future',
       'image': 'assets/images/image3.jpg',
-      'description': '  Join our community and take\n  the first step towards your\n ideal career! '
-         ,
+      'description':
+          '  Join our community and take\n  the first step towards your\n ideal career! ',
       'skip': false
     },
   ];
-   bool _isout =false   ;
-
+  bool _isout = false;
 
   @override
   Widget build(BuildContext context) {
@@ -75,17 +73,19 @@ class _IntroScreenState extends State<IntroScreen> {
               scrollBehavior: AppScrollBehavior(),
               onPageChanged: (int page) {
                 setState(() {
-                  _isout = !_isout;// true
+                  _isout = !_isout; // true
                 });
-                Timer (const Duration(milliseconds: 300),(){
-                  setState(() {
-                  _isout = !_isout;
-                });
-                } ,);
+                Timer(
+                  const Duration(milliseconds: 300),
+                  () {
+                    setState(() {
+                      _isout = !_isout;
+                    });
+                  },
+                );
                 _activePage = page;
-
               },
-              itemBuilder: (BuildContext context, int index){
+              itemBuilder: (BuildContext context, int index) {
                 return IntroWidget(
                   isout: _isout,
                   index: index,
@@ -96,8 +96,7 @@ class _IntroScreenState extends State<IntroScreen> {
                   skip: _pages[index]['skip'],
                   onTab: onNextPage,
                 );
-              }
-          ),
+              }),
           Positioned(
             top: MediaQuery.of(context).size.height / 1.75,
             right: 0,
@@ -106,36 +105,33 @@ class _IntroScreenState extends State<IntroScreen> {
               children: [
                 Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: _buildIndicator()
-                )
+                    children: _buildIndicator())
               ],
             ),
           )
-
         ],
       ),
     );
   }
 
   List<Widget> _buildIndicator() {
-    final indicators =  <Widget>[];
+    final indicators = <Widget>[];
 
-    for(var i = 0; i < _pages.length; i++) {
-
-      if(_activePage == i) {
+    for (var i = 0; i < _pages.length; i++) {
+      if (_activePage == i) {
         indicators.add(_indicatorsTrue());
-      }else{
+      } else {
         indicators.add(_indicatorsFalse());
       }
     }
-    return  indicators;
+    return indicators;
   }
 
   Widget _indicatorsTrue() {
     final String color;
-    if(_activePage == 0){
+    if (_activePage == 0) {
       color = '#3c94f8';
-    } else  if(_activePage ==  1) {
+    } else if (_activePage == 1) {
       color = '#5babde';
     } else {
       color = '#0186c7';

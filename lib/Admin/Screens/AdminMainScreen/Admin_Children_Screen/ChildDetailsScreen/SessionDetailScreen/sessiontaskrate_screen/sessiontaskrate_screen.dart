@@ -12,7 +12,8 @@ class SessionTaskRateScreen extends StatefulWidget {
 
 class _SessionTaskRateScreenState extends State<SessionTaskRateScreen> {
   double _rating = 0.0; // تقييم المهمة
-  final TextEditingController _notesController = TextEditingController(); // ملاحظات المهمة
+  final TextEditingController _notesController =
+      TextEditingController(); // ملاحظات المهمة
 
   @override
   void initState() {
@@ -129,7 +130,8 @@ class _SessionTaskRateScreenState extends State<SessionTaskRateScreen> {
                   onPressed: _saveTaskDetails,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

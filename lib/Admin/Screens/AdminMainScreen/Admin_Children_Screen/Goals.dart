@@ -19,10 +19,22 @@ class Goal {
     return Goal(
       goalName: data['goalName'] ?? '',
       goalDescription: data['goalDescription'] ?? '',
-      tasks: (data['tasks'] as List?)?.map((task) => Task.fromMap(task)).toList() ?? [],
-      sessions: (data['sessions'] as List?)?.map((session) => Map<String, dynamic>.from(session)).toList() ?? [],
-      evaluations: (data['evaluations'] as List?)?.map((evaluation) => Map<String, dynamic>.from(evaluation)).toList() ?? [],
-      progressData: (data['progressData'] as List?)?.map((progress) => (progress as num).toDouble()).toList() ?? [],
+      tasks: (data['tasks'] as List?)
+              ?.map((task) => Task.fromMap(task))
+              .toList() ??
+          [],
+      sessions: (data['sessions'] as List?)
+              ?.map((session) => Map<String, dynamic>.from(session))
+              .toList() ??
+          [],
+      evaluations: (data['evaluations'] as List?)
+              ?.map((evaluation) => Map<String, dynamic>.from(evaluation))
+              .toList() ??
+          [],
+      progressData: (data['progressData'] as List?)
+              ?.map((progress) => (progress as num).toDouble())
+              .toList() ??
+          [],
     );
   }
 
@@ -42,8 +54,8 @@ class Task {
   final String taskName;
   final String taskDescription;
   final String goalName;
-   double rate; // تقييم المهمة
-   String notes; // ملاحظات المهمة
+  double rate; // تقييم المهمة
+  String notes; // ملاحظات المهمة
 
   Task({
     required this.taskName,
@@ -72,5 +84,4 @@ class Task {
       'notes': notes, // حفظ الملاحظات
     };
   }
-
 }

@@ -47,10 +47,18 @@ class AdminProfileScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             // معلومات الحساب
-            const ProfileInfoTile(icon: Icons.person, title: "الاسم", value: "محمد "),
-            const ProfileInfoTile(icon: Icons.email, title: "البريد الإلكتروني", value: "admin@example.com"),
-            const ProfileInfoTile(icon: Icons.phone, title: "رقم الهاتف", value: "+20 123 456 789"),
-            const ProfileInfoTile(icon: Icons.badge, title: "الدور الوظيفي", value: "مدير"),
+            const ProfileInfoTile(
+                icon: Icons.person, title: "الاسم", value: "محمد "),
+            const ProfileInfoTile(
+                icon: Icons.email,
+                title: "البريد الإلكتروني",
+                value: "admin@example.com"),
+            const ProfileInfoTile(
+                icon: Icons.phone,
+                title: "رقم الهاتف",
+                value: "+20 123 456 789"),
+            const ProfileInfoTile(
+                icon: Icons.badge, title: "الدور الوظيفي", value: "مدير"),
             const SizedBox(height: 20),
 
             // أزرار الإجراءات
@@ -60,25 +68,25 @@ class AdminProfileScreen extends StatelessWidget {
               onPressed: () {
                 // تغيير كلمة المرور
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
+              style:
+                  ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
             ),
             const SizedBox(height: 10),
-            BlocBuilder<SignCubit,SignState>(
-              bloc: SignCubit(),
-              builder: (context,snap) {
-                final bloc =context.read<SignCubit>();
+            BlocBuilder<SignCubit, SignState>(
+                bloc: SignCubit(),
+                builder: (context, snap) {
+                  final bloc = context.read<SignCubit>();
 
-                return ElevatedButton.icon(
-                  icon: const Icon(Icons.logout),
-                  label: const Text("تسجيل الخروج"),
-                  onPressed: (){
-                    bloc.logout(context);
-
-                  },
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-                );
-              }
-            ),
+                  return ElevatedButton.icon(
+                    icon: const Icon(Icons.logout),
+                    label: const Text("تسجيل الخروج"),
+                    onPressed: () {
+                      bloc.logout(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent),
+                  );
+                }),
           ],
         ),
       ),

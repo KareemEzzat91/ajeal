@@ -7,7 +7,12 @@ class GlobalChatScreen extends StatefulWidget {
   final String doctorId;
   final String parentId;
   final bool isparent;
-  const GlobalChatScreen({super.key,required this.childName, required this.doctorId, required this.parentId, required this.isparent});
+  const GlobalChatScreen(
+      {super.key,
+      required this.childName,
+      required this.doctorId,
+      required this.parentId,
+      required this.isparent});
 
   @override
   _GlobalChatScreenState createState() => _GlobalChatScreenState();
@@ -15,7 +20,6 @@ class GlobalChatScreen extends StatefulWidget {
 
 class _GlobalChatScreenState extends State<GlobalChatScreen> {
   final TextEditingController _messageController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,8 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundImage: NetworkImage('https://thumbs.dreamstime.com/b/global-chat-logo-template-design-world-207780009.jpg'),
+              backgroundImage: NetworkImage(
+                  'https://thumbs.dreamstime.com/b/global-chat-logo-template-design-world-207780009.jpg'),
             ),
             SizedBox(width: 8),
             Text('Global Chat'),
@@ -41,7 +46,8 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(20)),
               ),
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
@@ -56,7 +62,12 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                   }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(child: Text('No messages yet.', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)));
+                    return const Center(
+                        child: Text('No messages yet.',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey)));
                   }
 
                   final messages = snapshot.data!.docs;
@@ -65,21 +76,44 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                     padding: const EdgeInsets.all(10),
                     itemCount: messages.length,
                     itemBuilder: (context, index) {
-                      final message = messages[index].data() as Map<String, dynamic>;
-                      final isDoctorMessage = message['sender_id'] == widget.doctorId;
-                      final isMyMessage = message['sender_id'] == widget.parentId;
+                      final message =
+                          messages[index].data() as Map<String, dynamic>;
+                      final isDoctorMessage =
+                          message['sender_id'] == widget.doctorId;
+                      final isMyMessage =
+                          message['sender_id'] == widget.parentId;
 
                       return GestureDetector(
-                        onTap: (){  
-                          widget.isparent==false &&message["sender_id"]!=widget.doctorId ?Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(chatId: widget.doctorId+ message['sender_id'], doctorId: widget.doctorId, parentId: message['sender_id'], isparent: false))) :null;
+                        onTap: () {
+                          widget.isparent == false &&
+                                  message["sender_id"] != widget.doctorId
+                              ? Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChatScreen(
+                                          chatId: widget.doctorId +
+                                              message['sender_id'],
+                                          doctorId: widget.doctorId,
+                                          parentId: message['sender_id'],
+                                          isparent: false)))
+                              : null;
                         },
                         child: ChatBubble(
                           message: message['text'],
-                          sender: isDoctorMessage ? "Doctor" : message["senderName"],
+                          sender: isDoctorMessage
+                              ? "Doctor"
+                              : message["senderName"],
                           time: message['timestamp'] != null
-                              ? (message['timestamp'] as Timestamp).toDate().toString().split(' ')[1]
+                              ? (message['timestamp'] as Timestamp)
+                                  .toDate()
+                                  .toString()
+                                  .split(' ')[1]
                               : 'N/A',
-                          messageType: isDoctorMessage ? MessageType.doctor : (isMyMessage ? MessageType.myMessage : MessageType.otherUser),
+                          messageType: isDoctorMessage
+                              ? MessageType.doctor
+                              : (isMyMessage
+                                  ? MessageType.myMessage
+                                  : MessageType.otherUser),
                         ),
                       );
                     },
@@ -109,7 +143,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                           color: Colors.grey.withOpacity(0.3),
                           spreadRadius: 1,
                           blurRadius: 5,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
@@ -121,7 +155,8 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide.none,
                         ),
-                        contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 20),
                       ),
                     ),
                   ),
@@ -155,9 +190,11 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
           .collection('messages');
 
       await messageRef.add({
-        'sender_id': widget.isparent? widget.parentId: widget.doctorId,  // Or doctorId if doctor is sending
+        'sender_id': widget.isparent
+            ? widget.parentId
+            : widget.doctorId, // Or doctorId if doctor is sending
         'text': messageText,
-        'senderName':widget.isparent?widget.childName:"Doctor",
+        'senderName': widget.isparent ? widget.childName : "Doctor",
         'timestamp': FieldValue.serverTimestamp(),
       });
 
@@ -178,7 +215,7 @@ class ChatBubble extends StatelessWidget {
   final String time;
   final MessageType messageType;
 
-  const ChatBubble({
+  const ChatBubble({super.key, 
     required this.message,
     required this.sender,
     required this.time,
@@ -261,19 +298,20 @@ class ChatBubble extends StatelessWidget {
 }
 
 String convertTo12Hour(String time) {
-  try {  List<String> parts = time.split(':');
-  int hours = int.parse(parts[0]);
-  int minutes = int.parse(parts[1]);
+  try {
+    List<String> parts = time.split(':');
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1]);
 
-  // تحويل الساعة إلى صيغة 12 ساعة
-  String period = hours >= 12 ? "PM" : "AM";
-  hours = hours > 12 ? hours - 12 : hours;
+    // تحويل الساعة إلى صيغة 12 ساعة
+    String period = hours >= 12 ? "PM" : "AM";
+    hours = hours > 12 ? hours - 12 : hours;
 
-  // تقريب الدقائق
-  minutes = (minutes + 0.5).toInt(); // تقريبي
+    // تقريب الدقائق
+    minutes = (minutes + 0.5).toInt(); // تقريبي
 
-  return "$hours:${minutes.toString().padLeft(2, '0')} $period";}catch(e){
+    return "$hours:${minutes.toString().padLeft(2, '0')} $period";
+  } catch (e) {
     return "N/A";
   }
-
 }

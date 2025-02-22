@@ -30,23 +30,40 @@ class _CustomTextFieldState extends State<CustomTextField> {
   late FocusNode _focusNode;
   Color _iconColor = Colors.grey;
 
-
   @override
   void initState() {
     super.initState();
     _focusNode = FocusNode();
     _focusNode.addListener(() {
       setState(() {
-        _iconColor = _focusNode.hasFocus ? const Color(0xff0186c7) : Colors.grey;
+        _iconColor =
+            _focusNode.hasFocus ? const Color(0xff0186c7) : Colors.grey;
       });
     });
   }
-  double TextSize(context,{required double isExtraSmallSize , required double isMobileSize,required double isMobileLarge,required double isIpadSize,required double isTabletSize,required double isLargeTabletSize,required double defaultSize} ){ return Responsive.isExtraSmall(context) ? isExtraSmallSize :
-  Responsive.isMobile(context) ?isMobileSize:
-  Responsive.isMobileLarge(context) ? isMobileLarge:
-  Responsive.isIpad(context) ? isIpadSize:
-  Responsive.isTablet(context) ? isTabletSize :
-  Responsive.isLargeTablet(context) ? isLargeTabletSize : isLargeTabletSize;}
+
+  double TextSize(context,
+      {required double isExtraSmallSize,
+      required double isMobileSize,
+      required double isMobileLarge,
+      required double isIpadSize,
+      required double isTabletSize,
+      required double isLargeTabletSize,
+      required double defaultSize}) {
+    return Responsive.isExtraSmall(context)
+        ? isExtraSmallSize
+        : Responsive.isMobile(context)
+            ? isMobileSize
+            : Responsive.isMobileLarge(context)
+                ? isMobileLarge
+                : Responsive.isIpad(context)
+                    ? isIpadSize
+                    : Responsive.isTablet(context)
+                        ? isTabletSize
+                        : Responsive.isLargeTablet(context)
+                            ? isLargeTabletSize
+                            : isLargeTabletSize;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,19 +79,28 @@ class _CustomTextFieldState extends State<CustomTextField> {
           validator: widget.validator,
           focusNode: _focusNode, // Assign the focus node
           controller: widget.controller,
-          style:TextStyle(fontSize: TextSize(context,isExtraSmallSize:13,isMobileSize: 15,isMobileLarge:21,isIpadSize: 27,isTabletSize: 32,isLargeTabletSize: 40,defaultSize: 18  )) ,
+          style: TextStyle(
+              fontSize: TextSize(context,
+                  isExtraSmallSize: 13,
+                  isMobileSize: 15,
+                  isMobileLarge: 21,
+                  isIpadSize: 27,
+                  isTabletSize: 32,
+                  isLargeTabletSize: 40,
+                  defaultSize: 18)),
           cursorHeight: 19,
           decoration: InputDecoration(
-            enabled: true ,
-            focusColor:  const Color(0xff0186c7),
-            hintText: " ${widget.text}",hintStyle: TextStyle(color: _iconColor) ,
+            enabled: true,
+            focusColor: const Color(0xff0186c7),
+            hintText: " ${widget.text}",
+            hintStyle: TextStyle(color: _iconColor),
             isDense: true,
             border: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey.withOpacity(0.2)),
               borderRadius: BorderRadius.circular(15),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color:Color(0xff0186c7)),
+              borderSide: const BorderSide(color: Color(0xff0186c7)),
               borderRadius: BorderRadius.circular(15),
             ),
             prefixIcon: Icon(
@@ -83,24 +109,23 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
             suffixIcon: widget.isPassword
                 ? IconButton(
-              onPressed: () {
-                setState(() {
-                  _obscureText = !_obscureText;
-                });
-              },
-              icon: Icon(
-                _obscureText
-                    ? CupertinoIcons.eye
-                    : CupertinoIcons.eye_slash,
-                color: _iconColor,
-              ),
-            )
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                    icon: Icon(
+                      _obscureText
+                          ? CupertinoIcons.eye
+                          : CupertinoIcons.eye_slash,
+                      color: _iconColor,
+                    ),
+                  )
                 : null,
           ),
-          cursorColor:  const Color(0xff0186c7),
+          cursorColor: const Color(0xff0186c7),
         ),
       ],
     );
   }
-
 }

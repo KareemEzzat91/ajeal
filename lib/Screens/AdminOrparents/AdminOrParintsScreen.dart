@@ -44,7 +44,8 @@ class AdminOrParentsScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) =>  ParentLoginPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const ParentLoginPage()),
                       );
                     },
                   ),
@@ -56,7 +57,8 @@ class AdminOrParentsScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) =>  AdminLoginScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => AdminLoginScreen()),
                       );
                     },
                   ),
@@ -86,12 +88,12 @@ class AdminOrParentsScreen extends StatelessWidget {
   }
 
   Widget _buildOptionCard(
-      BuildContext context, {
-        required IconData icon,
-        required String label,
-        required List<Color> gradientColors,
-        required VoidCallback onTap,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required List<Color> gradientColors,
+    required VoidCallback onTap,
+  }) {
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
@@ -141,10 +143,10 @@ class AdminOrParentsScreen extends StatelessWidget {
   }
 
   Widget _buildActionButton(
-      BuildContext context, {
-        required String label,
-        required VoidCallback onPressed,
-      }) {
+    BuildContext context, {
+    required String label,
+    required VoidCallback onPressed,
+  }) {
     return TextButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
@@ -156,7 +158,7 @@ class AdminOrParentsScreen extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 18,
           color: Colors.black,
         ),

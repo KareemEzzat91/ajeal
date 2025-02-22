@@ -33,7 +33,7 @@ class AdminLoginScreen extends StatelessWidget {
       },
       child: Scaffold(
         body: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -46,7 +46,8 @@ class AdminLoginScreen extends StatelessWidget {
           child: SafeArea(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -67,10 +68,11 @@ class AdminLoginScreen extends StatelessWidget {
                     // Welcome Text
                     Text(
                       "لنقم بتسجيل دخولك",
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
                     ),
 
                     const SizedBox(height: 8),
@@ -78,8 +80,8 @@ class AdminLoginScreen extends StatelessWidget {
                     Text(
                       "قم بادخال المعلومات اسفل",
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.grey.shade600,
-                      ),
+                            color: Colors.grey.shade600,
+                          ),
                     ),
 
                     const SizedBox(height: 32),
@@ -95,7 +97,9 @@ class AdminLoginScreen extends StatelessWidget {
                             label: "Email",
                             icon: Icons.email_outlined,
                             validator: (val) {
-                              if (!val!.isEmail) return "Please enter a valid email";
+                              if (!val!.isEmail) {
+                                return "Please enter a valid email";
+                              }
                               return null;
                             },
                           ),
@@ -109,7 +113,9 @@ class AdminLoginScreen extends StatelessWidget {
                             icon: Icons.lock_outline,
                             isPassword: true,
                             validator: (val) {
-                              if (val!.length < 6) return "Password must be at least 6 characters";
+                              if (val!.length < 6) {
+                                return "Password must be at least 6 characters";
+                              }
                               return null;
                             },
                           ),
@@ -120,9 +126,11 @@ class AdminLoginScreen extends StatelessWidget {
                             child: TextButton(
                               onPressed: () => Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (_) => const ResetPasswordScreen()),
+                                MaterialPageRoute(
+                                    builder: (_) =>
+                                        const ResetPasswordScreen()),
                               ),
-                              child: Text(
+                              child: const Text(
                                 "لا تتذكر الباسورد",
                                 style: TextStyle(
                                   color: Color(0xff0186c7),
@@ -140,11 +148,13 @@ class AdminLoginScreen extends StatelessWidget {
                               return ElevatedButton(
                                 onPressed: state is SignLoadingState
                                     ? null
-                                    : () => bloc.Login(context, _formKey, _emailController, _passwordController),
+                                    : () => bloc.Login(context, _formKey,
+                                        _emailController, _passwordController),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xff0186c7),
+                                  backgroundColor: const Color(0xff0186c7),
                                   foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -152,14 +162,15 @@ class AdminLoginScreen extends StatelessWidget {
                                   elevation: 2,
                                 ),
                                 child: state is SignLoadingState
-                                    ? const CircularProgressIndicator(color: Colors.white)
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white)
                                     : const Text(
-                                  "تسجيل الدخول",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                        "تسجيل الدخول",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                               );
                             },
                           ),
@@ -177,7 +188,8 @@ class AdminLoginScreen extends StatelessWidget {
                               TextButton(
                                 onPressed: () => Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(builder: (_) => SignupScreen()),
+                                  MaterialPageRoute(
+                                      builder: (_) => SignupScreen()),
                                 ),
                                 child: const Text(
                                   "Register Now",
@@ -215,7 +227,7 @@ class AdminLoginScreen extends StatelessWidget {
       validator: validator,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, color: Color(0xff0186c7)),
+        prefixIcon: Icon(icon, color: const Color(0xff0186c7)),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade300),
@@ -230,7 +242,8 @@ class AdminLoginScreen extends StatelessWidget {
         ),
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
     );
   }

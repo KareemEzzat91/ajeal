@@ -4,9 +4,12 @@ part of 'sign_cubit.dart';
 sealed class SignState {}
 
 final class SignInitial extends SignState {}
+
 final class SignSuccesState extends SignState {}
+
 final class SignLoadingState extends SignState {}
+
 final class SignFaliureState extends SignState {
-  final error ;
+  final error;
   SignFaliureState(this.error);
 }

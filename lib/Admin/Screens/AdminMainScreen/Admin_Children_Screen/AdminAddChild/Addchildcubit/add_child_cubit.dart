@@ -12,11 +12,12 @@ part 'add_child_state.dart';
 class AddChildCubit extends Cubit<AddChildState> {
   AddChildCubit() : super(AddChildInitial());
   static int id = 0;
-  final Map<String, List<Goal>> selectedGoals = {}; // لتخزين الأهداف المختارة //id == ParentsPhone
+  final Map<String, List<Goal>> selectedGoals =
+      {}; // لتخزين الأهداف المختارة //id == ParentsPhone
   List<Map<String, Child>> Children = []; // id =  ParentsPhone+ id
   List<Map<String, dynamic>> scheduleSesoins = [];
 
-  void saveToFirestore()async {
+  void saveToFirestore() async {
     emit(AddLoadingState());
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) {
@@ -25,10 +26,13 @@ class AddChildCubit extends Cubit<AddChildState> {
     }
     final userDoc = FirebaseFirestore.instance.collection("users").doc(userId);
     for (var childMap in Children) {
-      await Future.forEach(childMap.entries, (MapEntry<String, Child> childEntry) async {
-        await userDoc.collection("children").doc(childEntry.key).set(childEntry.value.toMap());
+      await Future.forEach(childMap.entries,
+          (MapEntry<String, Child> childEntry) async {
+        await userDoc
+            .collection("children")
+            .doc(childEntry.key)
+            .set(childEntry.value.toMap());
       });
-
     }
     // حفظ الـ ID
     userDoc.set({"lastChildId": id}, SetOptions(merge: true));
@@ -37,7 +41,7 @@ class AddChildCubit extends Cubit<AddChildState> {
   }
 
   Future<List<Map<String, Child>>>? getAllDataFromFirestore() async {
-     Children = []; // id =  ParentsPhone+ id
+    Children = []; // id =  ParentsPhone+ id
 
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) {
@@ -46,7 +50,10 @@ class AddChildCubit extends Cubit<AddChildState> {
     }
 
     try {
-       final userDoc = await FirebaseFirestore.instance.collection("users").doc(userId).get();
+      final userDoc = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .get();
 
       if (userDoc.exists) {
         print("User Data: ${userDoc.data()}");
@@ -58,18 +65,16 @@ class AddChildCubit extends Cubit<AddChildState> {
             .collection("children")
             .get();
 
-
         for (var childDoc in childrenSnapshot.docs) {
           final child = Child.fromJson(childDoc.data());
-            Children.add({"parentOccupation": child}); // Add the child with a key
-
+          Children.add({"parentOccupation": child}); // Add the child with a key
         }
 
         return Children;
       } else {
         print("No document found for user.");
       }
-      return[];
+      return [];
     } catch (e) {
       print("Error retrieving data: $e");
       return [];
@@ -77,35 +82,37 @@ class AddChildCubit extends Cubit<AddChildState> {
   }
 
   void saveChild(
-      String name,
-      String age,
-      DateTime dateOfBirth,
-      DateTime startDate,
-      DateTime endDate,
-      String period,
-      String parentOccupation,
-      String notes,
-      String school,
-      String fatherOccupation,
-      String motherOccupation,
-      String familyMembers,
-      String residence,
-      String motherAgeDuringPregnancy,
-      String relationshipBetweenParents,
-      String familyRelationship,
-      String motherNature,
-      String gender,
-      BuildContext context,
-      ) async {
+    String name,
+    String age,
+    DateTime dateOfBirth,
+    DateTime startDate,
+    DateTime endDate,
+    String period,
+    String parentOccupation,
+    String notes,
+    String school,
+    String fatherOccupation,
+    String motherOccupation,
+    String familyMembers,
+    String residence,
+    String motherAgeDuringPregnancy,
+    String relationshipBetweenParents,
+    String familyRelationship,
+    String motherNature,
+    String gender,
+    BuildContext context,
+  ) async {
     emit(AddLoadingState());
 
     try {
-      scheduleSesoins = await generateSchedule(startDate, endDate, period, name, selectedGoals[parentOccupation]!);
-      final uid= FirebaseAuth.instance.currentUser!.uid;
-      final doctorIdsnap= await FirebaseFirestore.instance.collection("users").doc(uid).get();
-      final  doctorId= doctorIdsnap['Doctor_id'];
-      final  doctorName= doctorIdsnap['Doctor_Name'];
-      var  lastChildId= doctorIdsnap['lastChildId'];
+      scheduleSesoins = await generateSchedule(
+          startDate, endDate, period, name, selectedGoals[parentOccupation]!);
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      final doctorIdsnap =
+          await FirebaseFirestore.instance.collection("users").doc(uid).get();
+      final doctorId = doctorIdsnap['Doctor_id'];
+      final doctorName = doctorIdsnap['Doctor_Name'];
+      var lastChildId = doctorIdsnap['lastChildId'];
 
       // إنشاء الطفل الجديد
       final newChild = Child(
@@ -131,10 +138,8 @@ class AddChildCubit extends Cubit<AddChildState> {
         scheduleSesoins: scheduleSesoins,
         doctorId: doctorId,
         doctorName: doctorName,
-        dailyNotes:[{}],
+        dailyNotes: [{}],
         gender: gender,
-
-
       );
 
       final userid = FirebaseAuth.instance.currentUser!.uid;
@@ -151,7 +156,8 @@ class AddChildCubit extends Cubit<AddChildState> {
       emit(AddScuccesState());
     } catch (e) {
       emit(AddFailureState(e.toString()));
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
       Navigator.pop(context);
     }
   }
@@ -159,7 +165,8 @@ class AddChildCubit extends Cubit<AddChildState> {
   void AddGoal(Goal goal, String childId, BuildContext context) {
     emit(NumberofItemsPlusstate());
     if (selectedGoals.containsKey(childId)) {
-      if (selectedGoals[childId]!.length < 7 &&!selectedGoals.containsKey(goal) ) {
+      if (selectedGoals[childId]!.length < 7 &&
+          !selectedGoals.containsKey(goal)) {
         selectedGoals[childId]!.add(goal);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -174,16 +181,15 @@ class AddChildCubit extends Cubit<AddChildState> {
     } else {
       selectedGoals[childId] = [goal];
     }
-
   }
 
   Future<List<Map<String, dynamic>>> generateSchedule(
-      DateTime startDate,
-      DateTime endDate,
-      String duration,
-      String childName,
-      List<Goal> goalsList,
-      ) async {
+    DateTime startDate,
+    DateTime endDate,
+    String duration,
+    String childName,
+    List<Goal> goalsList,
+  ) async {
     final List<String> goals = [];
     final List<String> goalsDescription = [];
 
@@ -193,10 +199,10 @@ class AddChildCubit extends Cubit<AddChildState> {
     }
 
     final durationInDays = endDate.difference(startDate).inDays;
-  //  final sessionsPerWeek = 3; // عدد الجلسات الأسبوعية
+    //  final sessionsPerWeek = 3; // عدد الجلسات الأسبوعية
 
-    
-    final prompt = """Create a detailed schedule for therapy sessions lasting **$durationInDays days** for the child **$childName**. The schedule should include the following goals:
+    final prompt =
+        """Create a detailed schedule for therapy sessions lasting **$durationInDays days** for the child **$childName**. The schedule should include the following goals:
 
 1. **أهداف تنمية الذاكرة السمعية** (Auditory Memory Development)
 2. **أهداف تنمية الذاكرة البصرية** (Visual Memory Development)
@@ -250,7 +256,8 @@ class AddChildCubit extends Cubit<AddChildState> {
       final List<Map<String, dynamic>> sessionsList = [];
       final jsonResponse = jsonDecode(rawResponse);
 
-      if (jsonResponse is Map<String, dynamic> && jsonResponse.containsKey('weeks')) {
+      if (jsonResponse is Map<String, dynamic> &&
+          jsonResponse.containsKey('weeks')) {
         final weeks = jsonResponse['weeks'] as List<dynamic>;
         for (int i = 0; i < weeks.length; i++) {
           final week = weeks[i];
@@ -259,10 +266,9 @@ class AddChildCubit extends Cubit<AddChildState> {
               "session": week['session'],
               "date": week['date'],
               "goals": List<String>.from(week['goals']),
-              'rate':0,
-              "notes":"",
-              "tasks" :[],
-
+              'rate': 0,
+              "notes": "",
+              "tasks": [],
             });
           } else {
             print("Invalid week format: $week");
@@ -278,8 +284,5 @@ class AddChildCubit extends Cubit<AddChildState> {
     }
   }
 
-  void saveTask(){
-
-  }
-  }
-
+  void saveTask() {}
+}

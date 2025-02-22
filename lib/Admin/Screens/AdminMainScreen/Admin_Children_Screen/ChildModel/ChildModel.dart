@@ -1,4 +1,3 @@
-
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
 
 class Child {
@@ -103,14 +102,21 @@ class Child {
       relationshipBetweenParents: json['relationshipBetweenParents'],
       familyRelationship: json['familyRelationship'],
       motherNature: json['motherNature'],
-      selectedGoals: (json['goals'] as List?)?.map((goal) => Goal.fromMap(Map<String, dynamic>.from(goal))).toList() ?? [],
-      scheduleSesoins: (json['scheduleSesoins'] as List?)?.map((e) => Map<String, dynamic>.from(e)).toList() ?? [],
+      selectedGoals: (json['goals'] as List?)
+              ?.map((goal) => Goal.fromMap(Map<String, dynamic>.from(goal)))
+              .toList() ??
+          [],
+      scheduleSesoins: (json['scheduleSesoins'] as List?)
+              ?.map((e) => Map<String, dynamic>.from(e))
+              .toList() ??
+          [],
       doctorId: json['doctorId'],
       doctorName: json['doctorName'],
-      dailyNotes: (json['dailyNotes'] as List?)?.map((e) => Map<String, dynamic>.from(e)).toList() ?? [],
+      dailyNotes: (json['dailyNotes'] as List?)
+              ?.map((e) => Map<String, dynamic>.from(e))
+              .toList() ??
+          [],
       gender: json['gender'],
-
-
     );
   }
 }
