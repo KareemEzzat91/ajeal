@@ -19,7 +19,7 @@ class ParentHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
       body: CustomScrollView(
         slivers: [
           _buildAppBar(context),

@@ -770,6 +770,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  stylish_pull_to_refresh:
+    dependency: "direct main"
+    description:
+      name: stylish_pull_to_refresh
+      sha256: "9b6fd77550b0e8658f94155f5afe7ad09a5418e97052dfe76fb20db2e2cefea1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   synchronized:
     dependency: transitive
     description:

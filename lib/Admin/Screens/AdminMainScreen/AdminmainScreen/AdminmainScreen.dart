@@ -44,7 +44,7 @@ class _AdminmainScreenState extends State<AdminmainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Screens[_selectedIndex],
-      bottomNavigationBar: FlashyTabBar(
+      bottomNavigationBar: FlashyTabBar(animationDuration: Duration(milliseconds:540 ),
         selectedIndex: _selectedIndex,
         showElevation: true,
         onItemSelected: (index) => setState(() {
@@ -54,22 +54,22 @@ class _AdminmainScreenState extends State<AdminmainScreen> {
           FlashyTabBarItem(
             activeColor: Colors.blue,
             icon: const Icon(Icons.child_care_rounded),
-            title: Text("ChildrenPage".tr()),
+            title: Text("Children".tr(),style: const TextStyle(fontSize: 12),),
           ),
           FlashyTabBarItem(
             activeColor: Colors.blue,
             icon: const Icon(Icons.analytics_outlined),
-            title: Text("ReportsPage".tr()),
+            title: Text("Reports".tr(),style: const TextStyle(fontSize: 12),),
           ),
           FlashyTabBarItem(
             activeColor: Colors.blue,
             icon: const Icon(Icons.comment_rounded),
-            title: Text("Global Chat".tr()),
+            title: Text("Global Chat".tr(),style: const TextStyle(fontSize: 12),),
           ),
           FlashyTabBarItem(
             activeColor: Colors.blue,
             icon: const Icon(Icons.person),
-            title: Text("ProfilePage".tr()),
+            title: Text("Profile".tr(),style: const TextStyle(fontSize: 12),),
           ),
         ],
       ),

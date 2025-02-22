@@ -133,11 +133,12 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
             value: value,
             child: Row(
               children: [
-                Icon(icon, size: 18, color: primaryColor),
+                Icon(icon, size: 16, color: primaryColor),
                 const SizedBox(width: 12),
                 Text(
                   value,
-                  style: TextStyle(color: secondaryColor, fontSize: 14),
+                  style: TextStyle(color: secondaryColor, fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
@@ -202,7 +203,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(icon, color: primaryColor, size: 24),
+                  Icon(icon, color: primaryColor, size: 20),
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -214,7 +215,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
                       trend,
                       style: TextStyle(
                         color: isPositive ? Colors.green[700] : Colors.red[700],
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -225,9 +226,10 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
               Text(
                 value,
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 21,
                   fontWeight: FontWeight.bold,
                   color: secondaryColor,
+                  overflow: TextOverflow.ellipsis
                 ),
               ),
               const SizedBox(height: 4),
@@ -235,7 +237,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
                 title,
                 style: TextStyle(
                   color: Colors.grey[600],
-                  fontSize: 12,
+                  fontSize: 11,
                 ),
               ),
             ],

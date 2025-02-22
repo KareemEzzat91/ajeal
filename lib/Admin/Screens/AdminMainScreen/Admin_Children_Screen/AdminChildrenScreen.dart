@@ -271,9 +271,10 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
       padding: const EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 0.75,
+        childAspectRatio:0.6,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
+
       ),
       itemCount: bloc.Children.length,
       itemBuilder: (context, index) {
@@ -413,7 +414,7 @@ class ChildCard extends StatelessWidget {
 
   Widget _buildAvatar() {
     return Hero(
-      tag: 'child_avatar_${child.id}',
+      tag: 'child_avatar_${child.id}${child.name}',
       child: Container(
         width: 64,
         height: 64,
@@ -665,6 +666,8 @@ class ChildGridCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height =MediaQuery.sizeOf(context).height;
+    print(height);
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
@@ -678,21 +681,25 @@ class ChildGridCard extends StatelessWidget {
         ],
       ),
       child: Material(
+
+
         color: Colors.transparent,
         child: InkWell(
+
           borderRadius: BorderRadius.circular(24),
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Avatar
                 Hero(
-                  tag: 'child_avatar_${child.id}',
+                  tag: 'child_avatar_${child.id}${child.name}',
                   child: Container(
                     width: double.infinity,
-                    height: 120,
+                    height: height/6.3,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(

@@ -95,7 +95,7 @@ class ChildDetailScreen extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 32.0),
       child: Center(
         child: Hero(
-          tag: 'child_avatar_${child.id}',
+          tag: 'child_avatar_${child.id}${child.name}',
           child: Container(
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
