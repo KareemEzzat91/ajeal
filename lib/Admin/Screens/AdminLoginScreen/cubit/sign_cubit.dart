@@ -117,7 +117,8 @@ class SignCubit extends Cubit<SignState> {
               "your account done please verfiy your account check mail"));
           FirebaseFirestore.instance.collection("users").doc(user.uid).set({
             'Doctor_Name': nameController.text,
-            'Doctor_id': doctorId //name+phone number
+            'Doctor_id': doctorId, //name+phone number
+            "lastChildId":0
           });
           // Doctor_id
           FirebaseFirestore.instance

@@ -7,6 +7,6 @@ abstract class Env {
 }
 
 const String _apiKey =
-    "AIzaSyD0U3k0U8PxzHDZgxFCCRbfSlubJFxCsCU"; // للتأكد من أن القيم تُحمل بشكل صحيح
+    "AIzaSyAHMoa_vABMkhtEJPxQQmJVPdCc4XjlIOI"; // للتأكد من أن القيم تُحمل بشكل صحيح
 
 //

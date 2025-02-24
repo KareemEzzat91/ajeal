@@ -24,7 +24,9 @@ class AddChildCubit extends Cubit<AddChildState> {
       print("User not logged in");
       return;
     }
-    final userDoc = FirebaseFirestore.instance.collection("users").doc(userId);
+    final userDoc =FirebaseFirestore.instance.collection("users").doc(userId);
+   var userdata= await userDoc.get();
+   id = userdata["lastChildId"];
     for (var childMap in Children) {
       await Future.forEach(childMap.entries,
           (MapEntry<String, Child> childEntry) async {
@@ -112,11 +114,11 @@ class AddChildCubit extends Cubit<AddChildState> {
           await FirebaseFirestore.instance.collection("users").doc(uid).get();
       final doctorId = doctorIdsnap['Doctor_id'];
       final doctorName = doctorIdsnap['Doctor_Name'];
-      var lastChildId = doctorIdsnap['lastChildId'];
-
+      id =doctorIdsnap['lastChildId'];
+      id++;
       // إنشاء الطفل الجديد
       final newChild = Child(
-        id: lastChildId++,
+        id: id,
         name: name,
         age: age,
         dateOfBirth: dateOfBirth,
@@ -149,6 +151,8 @@ class AddChildCubit extends Cubit<AddChildState> {
           .collection("children")
           .doc(parentOccupation)
           .set(newChild.toMap());
+
+     await FirebaseFirestore.instance.collection("DailyNotes").doc(parentOccupation).set({"notes":[]});
 
       saveToFirestore();
 

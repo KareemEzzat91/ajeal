@@ -77,7 +77,6 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           .doc(widget.childId);
 
       final userSnapshot = await userRef.get();
-
       if (!userSnapshot.exists) {
         _showErrorDialog("لم يتم العثور على بيانات الطفل.");
         return;
