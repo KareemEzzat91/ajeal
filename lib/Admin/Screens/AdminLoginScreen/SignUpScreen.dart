@@ -1,5 +1,6 @@
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/LoginScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/cubit/sign_cubit.dart';
+import 'package:ajeal/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -15,10 +16,11 @@ class SignupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<SignCubit>();
     final size = MediaQuery.of(context).size;
 
-    return BlocListener<SignCubit, SignState>(
+    return BlocProvider(
+  create: (context) => SignCubit(),
+  child: BlocListener<SignCubit, SignState>(
       listener: (context, state) {
         if (state is SignFaliureState) {
           Get.snackbar(
@@ -33,6 +35,7 @@ class SignupScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -68,7 +71,7 @@ class SignupScreen extends StatelessWidget {
 
                     // Welcome Text
                     Text(
-                      "Register Now!",
+                      S.of(context).register_now,
                       style:
                           Theme.of(context).textTheme.headlineSmall?.copyWith(
                                 fontWeight: FontWeight.bold,
@@ -79,7 +82,7 @@ class SignupScreen extends StatelessWidget {
                     const SizedBox(height: 8),
 
                     Text(
-                      "Enter Your Information Below",
+                      S.of(context).enter_information_below,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Colors.grey.shade600,
                           ),
@@ -163,7 +166,7 @@ class SignupScreen extends StatelessWidget {
                               return ElevatedButton(
                                 onPressed: state is SignLoadingState
                                     ? null
-                                    : () => bloc.SignUp(
+                                    : () => context.read<SignCubit>().SignUp(
                                           context,
                                           _formKey,
                                           _emailController,
@@ -209,7 +212,7 @@ class SignupScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Already a member? ",
+                                S.of(context).alreadyMember,
                                 style: TextStyle(color: Colors.grey.shade700),
                               ),
                               TextButton(
@@ -218,9 +221,9 @@ class SignupScreen extends StatelessWidget {
                                   MaterialPageRoute(
                                       builder: (_) => AdminLoginScreen()),
                                 ),
-                                child: const Text(
-                                  "Login",
-                                  style: TextStyle(
+                                child:  Text(
+                                 S.of(context).loginPage,
+                                  style: const TextStyle(
                                     color: Color(0xff0186c7),
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -238,7 +241,8 @@ class SignupScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ),
+);
   }
 
   Widget _buildTextField({

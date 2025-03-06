@@ -4,6 +4,7 @@ import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/ParentAdminchat/Parent
 import 'package:ajeal/Parents/ParentHomeScreen/parentchildgoalspage/parentchildgoals_screen.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/parentsessionschedulepage/parentssessionschedule_screen.dart';
 import 'package:ajeal/Screens/AdminOrparents/AdminOrParintsScreen.dart';
+import 'package:ajeal/generated/l10n.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
@@ -31,9 +32,9 @@ class ParentHomePage extends StatelessWidget {
                 children: [
                   _buildProfileHeader(),
                   const SizedBox(height: 24),
-                  _buildQuickStats(),
+                  _buildQuickStats(context),
                   const SizedBox(height: 24),
-                  _buildProgressSection(),
+                  _buildProgressSection(context),
                   const SizedBox(height: 24),
                   _buildActionCards(context),
                 ],
@@ -59,9 +60,9 @@ class ParentHomePage extends StatelessWidget {
       floating: false,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
-        title: const Text(
-          "Welcome Back!",
-          style: TextStyle(
+        title:  Text(
+          S.of(context).welcome_back,
+          style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
@@ -163,24 +164,24 @@ class ParentHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickStats() {
+  Widget _buildQuickStats(context ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _buildStatCard(
-          "Sessions",
+          S.of(context).sessions,
           "${child.scheduleSesoins.length}",
           Icons.calendar_today,
           Colors.blue,
         ),
         _buildStatCard(
-          "Goals",
+          S.of(context).goals,
           "${child.selectedGoals.length}",
           Icons.track_changes,
           Colors.green,
         ),
         _buildStatCard(
-          "Progress",
+          S.of(context).progress,
           "75%",
           Icons.trending_up,
           Colors.orange,
@@ -222,7 +223,7 @@ class ParentHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildProgressSection() {
+  Widget _buildProgressSection(context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -234,9 +235,9 @@ class ParentHomePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Progress Overview",
-            style: TextStyle(
+           Text(
+            S.of(context).progress_overview,
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.white,
@@ -253,10 +254,10 @@ class ParentHomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildProgressDetail(
-                  "Completed", "${child.selectedGoals.length}"),
+                  S.of(context).completed, "${child.selectedGoals.length}"),
               _buildProgressDetail(
-                  "In Progress", "${child.selectedGoals.length}"),
-              _buildProgressDetail("Upcoming", "3"),
+                  S.of(context).in_progress, "${child.selectedGoals.length}"),
+              _buildProgressDetail(S.of(context).upcoming, "3"),
             ],
           ),
         ],
@@ -291,8 +292,8 @@ class ParentHomePage extends StatelessWidget {
       children: [
         _buildActionCard(
           context,
-          "View Child's Goals",
-          "Track progress and achievements",
+          S.of(context).view_child_goals,
+          S.of(context).track_progress,
           Icons.flag,
           Colors.orange,
           () => Navigator.push(
@@ -305,8 +306,8 @@ class ParentHomePage extends StatelessWidget {
         const SizedBox(height: 16),
         _buildActionCard(
           context,
-          "Schedule Sessions",
-          "Manage upcoming sessions",
+          S.of(context).schedule_sessions,
+          S.of(context).manage_sessions,
           Icons.calendar_today,
           Colors.purple,
           () => Navigator.push(
@@ -322,8 +323,8 @@ class ParentHomePage extends StatelessWidget {
         const SizedBox(height: 16),
         _buildActionCard(
           context,
-          "Chat with Teacher",
-          "Direct communication channel",
+          S.of(context).chat_teacher,
+          S.of(context).direct_communication,
           Icons.chat,
           Colors.blue,
           () => Navigator.push(
@@ -342,8 +343,8 @@ class ParentHomePage extends StatelessWidget {
         const SizedBox(height: 16),
         _buildActionCard(
           context,
-          "Global Chat",
-          "Connect with the community",
+          S.of(context).global_chat,
+          S.of(context).connect_community,
           Icons.people,
           Colors.green,
           () => Navigator.push(
@@ -361,8 +362,8 @@ class ParentHomePage extends StatelessWidget {
         const SizedBox(height: 16),
         _buildActionCard(
           context,
-          "Daily Notes",
-          "Write Your Daily Notes",
+         S.of(context).daily_notes,
+          S.of(context).write_daily_notes,
           Icons.note_add_sharp,
           Colors.brown,
           () => Navigator.push(
@@ -444,27 +445,27 @@ class ParentHomePage extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Emergency Contact"),
+        title:  Text(S.of(context).emergency_contact),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
               leading: const Icon(Icons.phone, color: Colors.red),
-              title: const Text("Call Emergency Number"),
+              title: Text(S.of(context).call_emergency),
               onTap: () {
                 // Add emergency call functionality
               },
             ),
             ListTile(
               leading: const Icon(Icons.message, color: Colors.orange),
-              title: const Text("Message Teacher"),
+              title:Text(S.of(context).message_teacher),
               onTap: () {
                 // Add quick message functionality
               },
             ),
             ElevatedButton.icon(
               icon: const Icon(Icons.logout),
-              label: const Text("تسجيل الخروج"),
+              label:Text(S.of(context).logout),
               onPressed: () {
                 logout(context);
               },
@@ -483,13 +484,16 @@ class ParentHomePage extends StatelessWidget {
     );
   }
 
-  void logout(context) async {
+  Future<void> logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     final pref = await SharedPreferences.getInstance();
-    pref.setBool("ParentLogin", false);
-    Navigator.pushAndRemoveUntil(
+    await pref.setBool("ParentLogin", false);
+    if (context.mounted) {
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const AdminOrParentsScreen()),
-        (Route<dynamic> route) => false);
+            (route) => false,
+      );
+    }
   }
 }

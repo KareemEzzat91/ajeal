@@ -71,6 +71,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

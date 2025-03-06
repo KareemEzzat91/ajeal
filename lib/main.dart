@@ -1,5 +1,3 @@
-import 'package:ajeal/Admin/Screens/AdminLoginScreen/cubit/sign_cubit.dart';
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/add_child_cubit.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/AdminmainScreen/AdminmainScreen.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/ParentHomeScreen.dart';
@@ -8,9 +6,7 @@ import 'package:ajeal/firebase_options.dart';
 import 'package:ajeal/generated/l10n.dart';
 import 'package:ajeal/helpers/AIhelper/SecretKey/secretkey.dart';
 import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
-import 'package:ajeal/maincubit/main_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -82,7 +78,7 @@ class _MyAppState extends State<MyApp> {
       print('Error initializing app: $e');
       setState(() {
         _isLoading = false;
-        _isParentLogin = false;  // Reset login state on error
+        _isParentLogin = false; // Reset login state on error
       });
     }
   }
@@ -143,10 +139,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget _buildLoadingScreen() {
-    return  StylishPullToRefresh(
+    return StylishPullToRefresh(
       style: Style.circularProgress,
 
-      onRefresh:(){  return fun();} ,
+      onRefresh: () {
+        return fun();
+      },
       child: const SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
         child: Center(
@@ -167,38 +165,34 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-  Future <void>fun ()async{
 
-}
-
+  Future <void> fun() async {
+  }
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => MainCubit()),
-        BlocProvider(create: (context) => SignCubit()),
-        BlocProvider(create: (context) => AddChildCubit()),
-        BlocProvider(
-          create: (context) => ThemesCubit()..setInitialTheme(),
-        ),
-      ],
+    return BlocProvider(
+      create: (context) => ThemesCubit(),
       child: BlocBuilder<ThemesCubit, ThemState>(
         builder: (context, state) {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
+            locale: state.loc,  // Ensure locale updates
+            theme: state.themeData,
+            supportedLocales: const [
+              Locale('en'), // English
+              Locale('ar'), // Arabic
+            ],
             localizationsDelegates: const [
               S.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            supportedLocales: S.delegate.supportedLocales,
-            theme: state.themeData,
-            locale: state.Loc,
             home: _isLoading ? _buildLoadingScreen() : _buildHomeScreen(),
           );
         },
       ),
     );
   }
+
 }

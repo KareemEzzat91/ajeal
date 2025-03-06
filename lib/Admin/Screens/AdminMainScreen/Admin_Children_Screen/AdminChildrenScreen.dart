@@ -2,6 +2,7 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminA
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/AdminAddChildScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/ChildDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
+import 'package:ajeal/generated/l10n.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -70,7 +71,9 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
   Widget build(BuildContext context) {
     final bloc = context.read<AddChildCubit>();
 
-    return Scaffold(
+    return BlocProvider(
+  create: (context) => AddChildCubit(),
+  child: Scaffold(
       backgroundColor: AppColors.background,
       appBar: _buildAppBar(context, bloc),
       body: Column(
@@ -80,16 +83,17 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
         ],
       ),
       floatingActionButton: _buildAnimatedFAB(context),
-    );
+    ),
+);
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context, AddChildCubit bloc) {
     return AppBar(
       elevation: 0,
       backgroundColor: AppColors.surface,
-      title: const Text(
-        'قائمة الأطفال',
-        style: TextStyle(
+      title:  Text(
+        S.of(context ).childrenList,
+        style: const TextStyle(
           fontWeight: FontWeight.w700,
           fontSize: 24,
           color: AppColors.text,

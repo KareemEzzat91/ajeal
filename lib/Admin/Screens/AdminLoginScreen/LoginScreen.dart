@@ -1,6 +1,7 @@
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/ResetPasswordScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/SignUpScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/cubit/sign_cubit.dart';
+import 'package:ajeal/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -14,11 +15,15 @@ class AdminLoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<SignCubit>();
     final size = MediaQuery.of(context).size;
 
-    return BlocListener<SignCubit, SignState>(
+
+    return BlocProvider(
+  create: (context) => SignCubit(),
+  child: BlocListener<SignCubit, SignState>(
+
       listener: (context, state) {
+
         if (state is SignFaliureState) {
           Get.snackbar(
             "Error",
@@ -30,8 +35,10 @@ class AdminLoginScreen extends StatelessWidget {
             snackPosition: SnackPosition.TOP,
           );
         }
+
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -44,6 +51,7 @@ class AdminLoginScreen extends StatelessWidget {
             ),
           ),
           child: SafeArea(
+
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -62,12 +70,10 @@ class AdminLoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 32),
-
                     // Welcome Text
                     Text(
-                      "لنقم بتسجيل دخولك",
+                      S.of(context).letsSignIn,
                       style:
                           Theme.of(context).textTheme.headlineSmall?.copyWith(
                                 fontWeight: FontWeight.bold,
@@ -78,7 +84,7 @@ class AdminLoginScreen extends StatelessWidget {
                     const SizedBox(height: 8),
 
                     Text(
-                      "قم بادخال المعلومات اسفل",
+                      S.of(context).enter_information_below,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Colors.grey.shade600,
                           ),
@@ -130,9 +136,9 @@ class AdminLoginScreen extends StatelessWidget {
                                     builder: (_) =>
                                         const ResetPasswordScreen()),
                               ),
-                              child: const Text(
-                                "لا تتذكر الباسورد",
-                                style: TextStyle(
+                              child:  Text(
+                               S.of(context).forgot_password,
+                                style: const TextStyle(
                                   color: Color(0xff0186c7),
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -148,7 +154,7 @@ class AdminLoginScreen extends StatelessWidget {
                               return ElevatedButton(
                                 onPressed: state is SignLoadingState
                                     ? null
-                                    : () => bloc.Login(context, _formKey,
+                                    : () => context.read<SignCubit>().Login(context, _formKey,
                                         _emailController, _passwordController),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xff0186c7),
@@ -164,9 +170,9 @@ class AdminLoginScreen extends StatelessWidget {
                                 child: state is SignLoadingState
                                     ? const CircularProgressIndicator(
                                         color: Colors.white)
-                                    : const Text(
-                                        "تسجيل الدخول",
-                                        style: TextStyle(
+                                    :  Text(
+                                       S.of(context).loginPage,
+                                        style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -182,7 +188,7 @@ class AdminLoginScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Don't have an account? ",
+                                S.of(context).dont_have_account,
                                 style: TextStyle(color: Colors.grey.shade700),
                               ),
                               TextButton(
@@ -191,9 +197,9 @@ class AdminLoginScreen extends StatelessWidget {
                                   MaterialPageRoute(
                                       builder: (_) => SignupScreen()),
                                 ),
-                                child: const Text(
-                                  "Register Now",
-                                  style: TextStyle(
+                                child:  Text(
+                                  S.of(context).register_now,
+                                  style: const TextStyle(
                                     color: Color(0xff0186c7),
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -211,7 +217,8 @@ class AdminLoginScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ),
+);
   }
 
   Widget _buildTextField({

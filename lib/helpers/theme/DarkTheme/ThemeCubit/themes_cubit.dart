@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'themes_state.dart';
@@ -27,54 +29,35 @@ class ThemesCubit extends Cubit<ThemState> {
     iconTheme: const IconThemeData(color: Colors.white60),
   );
 
-  ThemesCubit()
-      : super(ThemState(const Locale("ar"),
-            lightTheme)); // Default to English and Light Theme
-
-  /// Toggles between light and dark themes and saves the preference.
-  void toggleTheme(bool isDark) {
-    final lang = isDark ? "en" : "ar";
-    print(lang);
-    final themeData = isDark ? darkTheme : lightTheme;
-    final loc = Locale(lang);
-
-    emit(ThemState(loc, themeData)); // Retain the current language
-    _saveThemePreference(isDark);
+  ThemesCubit() : super(ThemState(const Locale("ar"), lightTheme)) {
+    _loadPreferences();
   }
 
-  /// Saves the selected theme preference to SharedPreferences.
-  Future<void> _saveThemePreference(bool isDark) async {
+  /// Load stored preferences on startup
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isDark = prefs.getBool("isDark") ?? false;
+    final lang = prefs.getString("lang") ?? "ar"; // Default to Arabic
+
+    emit(ThemState(Locale(lang), isDark ? darkTheme : lightTheme));
+  }
+
+  /// Toggle between light and dark themes
+  void toggleTheme(bool isDark) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool("isDark", isDark);
+
+    emit(ThemState(state.loc, isDark ? darkTheme : lightTheme));
   }
 
-  /// Loads the theme preference from SharedPreferences.
-  static Future<bool> loadThemePreference() async {
+  Future<void> changeLang() async {
+    final newLocale = state.loc == const Locale("ar") ? const Locale("en") : const Locale("ar");
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool("isDark") ?? false;
+    await prefs.setString("lang", newLocale.languageCode);
+
+    emit(ThemState(newLocale, state.themeData)); // Ensure UI rebuilds
+    Get.updateLocale(newLocale); // Force update
+
   }
 
-  /// Initializes the theme based on saved preference.
-  Future<void> setInitialTheme() async {
-    final isDark = await loadThemePreference();
-    final themeData = isDark ? darkTheme : lightTheme;
-    emit(ThemState(state.Loc, themeData)); // Retain the current language
-  }
-
-  /// Loads the saved language preference from SharedPreferences.
-  Future<void> loadLang() async {
-    final prefs = await SharedPreferences.getInstance();
-    final lang = prefs.getString('lang') ?? "en"; // Default to English
-    final loc = Locale(lang);
-    emit(ThemState(loc, state.themeData)); // Retain the current theme
-  }
-
-  /// Changes the language and saves the preference to SharedPreferences.
-  Future<void> changelang(String lang) async {
-    lang = lang == "ar" ? "en" : "ar";
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('lang', lang);
-    final loc = Locale(lang);
-    emit(ThemState(loc, state.themeData)); // Retain the current theme
-  }
 }

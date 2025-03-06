@@ -1,5 +1,6 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/ParentHomeScreen.dart';
+import 'package:ajeal/generated/l10n.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,7 +61,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
                 ),
                 (Route<dynamic> route) => false);
           } else {
-            _showErrorSnackBar("Invalid parent code. Please try xagain.");
+            _showErrorSnackBar(S.of(context).invalid_parent_code);
           }
         } else {
           _showErrorSnackBar("Invalid admin code. Please try again.");
@@ -144,20 +145,19 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
         ),
         const SizedBox(height: 24),
         Text(
-          "Welcome Back!",
+          S.of(context).welcome_back,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.teal,
-              ),
+            fontWeight: FontWeight.bold,
+            color: Colors.teal,
+          ),
         ),
         const SizedBox(height: 8),
         Text(
-          "Please sign in to continue",
+          S.of(context).sign_in_to_continue,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.grey,
-              ),
-        ),
-      ],
+            color: Colors.grey,
+          ),
+        ),      ],
     );
   }
 
@@ -167,8 +167,8 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
         TextFormField(
           controller: _parentCodeController,
           decoration: InputDecoration(
-            labelText: "Parent Code",
-            hintText: "Enter your parent code",
+            labelText: S.of(context).parent_code,
+            hintText: S.of(context).enter_parent_code,
             prefixIcon: const Icon(Icons.person_outline, color: Colors.teal),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -194,8 +194,8 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
           controller: _admincodeController,
           obscureText: !_isPasswordVisible,
           decoration: InputDecoration(
-            labelText: "Admin Code",
-            hintText: "Enter admin code",
+            labelText: S.of(context).admin_code,
+            hintText: S.of(context).enter_admin_code,
             prefixIcon:
                 const Icon(Icons.admin_panel_settings_outlined, color: Colors.teal),
             suffixIcon: IconButton(
@@ -249,9 +249,9 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
             )
-          : const Text(
-              "Sign In",
-              style: TextStyle(
+          :  Text(
+        S.of(context).sign_in,
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -265,16 +265,16 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "Need help? ",
+          S.of(context).need_help,
           style: TextStyle(color: Colors.grey.shade600),
         ),
         TextButton(
           onPressed: () {
             // Add help functionality
           },
-          child: const Text(
-            "Contact Support",
-            style: TextStyle(
+          child:  Text(
+            S.of(context).contact_support,
+            style: const TextStyle(
               color: Colors.teal,
               fontWeight: FontWeight.bold,
             ),

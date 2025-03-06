@@ -11,80 +11,85 @@ class AdminOrParentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final locale = Localizations.localeOf(context).languageCode;
+    final locale = context.watch<ThemesCubit>().state.loc.languageCode;
     final themeCubit = context.read<ThemesCubit>();
 
+
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: Text(
-                  S.of(context).AdminOrParents,
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body:Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: Text(
+                    S.of(context).adminOrParents,
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildOptionCard(
-                    context,
-                    icon: Icons.family_restroom,
-                    label: S.of(context).Parents,
-                    gradientColors: [Colors.purpleAccent, Colors.deepPurple],
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ParentLoginPage()),
-                      );
-                    },
-                  ),
-                  _buildOptionCard(
-                    context,
-                    icon: Icons.admin_panel_settings_outlined,
-                    label: S.of(context).Admin,
-                    gradientColors: [Colors.tealAccent, Colors.blue],
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AdminLoginScreen()),
-                      );
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-              _buildActionButton(
-                context,
-                label: "Change Language",
-                onPressed: () {
-                  themeCubit.changelang(locale);
-                },
-              ),
-              const SizedBox(height: 10),
-              _buildActionButton(
-                context,
-                label: "Change Theme",
-                onPressed: () {
-                  themeCubit.toggleTheme(!isDarkMode);
-                },
-              ),
-            ],
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildOptionCard(
+                      context,
+                      icon: Icons.family_restroom,
+                      label: S.of(context).parents,
+                      gradientColors: [Colors.purpleAccent, Colors.deepPurple],
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ParentLoginPage()),
+                        );
+                      },
+                    ),
+                    _buildOptionCard(
+                      context,
+                      icon: Icons.admin_panel_settings_outlined,
+                      label: S.of(context).admin,
+                      gradientColors: [Colors.tealAccent, Colors.blue],
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AdminLoginScreen()),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                _buildActionButton(
+                  context,
+                  label: S.of(context).changeLanguage,
+                  onPressed: () {
+                    themeCubit.changeLang();
+                    print("locale:::$locale");
+
+                  },
+                ),
+                const SizedBox(height: 10),
+                _buildActionButton(
+                  context,
+                  label: S.of(context).changeTheme,
+                  onPressed: () {
+                    themeCubit.toggleTheme(!isDarkMode);
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
-    );
+        )
+
+      );
   }
 
   Widget _buildOptionCard(

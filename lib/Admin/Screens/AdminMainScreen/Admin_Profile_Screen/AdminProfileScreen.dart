@@ -1,4 +1,5 @@
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/cubit/sign_cubit.dart';
+import 'package:ajeal/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,7 +17,7 @@ class AdminProfileScreen extends StatelessWidget {
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: const Text("الملف الشخصي",
+              title:  Text(S.of(context).profilePage,
                   style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
               background: Container(
                 decoration: BoxDecoration(
@@ -86,23 +87,23 @@ class AdminProfileScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _buildSection(
-                    "المعلومات الشخصية",
+                   S.of(context).personalInfo,
                     [
                       _buildProfileCard(
                         icon: Icons.person,
-                        title: "الاسم",
+                        title: S.of(context).name,
                         value: "محمد",
                         onEdit: () => _showEditDialog(context, "الاسم", "محمد"),
                       ),
                       _buildProfileCard(
                         icon: Icons.email,
-                        title: "البريد الإلكتروني",
+                        title: S.of(context).email,
                         value: "admin@example.com",
                         onEdit: () => _showEditDialog(context, "البريد الإلكتروني", "admin@example.com"),
                       ),
                       _buildProfileCard(
                         icon: Icons.phone,
-                        title: "رقم الهاتف",
+                        title: S.of(context).phone,
                         value: "+20 123 456 789",
                         onEdit: () => _showEditDialog(context, "رقم الهاتف", "+20 123 456 789"),
                       ),
@@ -110,11 +111,11 @@ class AdminProfileScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
                   _buildSection(
-                    "الإعدادات",
+                    S.of(context).settings,
                     [
                       _buildActionButton(
                         icon: Icons.lock_outline,
-                        title: "تغيير كلمة المرور",
+                        title:S.of(context).changePassword,
                         onTap: () => _showChangePasswordDialog(context),
                         color: Colors.blue,
                       ),
@@ -124,7 +125,7 @@ class AdminProfileScreen extends StatelessWidget {
                         builder: (context, state) {
                           return _buildActionButton(
                             icon: Icons.logout,
-                            title: "تسجيل الخروج",
+                            title:  S.of(context).logout,
                             onTap: () => context.read<SignCubit>().logout(context),
                             color: Colors.red,
                           );

@@ -2,6 +2,7 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminC
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Profile_Screen/AdminProfileScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Reports_Screen/Admin_Reports_Screen.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/Allparentschats/GlobalchatScreen.dart';
+import 'package:ajeal/generated/l10n.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
@@ -54,22 +55,22 @@ class _AdminmainScreenState extends State<AdminmainScreen> {
           FlashyTabBarItem(
             activeColor: Colors.blue,
             icon: const Icon(Icons.child_care_rounded),
-            title: Text("Children".tr(),style: const TextStyle(fontSize: 12),),
+            title: Text(S.of(context).childrenPage,style: const TextStyle(fontSize: 12),),
           ),
           FlashyTabBarItem(
             activeColor: Colors.blue,
             icon: const Icon(Icons.analytics_outlined),
-            title: Text("Reports".tr(),style: const TextStyle(fontSize: 12),),
+            title: Text(S.of(context).reportsPage,style: const TextStyle(fontSize: 12),),
           ),
           FlashyTabBarItem(
             activeColor: Colors.blue,
             icon: const Icon(Icons.comment_rounded),
-            title: Text("Global Chat".tr(),style: const TextStyle(fontSize: 12),),
+            title: Text(S.of(context).global_chat,style: const TextStyle(fontSize: 12),),
           ),
           FlashyTabBarItem(
             activeColor: Colors.blue,
             icon: const Icon(Icons.person),
-            title: Text("Profile".tr(),style: const TextStyle(fontSize: 12),),
+            title: Text(S.of(context).profilePage,style: const TextStyle(fontSize: 12),),
           ),
         ],
       ),
