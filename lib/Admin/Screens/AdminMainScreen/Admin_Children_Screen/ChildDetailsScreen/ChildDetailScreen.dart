@@ -47,9 +47,9 @@ class ChildDetailScreen extends StatelessWidget {
               MaterialPageRoute(
                 builder: (c) => ChatScreen(
                   role: "doctor",
-                  chatId: AdminId! + child.parentOccupation,
+                  chatId: AdminId! + child.parentPhone,
                   doctorId: AdminId,
-                  parentId: child.parentOccupation,
+                  parentId: child.parentPhone,
                   isParent:false ,
 
                 ),
@@ -66,7 +66,7 @@ class ChildDetailScreen extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => DailyNotesScreen(
                     userType: 'Doctor',
-                    childID: child.parentOccupation,
+                    childID: child.parentPhone,
                   ),
                 ),
               );
@@ -282,7 +282,7 @@ class ChildDetailScreen extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) => SessionDetailScreen(
-          childId: child.parentOccupation,
+          childId: child.parentPhone,
           sessionName: session['session'],
           date: session['date'],
           goals: List<String>.from(session['goals']),

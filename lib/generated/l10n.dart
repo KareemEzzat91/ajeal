@@ -599,6 +599,616 @@ class S {
   String get logout_ar {
     return Intl.message('تسجيل الخروج', name: 'logout_ar', desc: '', args: []);
   }
+
+  /// `Basic Information`
+  String get basicInformation {
+    return Intl.message(
+      'Basic Information',
+      name: 'basicInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Treatment Period`
+  String get treatmentPeriod {
+    return Intl.message(
+      'Treatment Period',
+      name: 'treatmentPeriod',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Family Information`
+  String get familyInformation {
+    return Intl.message(
+      'Family Information',
+      name: 'familyInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Developmental History - Pregnancy`
+  String get developmentalHistoryPregnancy {
+    return Intl.message(
+      'Developmental History - Pregnancy',
+      name: 'developmentalHistoryPregnancy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Birth Information`
+  String get birthInformation {
+    return Intl.message(
+      'Birth Information',
+      name: 'birthInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Post-Birth Information`
+  String get postBirthInformation {
+    return Intl.message(
+      'Post-Birth Information',
+      name: 'postBirthInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Health History`
+  String get healthHistory {
+    return Intl.message(
+      'Health History',
+      name: 'healthHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `First-Year Growth`
+  String get firstYearGrowth {
+    return Intl.message(
+      'First-Year Growth',
+      name: 'firstYearGrowth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Psychological History`
+  String get psychologicalHistory {
+    return Intl.message(
+      'Psychological History',
+      name: 'psychologicalHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Social History`
+  String get socialHistory {
+    return Intl.message(
+      'Social History',
+      name: 'socialHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Medical Examinations`
+  String get medicalExaminations {
+    return Intl.message(
+      'Medical Examinations',
+      name: 'medicalExaminations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Oral Examination`
+  String get oralExamination {
+    return Intl.message(
+      'Oral Examination',
+      name: 'oralExamination',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Diagnosis`
+  String get diagnosis {
+    return Intl.message('Diagnosis', name: 'diagnosis', desc: '', args: []);
+  }
+
+  /// `Additional Information`
+  String get additionalInformation {
+    return Intl.message(
+      'Additional Information',
+      name: 'additionalInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Child's Name`
+  String get childName {
+    return Intl.message('Child\'s Name', name: 'childName', desc: '', args: []);
+  }
+
+  /// `Date of Birth`
+  String get dateOfBirth {
+    return Intl.message(
+      'Date of Birth',
+      name: 'dateOfBirth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Age`
+  String get age {
+    return Intl.message('Age', name: 'age', desc: '', args: []);
+  }
+
+  /// `Start Date`
+  String get startDate {
+    return Intl.message('Start Date', name: 'startDate', desc: '', args: []);
+  }
+
+  /// `End Date`
+  String get endDate {
+    return Intl.message('End Date', name: 'endDate', desc: '', args: []);
+  }
+
+  /// `Duration`
+  String get duration {
+    return Intl.message('Duration', name: 'duration', desc: '', args: []);
+  }
+
+  /// `Parents' Contact Number`
+  String get parentsContact {
+    return Intl.message(
+      'Parents\' Contact Number',
+      name: 'parentsContact',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Father's Occupation`
+  String get fathersOccupation {
+    return Intl.message(
+      'Father\'s Occupation',
+      name: 'fathersOccupation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mother's Occupation`
+  String get mothersOccupation {
+    return Intl.message(
+      'Mother\'s Occupation',
+      name: 'mothersOccupation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Family Members`
+  String get familyMembers {
+    return Intl.message(
+      'Family Members',
+      name: 'familyMembers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Siblings' Influence`
+  String get siblingsInfluence {
+    return Intl.message(
+      'Siblings\' Influence',
+      name: 'siblingsInfluence',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sibling Closeness`
+  String get siblingCloseness {
+    return Intl.message(
+      'Sibling Closeness',
+      name: 'siblingCloseness',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mother's Age`
+  String get mothersAge {
+    return Intl.message(
+      'Mother\'s Age',
+      name: 'mothersAge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Parents' Relationship`
+  String get parentsRelationship {
+    return Intl.message(
+      'Parents\' Relationship',
+      name: 'parentsRelationship',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Family Relationship`
+  String get familyRelationship {
+    return Intl.message(
+      'Family Relationship',
+      name: 'familyRelationship',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mother's Nature`
+  String get mothersNature {
+    return Intl.message(
+      'Mother\'s Nature',
+      name: 'mothersNature',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pregnancy Nature`
+  String get pregnancyNature {
+    return Intl.message(
+      'Pregnancy Nature',
+      name: 'pregnancyNature',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mother's Diseases During Pregnancy`
+  String get mothersDiseasesDuringPregnancy {
+    return Intl.message(
+      'Mother\'s Diseases During Pregnancy',
+      name: 'mothersDiseasesDuringPregnancy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pregnancy Complications`
+  String get pregnancyComplications {
+    return Intl.message(
+      'Pregnancy Complications',
+      name: 'pregnancyComplications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mother's Stress During Pregnancy`
+  String get mothersStressDuringPregnancy {
+    return Intl.message(
+      'Mother\'s Stress During Pregnancy',
+      name: 'mothersStressDuringPregnancy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type of Birth`
+  String get birthType {
+    return Intl.message('Type of Birth', name: 'birthType', desc: '', args: []);
+  }
+
+  /// `Birth Complications`
+  String get birthComplications {
+    return Intl.message(
+      'Birth Complications',
+      name: 'birthComplications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Birth Timing`
+  String get birthTiming {
+    return Intl.message(
+      'Birth Timing',
+      name: 'birthTiming',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Incubator`
+  String get incubator {
+    return Intl.message('Incubator', name: 'incubator', desc: '', args: []);
+  }
+
+  /// `Incubator Period`
+  String get incubatorPeriod {
+    return Intl.message(
+      'Incubator Period',
+      name: 'incubatorPeriod',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Jaundice`
+  String get jaundice {
+    return Intl.message('Jaundice', name: 'jaundice', desc: '', args: []);
+  }
+
+  /// `Jaundice Rate`
+  String get jaundiceRate {
+    return Intl.message(
+      'Jaundice Rate',
+      name: 'jaundiceRate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vaccinations`
+  String get vaccinations {
+    return Intl.message(
+      'Vaccinations',
+      name: 'vaccinations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Measles`
+  String get measles {
+    return Intl.message('Measles', name: 'measles', desc: '', args: []);
+  }
+
+  /// `Smallpox`
+  String get smallpox {
+    return Intl.message('Smallpox', name: 'smallpox', desc: '', args: []);
+  }
+
+  /// `Medications`
+  String get medications {
+    return Intl.message('Medications', name: 'medications', desc: '', args: []);
+  }
+
+  /// `Teething`
+  String get teething {
+    return Intl.message('Teething', name: 'teething', desc: '', args: []);
+  }
+
+  /// `Babbling`
+  String get babbling {
+    return Intl.message('Babbling', name: 'babbling', desc: '', args: []);
+  }
+
+  /// `Attention to Mother's Voice`
+  String get attentionToMothersVoice {
+    return Intl.message(
+      'Attention to Mother\'s Voice',
+      name: 'attentionToMothersVoice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sitting Alone`
+  String get sittingAlone {
+    return Intl.message(
+      'Sitting Alone',
+      name: 'sittingAlone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Crawling`
+  String get crawling {
+    return Intl.message('Crawling', name: 'crawling', desc: '', args: []);
+  }
+
+  /// `Walking`
+  String get walking {
+    return Intl.message('Walking', name: 'walking', desc: '', args: []);
+  }
+
+  /// `Hand Pointing`
+  String get handPointing {
+    return Intl.message(
+      'Hand Pointing',
+      name: 'handPointing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Family Disabilities`
+  String get familyDisabilities {
+    return Intl.message(
+      'Family Disabilities',
+      name: 'familyDisabilities',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Social Interaction`
+  String get socialInteraction {
+    return Intl.message(
+      'Social Interaction',
+      name: 'socialInteraction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Parent Absence`
+  String get parentAbsence {
+    return Intl.message(
+      'Parent Absence',
+      name: 'parentAbsence',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hearing`
+  String get hearing {
+    return Intl.message('Hearing', name: 'hearing', desc: '', args: []);
+  }
+
+  /// `Vision`
+  String get vision {
+    return Intl.message('Vision', name: 'vision', desc: '', args: []);
+  }
+
+  /// `Respiratory System`
+  String get respiratory {
+    return Intl.message(
+      'Respiratory System',
+      name: 'respiratory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Digestive System`
+  String get digestive {
+    return Intl.message(
+      'Digestive System',
+      name: 'digestive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Neurology`
+  String get neurology {
+    return Intl.message('Neurology', name: 'neurology', desc: '', args: []);
+  }
+
+  /// `Circulatory System`
+  String get circulatory {
+    return Intl.message(
+      'Circulatory System',
+      name: 'circulatory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vocal`
+  String get vocal {
+    return Intl.message('Vocal', name: 'vocal', desc: '', args: []);
+  }
+
+  /// `Head`
+  String get head {
+    return Intl.message('Head', name: 'head', desc: '', args: []);
+  }
+
+  /// `Speech`
+  String get speech {
+    return Intl.message('Speech', name: 'speech', desc: '', args: []);
+  }
+
+  /// `Lips`
+  String get lips {
+    return Intl.message('Lips', name: 'lips', desc: '', args: []);
+  }
+
+  /// `Teeth`
+  String get teeth {
+    return Intl.message('Teeth', name: 'teeth', desc: '', args: []);
+  }
+
+  /// `Palate`
+  String get palate {
+    return Intl.message('Palate', name: 'palate', desc: '', args: []);
+  }
+
+  /// `Tongue`
+  String get tongue {
+    return Intl.message('Tongue', name: 'tongue', desc: '', args: []);
+  }
+
+  /// `Upper Jaw`
+  String get upperJaw {
+    return Intl.message('Upper Jaw', name: 'upperJaw', desc: '', args: []);
+  }
+
+  /// `Lower Jaw`
+  String get lowerJaw {
+    return Intl.message('Lower Jaw', name: 'lowerJaw', desc: '', args: []);
+  }
+
+  /// `Pharynx`
+  String get pharynx {
+    return Intl.message('Pharynx', name: 'pharynx', desc: '', args: []);
+  }
+
+  /// `Throat`
+  String get throat {
+    return Intl.message('Throat', name: 'throat', desc: '', args: []);
+  }
+
+  /// `School/College`
+  String get schoolCollege {
+    return Intl.message(
+      'School/College',
+      name: 'schoolCollege',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Residence`
+  String get residence {
+    return Intl.message('Residence', name: 'residence', desc: '', args: []);
+  }
+
+  /// `Notes`
+  String get notes {
+    return Intl.message('Notes', name: 'notes', desc: '', args: []);
+  }
+
+  /// `Select Goals`
+  String get selectGoals {
+    return Intl.message(
+      'Select Goals',
+      name: 'selectGoals',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save Child Information`
+  String get saveChildInformation {
+    return Intl.message(
+      'Save Child Information',
+      name: 'saveChildInformation',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

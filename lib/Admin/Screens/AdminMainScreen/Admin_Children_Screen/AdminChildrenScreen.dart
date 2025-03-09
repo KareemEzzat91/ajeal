@@ -69,17 +69,15 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<AddChildCubit>();
-
     return BlocProvider(
-  create: (context) => AddChildCubit(),
-  child: Scaffold(
+     create: (context) => AddChildCubit(),
+     child: Scaffold(
       backgroundColor: AppColors.background,
-      appBar: _buildAppBar(context, bloc),
+      appBar: _buildAppBar(context, context.read<AddChildCubit>()),
       body: Column(
         children: [
           _buildFilterBar(),
-          Expanded(child: _buildBody(bloc)),
+          Expanded(child: _buildBody(context.read<AddChildCubit>())),
         ],
       ),
       floatingActionButton: _buildAnimatedFAB(context),
@@ -613,7 +611,7 @@ class ChildCard extends StatelessWidget {
                       .collection("users")
                       .doc(doctorSnap['Doctor_id'])
                       .collection("children")
-                      .doc(child.parentOccupation)
+                      .doc(child.parentPhone)
                       .set(child.toMap());
 
                   // Delete from current user's collection
@@ -621,7 +619,7 @@ class ChildCard extends StatelessWidget {
                       .collection('users')
                       .doc(uid)
                       .collection("children")
-                      .doc(child.parentOccupation)
+                      .doc(child.parentPhone)
                       .delete();
 
                   ScaffoldMessenger.of(context).showSnackBar(

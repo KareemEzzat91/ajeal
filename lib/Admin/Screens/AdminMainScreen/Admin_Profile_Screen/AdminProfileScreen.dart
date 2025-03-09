@@ -1,5 +1,7 @@
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/cubit/sign_cubit.dart';
 import 'package:ajeal/generated/l10n.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,6 +10,8 @@ class AdminProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser= FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -18,7 +22,7 @@ class AdminProfileScreen extends StatelessWidget {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title:  Text(S.of(context).profilePage,
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
               background: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -92,14 +96,14 @@ class AdminProfileScreen extends StatelessWidget {
                       _buildProfileCard(
                         icon: Icons.person,
                         title: S.of(context).name,
-                        value: "محمد",
-                        onEdit: () => _showEditDialog(context, "الاسم", "محمد"),
+                        value: currentUser!.displayName??"محمد",
+                        onEdit: () => _showEditDialog(context, "الاسم",  currentUser.displayName??"محمد"),
                       ),
                       _buildProfileCard(
                         icon: Icons.email,
                         title: S.of(context).email,
-                        value: "admin@example.com",
-                        onEdit: () => _showEditDialog(context, "البريد الإلكتروني", "admin@example.com"),
+                        value:currentUser.email??"admin@gmail.com" ,
+                        onEdit: () => _showEditDialog(context, "البريد الإلكتروني", currentUser.email??"admin@gmail.com"),
                       ),
                       _buildProfileCard(
                         icon: Icons.phone,

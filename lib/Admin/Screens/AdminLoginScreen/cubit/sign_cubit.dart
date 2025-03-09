@@ -118,6 +118,7 @@ class SignCubit extends Cubit<SignState> {
           FirebaseFirestore.instance.collection("users").doc(user.uid).set({
             'Doctor_Name': nameController.text,
             'Doctor_id': doctorId, //name+phone number
+            "Doctor_phone" :MobileController.text,
             "lastChildId":0
           });
           // Doctor_id

@@ -314,7 +314,7 @@ class ParentHomePage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SessionSchedulePage(
-                childId: child.parentOccupation,
+                childId: child.parentPhone,
                 scheduleSesoins: child.scheduleSesoins,
               ),
             ),
@@ -333,9 +333,9 @@ class ParentHomePage extends StatelessWidget {
               builder: (context) => ChatScreen(
                 role:"parent",
                 isParent: true,
-                chatId: AdminId + child.parentOccupation,
+                chatId: AdminId + child.parentPhone,
                 doctorId: AdminId,
-                parentId: child.parentOccupation,
+                parentId: child.parentPhone,
               ),
             ),
           ),
@@ -354,7 +354,7 @@ class ParentHomePage extends StatelessWidget {
                 childName: child.name,
                 isparent: true,
                 doctorId: AdminId,
-                parentId: child.parentOccupation,
+                parentId: child.parentPhone,
               ),
             ),
           ),

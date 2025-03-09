@@ -1,3 +1,5 @@
+import 'package:ajeal/Admin/Screens/AdminLoginScreen/cubit/sign_cubit.dart';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/add_child_cubit.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Profile_Screen/AdminProfileScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Reports_Screen/Admin_Reports_Screen.dart';
@@ -7,6 +9,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdminmainScreen extends StatefulWidget {
   final String doctorId;
@@ -43,7 +46,11 @@ class _AdminmainScreenState extends State<AdminmainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocProvider(
+  create: (context) => SignCubit(),
+  child: BlocProvider(
+  create: (context) => AddChildCubit(),
+  child: Scaffold(
       body: Screens[_selectedIndex],
       bottomNavigationBar: FlashyTabBar(animationDuration: Duration(milliseconds:540 ),
         selectedIndex: _selectedIndex,
@@ -74,6 +81,8 @@ class _AdminmainScreenState extends State<AdminmainScreen> {
           ),
         ],
       ),
-    );
+    ),
+),
+);
   }
 }

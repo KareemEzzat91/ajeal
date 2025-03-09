@@ -1,5 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
+import 'dart:math';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/generate.dart';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/sendvreficationmessage.dart';
+ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -84,39 +88,106 @@ class AddChildCubit extends Cubit<AddChildState> {
   }
 
   void saveChild(
-    String name,
-    String age,
-    DateTime dateOfBirth,
-    DateTime startDate,
-    DateTime endDate,
-    String period,
-    String parentOccupation,
-    String notes,
-    String school,
-    String fatherOccupation,
-    String motherOccupation,
-    String familyMembers,
-    String residence,
-    String motherAgeDuringPregnancy,
-    String relationshipBetweenParents,
-    String familyRelationship,
-    String motherNature,
-    String gender,
-    BuildContext context,
-  ) async {
+      BuildContext context, {
+        required String name,
+        required String age,
+        required DateTime dateOfBirth,
+        required DateTime startDate,
+        required DateTime endDate,
+        required String period,
+        required String parentPhone,
+        required String notes,
+        required String school,
+        required String residence,
+        required String gender,
+        required List<Goal>selectedGoals ,
+        // Family Information
+        required String fatherOccupation,
+        required String motherOccupation,
+        required String familyMembers,
+        required String siblingsInfluence,
+        required String siblingCloseness,
+        required String motherAge,
+        required String parentsRelationship,
+        required String familyRelationship,
+        required String motherNature,
+        // Developmental History - Pregnancy Phase
+        required String pregnancyNature,
+        required String motherDiseasesDuringPregnancy,
+        required String pregnancyComplications,
+        required String motherStressDuringPregnancy,
+        // Birth Phase
+        required String birthType,
+        required String birthComplications,
+        required String birthTiming,
+        // Post-Birth
+        required String incubator,
+        required String incubatorPeriod,
+        required String jaundice,
+        required String jaundiceRate,
+        // Health History
+        required String vaccinations,
+        required String measles,
+        required String smallpox,
+        required String medications,
+        // First Year Growth
+        required String teething,
+        required String babbling,
+        required String motherVoiceAttention,
+        required String sittingAlone,
+        required String crawling,
+        required String walking,
+        required String handPointing,
+        // Psychological History
+        required String familyDisabilities,
+        // Social History
+        required String socialInteraction,
+        required String parentAbsence,
+        // Medical Examinations
+        required String hearing,
+        required String vision,
+        required String respiratory,
+        required String digestive,
+        required String neurology,
+        required String circulatory,
+        required String vocal,
+        required String head,
+        required String speech,
+        required String lips,
+        required String teeth,
+        required String palate,
+        required String tongue,
+        required String upperJaw,
+        required String lowerJaw,
+        required String pharynx,
+        required String throat,
+        // Diagnosis
+        required String diagnosis,
+      }) async {
     emit(AddLoadingState());
 
     try {
-      scheduleSesoins = await generateSchedule(
-          startDate, endDate, period, name, selectedGoals[parentOccupation]!);
+
       final uid = FirebaseAuth.instance.currentUser!.uid;
-      final doctorIdsnap =
-          await FirebaseFirestore.instance.collection("users").doc(uid).get();
-      final doctorId = doctorIdsnap['Doctor_id'];
-      final doctorName = doctorIdsnap['Doctor_Name'];
-      id =doctorIdsnap['lastChildId'];
+      print("User Id::::::::::::$uid");
+      print( "Dataaaaaaaaaaaa$startDate $endDate, $period, $name,$selectedGoals}");
+      print(":::::::::::::::::::::::::::::::::::::1");
+      final scheduleGenerator = GenerateSchedule();
+
+      scheduleSesoins = await  scheduleGenerator.generateScheduleWithFallback(
+          startDate:  startDate, endDate: endDate, duration:  period,childName:  name,goalsList: selectedGoals);
+      print(":::::::::::::::::::::::::::::::::::::2");
+
+      final doctorIdSnap =
+      await FirebaseFirestore.instance.collection("users").doc(uid).get();
+      final doctorId = doctorIdSnap['Doctor_id'];
+      final doctorName = doctorIdSnap['Doctor_Name'];
+      id = doctorIdSnap['lastChildId'];
       id++;
-      // إنشاء الطفل الجديد
+      print(":::::::::::::::::::::::::::::::::::::3");
+
+
+
       final newChild = Child(
         id: id,
         name: name,
@@ -125,44 +196,97 @@ class AddChildCubit extends Cubit<AddChildState> {
         startDate: startDate,
         endDate: endDate,
         period: period,
-        parentOccupation: parentOccupation,
+        parentPhone: parentPhone,
         notes: notes,
         school: school,
+        residence: residence,
+        gender: gender,
         fatherOccupation: fatherOccupation,
         motherOccupation: motherOccupation,
         familyMembers: familyMembers,
-        residence: residence,
-        motherAgeDuringPregnancy: motherAgeDuringPregnancy,
-        relationshipBetweenParents: relationshipBetweenParents,
+        motherDiseasesDuringPregnancy: motherDiseasesDuringPregnancy,
+        parentsRelationship: parentsRelationship,
         familyRelationship: familyRelationship,
         motherNature: motherNature,
-        selectedGoals: selectedGoals[parentOccupation]!,
+        selectedGoals: selectedGoals,
         scheduleSesoins: scheduleSesoins,
         doctorId: doctorId,
         doctorName: doctorName,
-        dailyNotes: [{}],
-        gender: gender,
+        dailyNotes: const [{}],
+
+        // Missing fields added here
+        siblingsInfluence: siblingsInfluence,
+        siblingCloseness: siblingCloseness,
+        motherAge: motherAge,
+        pregnancyNature: pregnancyNature,
+        pregnancyComplications: pregnancyComplications,
+        motherStressDuringPregnancy: motherStressDuringPregnancy,
+        birthType: birthType,
+        birthComplications: birthComplications,
+        birthTiming: birthTiming,
+        incubator: incubator,
+        incubatorPeriod: incubatorPeriod,
+        jaundice: jaundice,
+        jaundiceRate: jaundiceRate,
+        vaccinations: vaccinations,
+        measles: measles,
+        smallpox: smallpox,
+        medications: medications,
+        teething: teething,
+        babbling: babbling,
+        motherVoiceAttention: motherVoiceAttention,
+        sittingAlone: sittingAlone,
+        crawling: crawling,
+        walking: walking,
+        handPointing: handPointing,
+        familyDisabilities: familyDisabilities,
+        socialInteraction: socialInteraction,
+        parentAbsence: parentAbsence,
+        hearing: hearing,
+        vision: vision,
+        respiratory: respiratory,
+        digestive: digestive,
+        neurology: neurology,
+        circulatory: circulatory,
+        vocal: vocal,
+        head: head,
+        speech: speech,
+        lips: lips,
+        teeth: teeth,
+        palate: palate,
+        tongue: tongue,
+        upperJaw: upperJaw,
+        lowerJaw: lowerJaw,
+        pharynx: pharynx,
+        throat: throat,
+        diagnosis: diagnosis,
       );
 
-      final userid = FirebaseAuth.instance.currentUser!.uid;
+
       await FirebaseFirestore.instance
           .collection("users")
-          .doc(userid)
+          .doc(uid)
           .collection("children")
-          .doc(parentOccupation)
+          .doc(parentPhone)
           .set(newChild.toMap());
 
-     await FirebaseFirestore.instance.collection("DailyNotes").doc(parentOccupation).set({"notes":[]});
+      await FirebaseFirestore.instance.collection("DailyNotes").doc(parentPhone).set({"notes":[]});
+
+      // Update the lastChildId in the doctor's document
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .update({'lastChildId': id});
 
       saveToFirestore();
 
+      sendWhatsAppMessage(parentPhone,doctorId,name);
       Navigator.pop(context);
       emit(AddScuccesState());
     } catch (e) {
       emit(AddFailureState(e.toString()));
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
-      Navigator.pop(context);
     }
   }
 
@@ -184,107 +308,6 @@ class AddChildCubit extends Cubit<AddChildState> {
       }
     } else {
       selectedGoals[childId] = [goal];
-    }
-  }
-
-  Future<List<Map<String, dynamic>>> generateSchedule(
-    DateTime startDate,
-    DateTime endDate,
-    String duration,
-    String childName,
-    List<Goal> goalsList,
-  ) async {
-    final List<String> goals = [];
-    final List<String> goalsDescription = [];
-
-    for (var goal in goalsList) {
-      goals.add(goal.goalName);
-      goalsDescription.add(goal.goalDescription);
-    }
-
-    final durationInDays = endDate.difference(startDate).inDays;
-    //  final sessionsPerWeek = 3; // عدد الجلسات الأسبوعية
-
-    final prompt =
-        """Create a detailed schedule for therapy sessions lasting **$durationInDays days** for the child **$childName**. The schedule should include the following goals:
-
-1. **أهداف تنمية الذاكرة السمعية** (Auditory Memory Development)
-2. **أهداف تنمية الذاكرة البصرية** (Visual Memory Development)
-3. **أهداف تنمية الكتابة** (Writing Development)
-4. **أهداف تنمية القراءة** (Reading Development)
-5. **أهداف تنمية الحساب** (Math Development)
-6. **أهداف تنمية الإدراك** (Perception Development)
-7. **أهداف تنمية الانتباه** (Attention Development)
-
-**Requirements:**
-1. The schedule should cover the period from **${startDate.toIso8601String()}** to **${endDate.toIso8601String()}**.
-2. There should be **3 sessions per week**, with each session occurring every **3 days**.
-3. Distribute the goals evenly across the sessions, ensuring that each goal is addressed multiple times throughout the schedule.
-4. Use the **exact names of the goals** as provided above.
-5. Return the schedule in **JSON format** with the following structure:
-
-```json
-{
-  "weeks": [
-    {
-      "session": 1,
-      "date": "YYYY-MM-DD",
-      "goals": ["هدف 1", "هدف 2"]
-    },
-    {
-      "session": 2,
-      "date": "YYYY-MM-DD",
-      "goals": ["هدف 3", "هدف 4"]
-    },
-    ...
-  ]
-}
-  """;
-
-    final gemini = Gemini.instance;
-
-    try {
-      final response = await gemini.text(prompt);
-      String rawResponse = response?.output ?? '';
-
-      // Clean the response
-      rawResponse = rawResponse.trim();
-      if (rawResponse.startsWith('```json')) {
-        rawResponse = rawResponse.replaceFirst('```json', '');
-      }
-      if (rawResponse.endsWith('```')) {
-        rawResponse = rawResponse.substring(0, rawResponse.lastIndexOf('```'));
-      }
-
-      // Parse the cleaned response
-      final List<Map<String, dynamic>> sessionsList = [];
-      final jsonResponse = jsonDecode(rawResponse);
-
-      if (jsonResponse is Map<String, dynamic> &&
-          jsonResponse.containsKey('weeks')) {
-        final weeks = jsonResponse['weeks'] as List<dynamic>;
-        for (int i = 0; i < weeks.length; i++) {
-          final week = weeks[i];
-          if (week is Map<String, dynamic>) {
-            sessionsList.add({
-              "session": week['session'],
-              "date": week['date'],
-              "goals": List<String>.from(week['goals']),
-              'rate': 0,
-              "notes": "",
-              "tasks": [],
-            });
-          } else {
-            print("Invalid week format: $week");
-          }
-        }
-      } else {
-        print("Invalid response format or missing 'weeks' key");
-      }
-
-      return sessionsList;
-    } catch (e) {
-      throw Exception("Error generating schedule: $e");
     }
   }
 

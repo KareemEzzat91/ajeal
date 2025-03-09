@@ -1,3 +1,4 @@
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/sendvreficationmessage.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/AdminmainScreen/AdminmainScreen.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/ParentHomeScreen.dart';
@@ -7,6 +8,7 @@ import 'package:ajeal/generated/l10n.dart';
 import 'package:ajeal/helpers/AIhelper/SecretKey/secretkey.dart';
 import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,7 +40,7 @@ Future<void> main() async {
     // Initialize Gemini
     Gemini.init(apiKey: Env.apiKey);
 
-    runApp(const MyApp());
+    runApp( const MyApp());
   } catch (e) {
     print('Initialization error: $e');
     // You might want to show a user-friendly error screen here
@@ -141,31 +143,79 @@ class _MyAppState extends State<MyApp> {
   Widget _buildLoadingScreen() {
     return StylishPullToRefresh(
       style: Style.circularProgress,
-
       onRefresh: () {
         return fun();
       },
-      child: const SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 200), // Add some spacing
-              Text(
-                'Loading...',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFFF5F7FA), Color(0xFFE4EDF5)],
+            ),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Logo or branded icon
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.hourglass_bottom,
+                    size: 50,
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 32),
+                // Loading text with animation
+                const DefaultTextStyle(
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF4A6572),
+                  ),
+                  child: LoadingAnimatedText('Loading'),
+                ),
+                const SizedBox(height: 16),
+                // Subtle progress indicator
+                SizedBox(
+                  width: 200,
+                  child: LinearProgressIndicator(
+                    backgroundColor: Colors.grey.shade200,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                // Helpful tip or message
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Text(
+                    'Pull down to refresh or wait while we load your content',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-
   Future <void> fun() async {
   }
   @override
@@ -195,4 +245,52 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+}
+// Animated ellipsis for loading text
+class LoadingAnimatedText extends StatefulWidget {
+  final String text;
+
+  const LoadingAnimatedText(this.text, {Key? key}) : super(key: key);
+
+  @override
+  _LoadingAnimatedTextState createState() => _LoadingAnimatedTextState();
+}
+
+class _LoadingAnimatedTextState extends State<LoadingAnimatedText> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  int _dotCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    )..repeat();
+
+    _controller.addListener(() {
+      if (_controller.value == 1.0) {
+        setState(() {
+          _dotCount = (_dotCount + 1) % 4;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(widget.text),
+        Text('.' * _dotCount),
+      ],
+    );
+  }
 }
