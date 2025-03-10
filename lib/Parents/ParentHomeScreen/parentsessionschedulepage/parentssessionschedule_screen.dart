@@ -1,13 +1,16 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/SessionDetailScreen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class SessionSchedulePage extends StatelessWidget {
   final String childId;
   final List<Map<String, dynamic>> scheduleSesoins;
+  final bool isParent  ;
 
   const SessionSchedulePage({super.key, 
     required this.childId,
     required this.scheduleSesoins,
+    required this.isParent,
   });
 
   @override
@@ -197,6 +200,7 @@ class SessionSchedulePage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SessionDetailScreen(
+                isParent: true,
                 childId: childId,
                 sessionName: session['session'],
                 date: session['date'],
@@ -307,6 +311,7 @@ class SessionSchedulePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => SessionDetailScreen(
+                            isParent: true,
                             childId: childId,
                             sessionName: session['session'],
                             date: session['date'],

@@ -5,9 +5,11 @@ import 'package:ajeal/Parents/ParentHomeScreen/parentchildgoalspage/parentchildg
 import 'package:ajeal/Parents/ParentHomeScreen/parentsessionschedulepage/parentssessionschedule_screen.dart';
 import 'package:ajeal/Screens/AdminOrparents/AdminOrParintsScreen.dart';
 import 'package:ajeal/generated/l10n.dart';
+import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ParentHomePage extends StatelessWidget {
@@ -20,17 +22,21 @@ class ParentHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final locale = context.watch<ThemesCubit>().state.loc.languageCode;
+    final themeCubit = context.read<ThemesCubit>();
+
     return  Scaffold(
       body: CustomScrollView(
         slivers: [
-          _buildAppBar(context),
+          _buildAppBar(context,isDarkMode,locale,themeCubit),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildProfileHeader(),
+                  _buildProfileHeader(isDarkMode),
                   const SizedBox(height: 24),
                   _buildQuickStats(context),
                   const SizedBox(height: 24),
@@ -54,7 +60,7 @@ class ParentHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  Widget _buildAppBar(BuildContext context, bool isDarkMode, String locale, ThemesCubit themeCubit) {
     return SliverAppBar(
       expandedHeight: 200.0,
       floating: false,
@@ -74,18 +80,19 @@ class ParentHomePage extends StatelessWidget {
               end: Alignment.bottomLeft,
               colors: [
                 Colors.teal,
-                Colors.teal.shade700,
+               isDarkMode? Colors.black:Colors.teal.shade700
               ],
             ),
           ),
           child: Stack(
             children: [
+
               Positioned(
                 right: -50,
                 top: -50,
                 child: CircleAvatar(
                   radius: 100,
-                  backgroundColor: Colors.white.withOpacity(0.1),
+                  backgroundColor:isDarkMode?Colors.black12: Colors.white.withOpacity(0.1),
                 ),
               ),
             ],
@@ -93,23 +100,40 @@ class ParentHomePage extends StatelessWidget {
         ),
       ),
       actions: [
-        IconButton(
-          icon: const Icon(Icons.notifications),
-          onPressed: () {
-            // Add notifications functionality
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.settings),
-          onPressed: () {
-            // Add settings functionality
-          },
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+
+            // Setting buttons
+            Row(
+              children: [
+                _buildIconButton(
+                  context,
+                  icon: Icons.language,
+                  tooltip: S.of(context).changeLanguage,
+                  onPressed: () {
+                    themeCubit.changeLang();
+                  },
+                ),
+                const SizedBox(width: 8),
+                _buildIconButton(
+                  context,
+                  icon: isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                  tooltip: S.of(context).changeTheme,
+                  onPressed: () {
+                    themeCubit.toggleTheme(!isDarkMode);
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );
   }
 
-  Widget _buildProfileHeader() {
+  Widget _buildProfileHeader(bool isDarkMode) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -127,7 +151,7 @@ class ParentHomePage extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 40,
-            backgroundColor: Colors.teal.shade100,
+            backgroundColor:isDarkMode? Colors.teal.shade600:Colors.teal.shade100,
             child: Text(
               child.name[0].toUpperCase(),
               style: const TextStyle(
@@ -145,6 +169,7 @@ class ParentHomePage extends StatelessWidget {
                 Text(
                   child.name,
                   style: const TextStyle(
+                    color: Colors.black,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -314,6 +339,8 @@ class ParentHomePage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SessionSchedulePage(
+
+                isParent: true,
                 childId: child.parentPhone,
                 scheduleSesoins: child.scheduleSesoins,
               ),
@@ -495,5 +522,24 @@ class ParentHomePage extends StatelessWidget {
             (route) => false,
       );
     }
+  }
+  Widget _buildIconButton(
+      BuildContext context, {
+        required IconData icon,
+        required String tooltip,
+        required VoidCallback onPressed,
+      }) {
+
+    return IconButton(
+      onPressed: onPressed,
+      icon: Icon(icon),
+      tooltip: tooltip,
+      style: IconButton.styleFrom(
+         padding: const EdgeInsets.all(12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
   }
 }

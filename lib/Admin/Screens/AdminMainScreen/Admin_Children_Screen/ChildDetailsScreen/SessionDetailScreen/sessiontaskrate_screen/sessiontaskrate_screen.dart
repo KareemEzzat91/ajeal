@@ -3,8 +3,8 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.
 
 class SessionTaskRateScreen extends StatefulWidget {
   final Task task;
-
-  const SessionTaskRateScreen({super.key, required this.task});
+  final bool isParent ;
+  const SessionTaskRateScreen({super.key, required this.task, required this.isParent});
 
   @override
   State<SessionTaskRateScreen> createState() => _SessionTaskRateScreenState();
@@ -118,14 +118,13 @@ class _SessionTaskRateScreenState extends State<SessionTaskRateScreen> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  filled: true,
-                  fillColor: Colors.grey[100],
+
                 ),
               ),
               const SizedBox(height: 20),
 
               // زر الحفظ
-              Center(
+             widget.isParent?const SizedBox(): Center(
                 child: ElevatedButton(
                   onPressed: _saveTaskDetails,
                   style: ElevatedButton.styleFrom(

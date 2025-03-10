@@ -282,6 +282,7 @@ class ChildDetailScreen extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) => SessionDetailScreen(
+          isParent: false ,
           childId: child.parentPhone,
           sessionName: session['session'],
           date: session['date'],
