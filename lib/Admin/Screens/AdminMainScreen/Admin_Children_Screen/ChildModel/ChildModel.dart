@@ -93,14 +93,15 @@ class Child extends Equatable {
   final List<Map<String, dynamic>> scheduleSesoins;
 
   // Doctor Information
-   String doctorId;
-   String doctorName;
+  String doctorId;
+  String doctorName;
+  final String doctorPhone;
 
   // Progress Tracking
   final List<Map<String, dynamic>> dailyNotes;
 
   // Comprehensive constructor with named parameters
-    Child({
+  Child({
     required this.id,
     required this.name,
     required this.age,
@@ -193,6 +194,7 @@ class Child extends Equatable {
     // Doctor Information
     required this.doctorId,
     required this.doctorName,
+    required this.doctorPhone,
 
     // Progress Tracking
     required this.dailyNotes,
@@ -294,6 +296,7 @@ class Child extends Equatable {
       // Doctor Information
       'doctorId': doctorId,
       'doctorName': doctorName,
+      "doctorPhone": doctorPhone,
 
       // Progress Tracking
       'dailyNotes': dailyNotes,
@@ -389,7 +392,9 @@ class Child extends Equatable {
         startDate: _parseDateTime(json['startDate']),
         endDate: _parseDateTime(json['endDate']),
         period: json['period'] ?? '',
-        parentPhone: json['parentPhone'] ?? json['parentOccupation'] ?? '', // Handle legacy data
+        parentPhone: json['parentPhone'] ??
+            json['parentOccupation'] ??
+            '', // Handle legacy data
         notes: json['notes'] ?? '',
         school: json['school'] ?? '',
         residence: json['residence'] ?? '',
@@ -402,13 +407,16 @@ class Child extends Equatable {
         siblingsInfluence: json['siblingsInfluence'] ?? '',
         siblingCloseness: json['siblingCloseness'] ?? '',
         motherAge: json['motherAge'] ?? '',
-        parentsRelationship: json['parentsRelationship'] ?? json['relationshipBetweenParents'] ?? '',
+        parentsRelationship: json['parentsRelationship'] ??
+            json['relationshipBetweenParents'] ??
+            '',
         familyRelationship: json['familyRelationship'] ?? '',
         motherNature: json['motherNature'] ?? '',
 
         // Developmental History - Pregnancy Phase
         pregnancyNature: json['pregnancyNature'] ?? '',
-        motherDiseasesDuringPregnancy: json['motherDiseasesDuringPregnancy'] ?? '',
+        motherDiseasesDuringPregnancy:
+            json['motherDiseasesDuringPregnancy'] ?? '',
         pregnancyComplications: json['pregnancyComplications'] ?? '',
         motherStressDuringPregnancy: json['motherStressDuringPregnancy'] ?? '',
 
@@ -474,6 +482,7 @@ class Child extends Equatable {
         // Doctor Information
         doctorId: json['doctorId'] ?? '',
         doctorName: json['doctorName'] ?? '',
+        doctorPhone: json["doctorPhone"],
 
         // Progress Tracking
         dailyNotes: _parseDailyNotes(json['dailyNotes']),
@@ -501,10 +510,11 @@ class Child extends Equatable {
         familyRelationship: '',
         motherNature: '',
         motherDiseasesDuringPregnancy: '',
-        selectedGoals: [],
-        scheduleSesoins: [],
+        selectedGoals: const [],
+        scheduleSesoins: const [],
         doctorId: '',
         doctorName: '',
+        doctorPhone: '',
         dailyNotes: const [],
       );
     }
@@ -525,7 +535,9 @@ class Child extends Equatable {
     if (value == null) return [];
     if (value is List) {
       try {
-        return value.map((goal) => Goal.fromMap(Map<String, dynamic>.from(goal))).toList();
+        return value
+            .map((goal) => Goal.fromMap(Map<String, dynamic>.from(goal)))
+            .toList();
       } catch (e) {
         print('Error parsing goals: $e');
         return [];
@@ -630,6 +642,7 @@ class Child extends Equatable {
     List<Map<String, dynamic>>? scheduleSesoins,
     String? doctorId,
     String? doctorName,
+    String? doctorPhone,
     List<Map<String, dynamic>>? dailyNotes,
   }) {
     return Child(
@@ -655,9 +668,12 @@ class Child extends Equatable {
       familyRelationship: familyRelationship ?? this.familyRelationship,
       motherNature: motherNature ?? this.motherNature,
       pregnancyNature: pregnancyNature ?? this.pregnancyNature,
-      motherDiseasesDuringPregnancy: motherDiseasesDuringPregnancy ?? this.motherDiseasesDuringPregnancy,
-      pregnancyComplications: pregnancyComplications ?? this.pregnancyComplications,
-      motherStressDuringPregnancy: motherStressDuringPregnancy ?? this.motherStressDuringPregnancy,
+      motherDiseasesDuringPregnancy:
+          motherDiseasesDuringPregnancy ?? this.motherDiseasesDuringPregnancy,
+      pregnancyComplications:
+          pregnancyComplications ?? this.pregnancyComplications,
+      motherStressDuringPregnancy:
+          motherStressDuringPregnancy ?? this.motherStressDuringPregnancy,
       birthType: birthType ?? this.birthType,
       birthComplications: birthComplications ?? this.birthComplications,
       birthTiming: birthTiming ?? this.birthTiming,
@@ -701,95 +717,97 @@ class Child extends Equatable {
       scheduleSesoins: scheduleSesoins ?? this.scheduleSesoins,
       doctorId: doctorId ?? this.doctorId,
       doctorName: doctorName ?? this.doctorName,
+      doctorPhone: doctorPhone ?? this.doctorPhone,
       dailyNotes: dailyNotes ?? this.dailyNotes,
     );
   }
 
   @override
   List<Object?> get props => [
-    // Basic Information
-    id,
-    name,
-    age,
-    dateOfBirth,
-    startDate,
-    endDate,
-    period,
-    parentPhone,
-    notes,
-    school,
-    residence,
-    gender,
+        // Basic Information
+        id,
+        name,
+        age,
+        dateOfBirth,
+        startDate,
+        endDate,
+        period,
+        parentPhone,
+        notes,
+        school,
+        residence,
+        gender,
 
-    // Family Information
-    fatherOccupation,
-    motherOccupation,
-    familyMembers,
-    siblingsInfluence,
-    siblingCloseness,
-    motherAge,
-    parentsRelationship,
-    familyRelationship,
-    motherNature,
+        // Family Information
+        fatherOccupation,
+        motherOccupation,
+        familyMembers,
+        siblingsInfluence,
+        siblingCloseness,
+        motherAge,
+        parentsRelationship,
+        familyRelationship,
+        motherNature,
 
-    // Developmental History
-    pregnancyNature,
-    motherDiseasesDuringPregnancy,
-    pregnancyComplications,
-    motherStressDuringPregnancy,
-    birthType,
-    birthComplications,
-    birthTiming,
-    incubator,
-    incubatorPeriod,
-    jaundice,
-    jaundiceRate,
+        // Developmental History
+        pregnancyNature,
+        motherDiseasesDuringPregnancy,
+        pregnancyComplications,
+        motherStressDuringPregnancy,
+        birthType,
+        birthComplications,
+        birthTiming,
+        incubator,
+        incubatorPeriod,
+        jaundice,
+        jaundiceRate,
 
-    // Health History
-    vaccinations,
-    measles,
-    smallpox,
-    medications,
+        // Health History
+        vaccinations,
+        measles,
+        smallpox,
+        medications,
 
-    // First Year Growth
-    teething,
-    babbling,
-    motherVoiceAttention,
-    sittingAlone,
-    crawling,
-    walking,
-    handPointing,
+        // First Year Growth
+        teething,
+        babbling,
+        motherVoiceAttention,
+        sittingAlone,
+        crawling,
+        walking,
+        handPointing,
 
-    // Psychological & Social History
-    familyDisabilities,
-    socialInteraction,
-    parentAbsence,
+        // Psychological & Social History
+        familyDisabilities,
+        socialInteraction,
+        parentAbsence,
 
-    // Medical Examinations
-    hearing,
-    vision,
-    respiratory,
-    digestive,
-    neurology,
-    circulatory,
-    vocal,
-    head,
-    speech,
-    lips,
-    teeth,
-    palate,
-    tongue,
-    upperJaw,
-    lowerJaw,
-    pharynx,
-    throat,
+        // Medical Examinations
+        hearing,
+        vision,
+        respiratory,
+        digestive,
+        neurology,
+        circulatory,
+        vocal,
+        head,
+        speech,
+        lips,
+        teeth,
+        palate,
+        tongue,
+        upperJaw,
+        lowerJaw,
+        pharynx,
+        throat,
 
-    // Diagnosis
-    diagnosis,
+        // Diagnosis
+        diagnosis,
 
-    // Treatment Plan & Other
-    // Note: For complex objects like lists, consider if deep equality is needed
-    doctorId,
-    doctorName,
-  ];
+        // Treatment Plan & Other
+        // Note: For complex objects like lists, consider if deep equality is needed
+        doctorId,
+        doctorName,
+        doctorPhone,
+      ];
 }

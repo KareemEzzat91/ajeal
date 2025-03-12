@@ -174,8 +174,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Colors.red.shade300),
                         ),
-                        filled: true,
-                        fillColor: Colors.white,
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 12,

@@ -4,6 +4,7 @@ import 'package:ajeal/generated/l10n.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ParentLoginPage extends StatefulWidget {
   const ParentLoginPage({super.key});
@@ -18,6 +19,17 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   bool _isPasswordVisible = false;
+
+  Future<void> _launchUrl(String url) async {
+    try {
+      final Uri url0 = Uri.parse(url); // Convert the string URL to a Uri
+      if (!await launchUrl(url0)) {
+        throw Exception('Could not launch $url0');
+      }
+    } catch (e) {
+      throw Exception('Could not launch $e');
+    }
+  }
 
   void _login() async {
     if (!_formKey.currentState!.validate()) return;
@@ -147,17 +159,18 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
         Text(
           S.of(context).welcome_back,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Colors.teal,
-          ),
+                fontWeight: FontWeight.bold,
+                color: Colors.teal,
+              ),
         ),
         const SizedBox(height: 8),
         Text(
           S.of(context).sign_in_to_continue,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: Colors.grey,
-          ),
-        ),      ],
+                color: Colors.grey,
+              ),
+        ),
+      ],
     );
   }
 
@@ -196,8 +209,8 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
           decoration: InputDecoration(
             labelText: S.of(context).admin_code,
             hintText: S.of(context).enter_admin_code,
-            prefixIcon:
-                const Icon(Icons.admin_panel_settings_outlined, color: Colors.teal),
+            prefixIcon: const Icon(Icons.admin_panel_settings_outlined,
+                color: Colors.teal),
             suffixIcon: IconButton(
               icon: Icon(
                 _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
@@ -249,8 +262,8 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
             )
-          :  Text(
-        S.of(context).sign_in,
+          : Text(
+              S.of(context).sign_in,
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -270,9 +283,9 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
         ),
         TextButton(
           onPressed: () {
-            // Add help functionality
+            _launchUrl("https://wa.me/<+20 100 409 2979>?text=السلام عليكم");
           },
-          child:  Text(
+          child: Text(
             S.of(context).contact_support,
             style: const TextStyle(
               color: Colors.teal,

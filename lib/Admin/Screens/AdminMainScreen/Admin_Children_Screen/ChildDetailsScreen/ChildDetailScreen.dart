@@ -29,7 +29,7 @@ class ChildDetailScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: theme.primaryColor,
       appBar: AppBar(
         title: Text(
           "تفاصيل $childName",
@@ -50,8 +50,7 @@ class ChildDetailScreen extends StatelessWidget {
                   chatId: AdminId! + child.parentPhone,
                   doctorId: AdminId,
                   parentId: child.parentPhone,
-                  isParent:false ,
-
+                  isParent: false,
                 ),
               ),
             );
@@ -81,10 +80,10 @@ class ChildDetailScreen extends StatelessWidget {
         child: Column(
           children: [
             _buildHeaderSection(),
-            _buildInfoSection(),
+            _buildInfoSection(theme),
             _buildSessionsSection(context),
             _buildGoalsSection(context),
-            _buildProgressSection(),
+            _buildProgressSection(theme.primaryColor),
           ],
         ),
       ),
@@ -118,12 +117,12 @@ class ChildDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoSection() {
+  Widget _buildInfoSection(theme) {
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.primaryColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -205,15 +204,16 @@ class ChildDetailScreen extends StatelessWidget {
           itemCount: child.scheduleSesoins.length,
           itemBuilder: (context, index) {
             final session = child.scheduleSesoins[index];
-            return _buildSessionCard(context, session, index);
+            return _buildSessionCard(
+                context, session, index, Theme.of(context).primaryColor);
           },
         ),
       ],
     );
   }
 
-  Widget _buildSessionCard(
-      BuildContext context, Map<String, dynamic> session, int index) {
+  Widget _buildSessionCard(BuildContext context, Map<String, dynamic> session,
+      int index, primaryColor) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: 2,
@@ -264,7 +264,7 @@ class ChildDetailScreen extends StatelessWidget {
                         goal,
                         style: const TextStyle(fontSize: 12),
                       ),
-                      backgroundColor: Colors.blue[50],
+                      backgroundColor: primaryColor,
                     );
                   }).toList(),
                 ),
@@ -282,7 +282,7 @@ class ChildDetailScreen extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) => SessionDetailScreen(
-          isParent: false ,
+          isParent: false,
           childId: child.parentPhone,
           sessionName: session['session'],
           date: session['date'],
@@ -386,13 +386,13 @@ class ChildDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProgressSection() {
+  Widget _buildProgressSection(theme) {
     final progressValue = double.tryParse(progress) ?? 0.5;
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -429,10 +429,10 @@ class ChildDetailScreen extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             '${(progressValue * 100).toStringAsFixed(1)}%',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: Colors.blue[700],
+              color: Colors.grey,
             ),
           ),
         ],

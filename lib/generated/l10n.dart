@@ -28,10 +28,9 @@ class S {
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name =
-        (locale.countryCode?.isEmpty ?? false)
-            ? locale.languageCode
-            : locale.toString();
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -1205,6 +1204,201 @@ class S {
     return Intl.message(
       'Save Child Information',
       name: 'saveChildInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reports & Analytics`
+  String get reportsAnalytics {
+    return Intl.message(
+      'Reports & Analytics',
+      name: 'reportsAnalytics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export Reports`
+  String get exportReports {
+    return Intl.message(
+      'Export Reports',
+      name: 'exportReports',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Today`
+  String get today {
+    return Intl.message('Today', name: 'today', desc: '', args: []);
+  }
+
+  /// `This Week`
+  String get thisWeek {
+    return Intl.message('This Week', name: 'thisWeek', desc: '', args: []);
+  }
+
+  /// `This Month`
+  String get thisMonth {
+    return Intl.message('This Month', name: 'thisMonth', desc: '', args: []);
+  }
+
+  /// `This Year`
+  String get thisYear {
+    return Intl.message('This Year', name: 'thisYear', desc: '', args: []);
+  }
+
+  /// `Custom`
+  String get custom {
+    return Intl.message('Custom', name: 'custom', desc: '', args: []);
+  }
+
+  /// `Overview`
+  String get overview {
+    return Intl.message('Overview', name: 'overview', desc: '', args: []);
+  }
+
+  /// `Children`
+  String get children {
+    return Intl.message('Children', name: 'children', desc: '', args: []);
+  }
+
+  /// `Total Children`
+  String get totalChildren {
+    return Intl.message(
+      'Total Children',
+      name: 'totalChildren',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active Goals`
+  String get activeGoals {
+    return Intl.message(
+      'Active Goals',
+      name: 'activeGoals',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Success Rate`
+  String get successRate {
+    return Intl.message(
+      'Success Rate',
+      name: 'successRate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Detailed Reports`
+  String get detailedReports {
+    return Intl.message(
+      'Detailed Reports',
+      name: 'detailedReports',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recent Activities`
+  String get recentActivities {
+    return Intl.message(
+      'Recent Activities',
+      name: 'recentActivities',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Age Distribution`
+  String get ageDistribution {
+    return Intl.message(
+      'Age Distribution',
+      name: 'ageDistribution',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Goal Progress`
+  String get goalProgress {
+    return Intl.message(
+      'Goal Progress',
+      name: 'goalProgress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Session Analysis`
+  String get sessionAnalysis {
+    return Intl.message(
+      'Session Analysis',
+      name: 'sessionAnalysis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Success Metrics`
+  String get successMetrics {
+    return Intl.message(
+      'Success Metrics',
+      name: 'successMetrics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New child registered`
+  String get newChildRegistered {
+    return Intl.message(
+      'New child registered',
+      name: 'newChildRegistered',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Goal updated for Ahmed`
+  String get goalUpdated {
+    return Intl.message(
+      'Goal updated for Ahmed',
+      name: 'goalUpdated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Session completed with Sara`
+  String get sessionCompleted {
+    return Intl.message(
+      'Session completed with Sara',
+      name: 'sessionCompleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monthly report generated`
+  String get monthlyReportGenerated {
+    return Intl.message(
+      'Monthly report generated',
+      name: 'monthlyReportGenerated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Appointment scheduled`
+  String get appointmentScheduled {
+    return Intl.message(
+      'Appointment scheduled',
+      name: 'appointmentScheduled',
       desc: '',
       args: [],
     );

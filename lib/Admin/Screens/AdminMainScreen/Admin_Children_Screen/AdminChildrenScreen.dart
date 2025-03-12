@@ -70,27 +70,27 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-     create: (context) => AddChildCubit(),
-     child: Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: _buildAppBar(context, context.read<AddChildCubit>()),
-      body: Column(
-        children: [
-          _buildFilterBar(),
-          Expanded(child: _buildBody(context.read<AddChildCubit>())),
-        ],
+      create: (context) => AddChildCubit(),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        appBar: _buildAppBar(context, context.read<AddChildCubit>()),
+        body: Column(
+          children: [
+            _buildFilterBar(),
+            Expanded(child: _buildBody(context.read<AddChildCubit>())),
+          ],
+        ),
+        floatingActionButton: _buildAnimatedFAB(context),
       ),
-      floatingActionButton: _buildAnimatedFAB(context),
-    ),
-);
+    );
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context, AddChildCubit bloc) {
     return AppBar(
       elevation: 0,
-      backgroundColor: AppColors.surface,
-      title:  Text(
-        S.of(context ).childrenList,
+      backgroundColor: Theme.of(context).primaryColor,
+      title: Text(
+        S.of(context).childrenList,
         style: const TextStyle(
           fontWeight: FontWeight.w700,
           fontSize: 24,
@@ -116,7 +116,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
       height: 60,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Theme.of(context).primaryColor,
         border: Border(
           bottom: BorderSide(
             color: AppColors.textSecondary.withOpacity(0.1),
@@ -273,10 +273,9 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
       padding: const EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio:0.6,
+        childAspectRatio: 0.6,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-
       ),
       itemCount: bloc.Children.length,
       itemBuilder: (context, index) {
@@ -627,7 +626,7 @@ class ChildCard extends StatelessWidget {
                         content: Text("Child transferred successfully!")),
                   );
                 } catch (e) {
-                  ScaffoldMessenger.of( context).showSnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Error: $e")),
                   );
                 }
@@ -668,11 +667,10 @@ class ChildGridCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height =MediaQuery.sizeOf(context).height;
-    print(height);
+    final height = MediaQuery.sizeOf(context).height;
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -683,11 +681,8 @@ class ChildGridCard extends StatelessWidget {
         ],
       ),
       child: Material(
-
-
-        color: Colors.transparent,
+        color: Theme.of(context).primaryColor,
         child: InkWell(
-
           borderRadius: BorderRadius.circular(24),
           onTap: onTap,
           child: Padding(
@@ -701,7 +696,7 @@ class ChildGridCard extends StatelessWidget {
                   tag: 'child_avatar_${child.id}${child.name}',
                   child: Container(
                     width: double.infinity,
-                    height: height/6.3,
+                    height: height / 6.3,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(

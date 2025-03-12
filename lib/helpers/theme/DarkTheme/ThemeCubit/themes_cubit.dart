@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'themes_state.dart';
@@ -51,13 +50,13 @@ class ThemesCubit extends Cubit<ThemState> {
   }
 
   Future<void> changeLang() async {
-    final newLocale = state.loc == const Locale("ar") ? const Locale("en") : const Locale("ar");
+    final newLocale = state.loc == const Locale("ar")
+        ? const Locale("en")
+        : const Locale("ar");
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString("lang", newLocale.languageCode);
 
     emit(ThemState(newLocale, state.themeData)); // Ensure UI rebuilds
     Get.updateLocale(newLocale); // Force update
-
   }
-
 }

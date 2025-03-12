@@ -14,7 +14,7 @@ class SessionDetailScreen extends StatefulWidget {
   final num rate;
   final String notes;
   final List tasks;
-  final bool isParent ;
+  final bool isParent;
 
   const SessionDetailScreen({
     super.key,
@@ -125,7 +125,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           children: [
             Icon(Icons.check_circle, color: Colors.green),
             SizedBox(width: 10),
-            Text("تم الحفظ بنجاح"),
+            Text("تم الحفظ بنجاح قم بعمل تحديث للبيانات "),
           ],
         ),
         content: Column(
@@ -381,7 +381,6 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-
               ),
             ),
           ],
@@ -419,30 +418,32 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               const SizedBox(height: 80),
             ],
           ),
-         widget.isParent ?const  SizedBox():Positioned(
-           bottom: 16,
-           left: 16,
-           right: 16,
-           child: ElevatedButton(
-             onPressed: _isSaving ? null : _saveSessionDetails,
-             style: ElevatedButton.styleFrom(
-               backgroundColor: Colors.blue[700],
-               padding: const EdgeInsets.symmetric(vertical: 16),
-               shape: RoundedRectangleBorder(
-                 borderRadius: BorderRadius.circular(12),
-               ),
-             ),
-             child: _isSaving
-                 ? const CircularProgressIndicator(color: Colors.white)
-                 : const Text(
-               "حفظ التفاصيل",
-               style: TextStyle(
-                 fontSize: 16,
-                 fontWeight: FontWeight.bold,
-               ),
-             ),
-           ),
-         ),
+          widget.isParent
+              ? const SizedBox()
+              : Positioned(
+                  bottom: 16,
+                  left: 16,
+                  right: 16,
+                  child: ElevatedButton(
+                    onPressed: _isSaving ? null : _saveSessionDetails,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue[700],
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: _isSaving
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text(
+                            "حفظ التفاصيل",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                  ),
+                ),
         ],
       ),
     );

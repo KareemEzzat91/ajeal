@@ -54,7 +54,8 @@ class AdminOrParentsScreen extends StatelessWidget {
           // Main content
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -66,7 +67,10 @@ class AdminOrParentsScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withOpacity(0.8),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
@@ -104,7 +108,8 @@ class AdminOrParentsScreen extends StatelessWidget {
                           const SizedBox(width: 8),
                           _buildIconButton(
                             context,
-                            icon: isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                            icon:
+                                isDarkMode ? Icons.light_mode : Icons.dark_mode,
                             tooltip: S.of(context).changeTheme,
                             onPressed: () {
                               themeCubit.toggleTheme(!isDarkMode);
@@ -124,16 +129,21 @@ class AdminOrParentsScreen extends StatelessWidget {
                       width: size.height * 0.25,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Theme.of(context).colorScheme.surface.withOpacity(0.9),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surface
+                            .withOpacity(0.9),
                         boxShadow: [
                           BoxShadow(
-                            color: Theme.of(context).shadowColor.withOpacity(0.1),
+                            color:
+                                Theme.of(context).shadowColor.withOpacity(0.1),
                             blurRadius: 20,
                             spreadRadius: 5,
                           ),
                         ],
                         image: const DecorationImage(
-                          image: AssetImage('assets/images/Untitled design.png'), // Add this image to your assets
+                          image: AssetImage(
+                              'assets/images/Untitled design.png'), // Add this image to your assets
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -147,9 +157,13 @@ class AdminOrParentsScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.1),
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Text(
@@ -171,14 +185,16 @@ class AdminOrParentsScreen extends StatelessWidget {
                     context,
                     icon: Icons.family_restroom,
                     label: S.of(context).parents,
-                    description: "Login as a parent to monitor your child's progress",
+                    description:
+                        "Login as a parent to monitor your child's progress",
                     gradientColors: isDarkMode
-                        ? [Color(0xFF9C27B0), Color(0xFF673AB7)]
-                        : [Color(0xFFE1BEE7), Color(0xFF9C27B0)],
+                        ? [const Color(0xFF9C27B0), const Color(0xFF673AB7)]
+                        : [const Color(0xFFE1BEE7), const Color(0xFF9C27B0)],
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const ParentLoginPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const ParentLoginPage()),
                       );
                     },
                   ),
@@ -189,12 +205,13 @@ class AdminOrParentsScreen extends StatelessWidget {
                     label: S.of(context).admin,
                     description: "Login as admin to manage the system",
                     gradientColors: isDarkMode
-                        ? [Color(0xFF00BCD4), Color(0xFF2196F3)]
-                        : [Color(0xFFB2EBF2), Color(0xFF00BCD4)],
+                        ? [const Color(0xFF00BCD4), const Color(0xFF2196F3)]
+                        : [const Color(0xFFB2EBF2), const Color(0xFF00BCD4)],
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AdminLoginScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => AdminLoginScreen()),
                       );
                     },
                   ),
@@ -221,11 +238,11 @@ class AdminOrParentsScreen extends StatelessWidget {
   }
 
   Widget _buildIconButton(
-      BuildContext context, {
-        required IconData icon,
-        required String tooltip,
-        required VoidCallback onPressed,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String tooltip,
+    required VoidCallback onPressed,
+  }) {
     return IconButton(
       onPressed: onPressed,
       icon: Icon(icon),
@@ -242,13 +259,13 @@ class AdminOrParentsScreen extends StatelessWidget {
   }
 
   Widget _buildOptionCard(
-      BuildContext context, {
-        required IconData icon,
-        required String label,
-        required String description,
-        required List<Color> gradientColors,
-        required VoidCallback onTap,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required String description,
+    required List<Color> gradientColors,
+    required VoidCallback onTap,
+  }) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),

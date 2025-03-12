@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
-  final String role;      // 'doctor' or 'parent'
-  final String chatId;    // Unique chat identifier
-  final String doctorId;  // Doctor's ID
-  final String parentId;  // Parent's ID
-  final bool isParent;    // Whether current user is parent
+  final String role; // 'doctor' or 'parent'
+  final String chatId; // Unique chat identifier
+  final String doctorId; // Doctor's ID
+  final String parentId; // Parent's ID
+  final bool isParent; // Whether current user is parent
 
   const ChatScreen({
     super.key,
@@ -38,12 +38,10 @@ class _ChatScreenState extends State<ChatScreen> {
     _setupAuthorization();
   }
 
-  void _setupAuthorization(){
-
-
+  void _setupAuthorization() {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
-      _currentUserId=widget.parentId ;
+      _currentUserId = widget.parentId;
       _isAuthorized = true;
       return;
     }
@@ -160,9 +158,11 @@ class _ChatScreenState extends State<ChatScreen> {
             child: CircleAvatar(
               radius: 18,
               backgroundImage: isDoctor
-                  ? const NetworkImage("https://img.freepik.com/premium-vector/parents-with-kids-avatars-characters_24877-24085.jpg")
-                  :const AssetImage("assets/images/Mohsen.jpg") ,
-            ),),
+                  ? const NetworkImage(
+                      "https://img.freepik.com/premium-vector/parents-with-kids-avatars-characters_24877-24085.jpg")
+                  : const AssetImage("assets/images/Mohsen.jpg"),
+            ),
+          ),
           const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,9 +318,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _submitReport(String reportText) async {
-    await FirebaseFirestore.instance
-        .collection('Reports')
-        .add({
+    await FirebaseFirestore.instance.collection('Reports').add({
       'chat_id': widget.chatId,
       'reporter_id': _currentUserId,
       'reporter_role': widget.role,
@@ -433,11 +431,13 @@ class _ChatScreenState extends State<ChatScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
-        mainAxisAlignment:
-        isCurrentUserMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: isCurrentUserMessage
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          if (!isCurrentUserMessage) _buildAvatar(message['sender_role'] == 'doctor'),
+          if (!isCurrentUserMessage)
+            _buildAvatar(message['sender_role'] == 'doctor'),
           if (!isCurrentUserMessage) const SizedBox(width: 8),
           Flexible(
             child: Container(
@@ -447,8 +447,10 @@ class _ChatScreenState extends State<ChatScreen> {
               decoration: BoxDecoration(
                 color: isCurrentUserMessage ? Colors.blue[700] : Colors.white,
                 borderRadius: BorderRadius.circular(20).copyWith(
-                  bottomLeft: !isCurrentUserMessage ? const Radius.circular(0) : null,
-                  bottomRight: isCurrentUserMessage ? const Radius.circular(0) : null,
+                  bottomLeft:
+                      !isCurrentUserMessage ? const Radius.circular(0) : null,
+                  bottomRight:
+                      isCurrentUserMessage ? const Radius.circular(0) : null,
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -467,7 +469,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   Text(
                     message['text'],
                     style: TextStyle(
-                      color: isCurrentUserMessage ? Colors.white : Colors.black87,
+                      color:
+                          isCurrentUserMessage ? Colors.white : Colors.black87,
                       fontSize: 15,
                     ),
                   ),
@@ -487,9 +490,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       if (isCurrentUserMessage) ...[
                         const SizedBox(width: 4),
                         Icon(
-                          message['read'] == true
-                              ? Icons.done_all
-                              : Icons.done,
+                          message['read'] == true ? Icons.done_all : Icons.done,
                           size: 14,
                           color: Colors.white.withOpacity(0.7),
                         ),
@@ -507,17 +508,18 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _buildAvatar(bool isDoctor) {
     return Container(
-        decoration: BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-        color: Colors.blue[700]!,
+          color: Colors.blue[700]!,
         ),
-        ),
+      ),
       child: CircleAvatar(
         radius: 16,
         backgroundImage: isDoctor
             ? const AssetImage("assets/images/Mohsen.jpg")
-            :const NetworkImage("https://img.freepik.com/premium-vector/parents-with-kids-avatars-characters_24877-24085.jpg"),
+            : const NetworkImage(
+                "https://img.freepik.com/premium-vector/parents-with-kids-avatars-characters_24877-24085.jpg"),
       ),
     );
   }
@@ -675,7 +677,6 @@ class _ChatScreenState extends State<ChatScreen> {
       _messageController.clear();
       setState(() => _isTyping = false);
       _scrollToBottom();
-
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

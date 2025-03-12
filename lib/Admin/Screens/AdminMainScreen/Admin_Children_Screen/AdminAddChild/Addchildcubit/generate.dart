@@ -6,7 +6,8 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.
 import 'package:flutter_gemini/flutter_gemini.dart';
 
 class GenerateSchedule {
-  static final GenerateSchedule _generateSchedule = GenerateSchedule._internal();
+  static final GenerateSchedule _generateSchedule =
+      GenerateSchedule._internal();
 
   factory GenerateSchedule() {
     return _generateSchedule;
@@ -34,7 +35,8 @@ class GenerateSchedule {
     final List<DateTime> sessionDates = [];
     DateTime currentDate = startDate;
 
-    while (currentDate.isBefore(endDate) || currentDate.isAtSameMomentAs(endDate)) {
+    while (currentDate.isBefore(endDate) ||
+        currentDate.isAtSameMomentAs(endDate)) {
       sessionDates.add(currentDate);
       currentDate = currentDate.add(const Duration(days: 3));
     }
@@ -91,8 +93,7 @@ class GenerateSchedule {
           endDate: endDate,
           duration: duration,
           childName: childName,
-          goalsList: goalsList
-      );
+          goalsList: goalsList);
     } catch (e) {
       // Log the error
       print('Gemini API failed: $e');
@@ -113,11 +114,12 @@ class GenerateSchedule {
     required DateTime endDate,
     required String duration,
     required String childName,
-    required List<Goal> goalsList,}) async {
+    required List<Goal> goalsList,
+  }) async {
     // Extract goal information
     final List<String> goals = goalsList.map((goal) => goal.goalName).toList();
     final List<String> goalsDescription =
-    goalsList.map((goal) => goal.goalDescription).toList();
+        goalsList.map((goal) => goal.goalDescription).toList();
 
     // Calculate duration and validate inputs
     final durationInDays = endDate.difference(startDate).inDays;
@@ -159,10 +161,10 @@ Requirements:
       try {
         // Make API request with timeout
         final response = await gemini.text(prompt).timeout(
-          const Duration(seconds: 130),
-          onTimeout: () =>
-          throw TimeoutException('Gemini API request timed out'),
-        );
+              const Duration(seconds: 130),
+              onTimeout: () =>
+                  throw TimeoutException('Gemini API request timed out'),
+            );
 
         if (response == null ||
             response.output == null ||
@@ -237,7 +239,7 @@ Requirements:
     final jsonMatch = RegExp(r'({[\s\S]*})').firstMatch(rawResponse);
 
     if (jsonMatch == null) {
-      throw FormatException('Could not find valid JSON in response');
+      throw const FormatException('Could not find valid JSON in response');
     }
 
     final jsonString = jsonMatch.group(1)!;
@@ -251,10 +253,10 @@ Requirements:
 
       // Look for anything that might be the weeks array
       final weeksMatch =
-      RegExp(r'"weeks"\s*:\s*(\[[\s\S]*?\])').firstMatch(rawResponse);
+          RegExp(r'"weeks"\s*:\s*(\[[\s\S]*?\])').firstMatch(rawResponse);
 
       if (weeksMatch == null) {
-        throw FormatException('Could not find weeks data in response');
+        throw const FormatException('Could not find weeks data in response');
       }
 
       try {
@@ -272,13 +274,13 @@ Requirements:
     final List<Map<String, dynamic>> sessionsList = [];
 
     if (!jsonResponse.containsKey('weeks')) {
-      throw FormatException('Missing "weeks" key in response');
+      throw const FormatException('Missing "weeks" key in response');
     }
 
     final weeks = jsonResponse['weeks'] as List<dynamic>;
 
     if (weeks.isEmpty) {
-      throw FormatException('Empty weeks array in response');
+      throw const FormatException('Empty weeks array in response');
     }
 
     for (final week in weeks) {
@@ -323,4 +325,3 @@ void _logError(String type, dynamic error) {
   print('[$type] Error in generateSchedule: $error');
   // You could integrate with a proper logging system here
 }
-

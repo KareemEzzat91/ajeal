@@ -150,7 +150,34 @@
   "residence": "Residence",
   "notes": "Notes",
   "selectGoals": "Select Goals",
-  "saveChildInformation": "Save Child Information"
+  "saveChildInformation": "Save Child Information",
+
+
+
+
+  "reportsAnalytics": "Reports & Analytics",
+  "exportReports": "Export Reports",
+  "today": "Today",
+  "thisWeek": "This Week",
+  "thisMonth": "This Month",
+  "thisYear": "This Year",
+  "custom": "Custom",
+  "overview": "Overview",
+  "children": "Children",
+   "totalChildren": "Total Children",
+  "activeGoals": "Active Goals",
+  "successRate": "Success Rate",
+  "detailedReports": "Detailed Reports",
+  "recentActivities": "Recent Activities",
+  "ageDistribution": "Age Distribution",
+  "goalProgress": "Goal Progress",
+  "sessionAnalysis": "Session Analysis",
+  "successMetrics": "Success Metrics",
+  "newChildRegistered": "New child registered",
+  "goalUpdated": "Goal updated for Ahmed",
+  "sessionCompleted": "Session completed with Sara",
+  "monthlyReportGenerated": "Monthly report generated",
+  "appointmentScheduled": "Appointment scheduled"
 
 
 }

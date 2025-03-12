@@ -12,13 +12,29 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildM
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+
 class ParentHomePage extends StatelessWidget {
   final String parentCode;
   final Child child;
   final String AdminId;
 
   const ParentHomePage(
-      {super.key, required this.parentCode, required this.child, required this.AdminId});
+      {super.key,
+      required this.parentCode,
+      required this.child,
+      required this.AdminId});
+
+  Future<void> _launchUrl(String url) async {
+    try {
+      final Uri url0 = Uri.parse(url); // Convert the string URL to a Uri
+      if (!await launchUrl(url0)) {
+        throw Exception('Could not launch $url0');
+      }
+    } catch (e) {
+      throw Exception('Could not launch $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +42,10 @@ class ParentHomePage extends StatelessWidget {
     final locale = context.watch<ThemesCubit>().state.loc.languageCode;
     final themeCubit = context.read<ThemesCubit>();
 
-    return  Scaffold(
+    return Scaffold(
       body: CustomScrollView(
         slivers: [
-          _buildAppBar(context,isDarkMode,locale,themeCubit),
+          _buildAppBar(context, isDarkMode, locale, themeCubit),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -60,13 +76,14 @@ class ParentHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildAppBar(BuildContext context, bool isDarkMode, String locale, ThemesCubit themeCubit) {
+  Widget _buildAppBar(BuildContext context, bool isDarkMode, String locale,
+      ThemesCubit themeCubit) {
     return SliverAppBar(
       expandedHeight: 200.0,
       floating: false,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
-        title:  Text(
+        title: Text(
           S.of(context).welcome_back,
           style: const TextStyle(
             color: Colors.white,
@@ -80,19 +97,20 @@ class ParentHomePage extends StatelessWidget {
               end: Alignment.bottomLeft,
               colors: [
                 Colors.teal,
-               isDarkMode? Colors.black:Colors.teal.shade700
+                isDarkMode ? Colors.black : Colors.teal.shade700
               ],
             ),
           ),
           child: Stack(
             children: [
-
               Positioned(
                 right: -50,
                 top: -50,
                 child: CircleAvatar(
                   radius: 100,
-                  backgroundColor:isDarkMode?Colors.black12: Colors.white.withOpacity(0.1),
+                  backgroundColor: isDarkMode
+                      ? Colors.black12
+                      : Colors.white ,
                 ),
               ),
             ],
@@ -100,11 +118,9 @@ class ParentHomePage extends StatelessWidget {
         ),
       ),
       actions: [
-
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-
             // Setting buttons
             Row(
               children: [
@@ -139,9 +155,9 @@ class ParentHomePage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey,
             spreadRadius: 1,
             blurRadius: 10,
           ),
@@ -151,7 +167,8 @@ class ParentHomePage extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 40,
-            backgroundColor:isDarkMode? Colors.teal.shade600:Colors.teal.shade100,
+            backgroundColor:
+                isDarkMode ? Colors.teal.shade600 : Colors.teal.shade100,
             child: Text(
               child.name[0].toUpperCase(),
               style: const TextStyle(
@@ -189,7 +206,7 @@ class ParentHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickStats(context ) {
+  Widget _buildQuickStats(context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -221,7 +238,7 @@ class ParentHomePage extends StatelessWidget {
       width: 100,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -240,7 +257,7 @@ class ParentHomePage extends StatelessWidget {
             title,
             style: TextStyle(
               fontSize: 12,
-              color: color.withOpacity(0.8),
+              color: color,
             ),
           ),
         ],
@@ -260,7 +277,7 @@ class ParentHomePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           Text(
+          Text(
             S.of(context).progress_overview,
             style: const TextStyle(
               fontSize: 20,
@@ -269,10 +286,10 @@ class ParentHomePage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          LinearProgressIndicator(
+          const LinearProgressIndicator(
             value: 0.75,
-            backgroundColor: Colors.white.withOpacity(0.3),
-            valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+            backgroundColor: Colors.white ,
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           ),
           const SizedBox(height: 16),
           Row(
@@ -303,9 +320,9 @@ class ParentHomePage extends StatelessWidget {
         ),
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
-            color: Colors.white.withOpacity(0.8),
+            color: Colors.white ,
           ),
         ),
       ],
@@ -339,7 +356,6 @@ class ParentHomePage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SessionSchedulePage(
-
                 isParent: true,
                 childId: child.parentPhone,
                 scheduleSesoins: child.scheduleSesoins,
@@ -358,7 +374,7 @@ class ParentHomePage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => ChatScreen(
-                role:"parent",
+                role: "parent",
                 isParent: true,
                 chatId: AdminId + child.parentPhone,
                 doctorId: AdminId,
@@ -389,7 +405,7 @@ class ParentHomePage extends StatelessWidget {
         const SizedBox(height: 16),
         _buildActionCard(
           context,
-         S.of(context).daily_notes,
+          S.of(context).daily_notes,
           S.of(context).write_daily_notes,
           Icons.note_add_sharp,
           Colors.brown,
@@ -433,7 +449,7 @@ class ParentHomePage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color ,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color),
@@ -472,7 +488,7 @@ class ParentHomePage extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title:  Text(S.of(context).emergency_contact),
+        title: Text(S.of(context).emergency_contact),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -480,19 +496,21 @@ class ParentHomePage extends StatelessWidget {
               leading: const Icon(Icons.phone, color: Colors.red),
               title: Text(S.of(context).call_emergency),
               onTap: () {
-                // Add emergency call functionality
+                _launchUrl(
+                    "https://wa.me/<+20 100 409 2979>?text=السلام عليكم");
               },
             ),
             ListTile(
               leading: const Icon(Icons.message, color: Colors.orange),
-              title:Text(S.of(context).message_teacher),
+              title: Text(S.of(context).message_teacher),
               onTap: () {
-                // Add quick message functionality
+                _launchUrl(
+                    "https://wa.me/<+2${child.doctorPhone}>?text=السلام عليكم");
               },
             ),
             ElevatedButton.icon(
               icon: const Icon(Icons.logout),
-              label:Text(S.of(context).logout),
+              label: Text(S.of(context).logout),
               onPressed: () {
                 logout(context);
               },
@@ -519,23 +537,23 @@ class ParentHomePage extends StatelessWidget {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const AdminOrParentsScreen()),
-            (route) => false,
+        (route) => false,
       );
     }
   }
-  Widget _buildIconButton(
-      BuildContext context, {
-        required IconData icon,
-        required String tooltip,
-        required VoidCallback onPressed,
-      }) {
 
+  Widget _buildIconButton(
+    BuildContext context, {
+    required IconData icon,
+    required String tooltip,
+    required VoidCallback onPressed,
+  }) {
     return IconButton(
       onPressed: onPressed,
       icon: Icon(icon),
       tooltip: tooltip,
       style: IconButton.styleFrom(
-         padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),

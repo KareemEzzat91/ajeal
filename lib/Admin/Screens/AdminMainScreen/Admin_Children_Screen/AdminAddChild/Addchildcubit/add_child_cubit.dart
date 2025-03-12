@@ -1,15 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:math';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/generate.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/sendvreficationmessage.dart';
- import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gemini/flutter_gemini.dart';
 
 part 'add_child_state.dart';
 
@@ -28,9 +25,9 @@ class AddChildCubit extends Cubit<AddChildState> {
       print("User not logged in");
       return;
     }
-    final userDoc =FirebaseFirestore.instance.collection("users").doc(userId);
-   var userdata= await userDoc.get();
-   id = userdata["lastChildId"];
+    final userDoc = FirebaseFirestore.instance.collection("users").doc(userId);
+    var userdata = await userDoc.get();
+    id = userdata["lastChildId"];
     for (var childMap in Children) {
       await Future.forEach(childMap.entries,
           (MapEntry<String, Child> childEntry) async {
@@ -88,105 +85,108 @@ class AddChildCubit extends Cubit<AddChildState> {
   }
 
   void saveChild(
-      BuildContext context, {
-        required String name,
-        required String age,
-        required DateTime dateOfBirth,
-        required DateTime startDate,
-        required DateTime endDate,
-        required String period,
-        required String parentPhone,
-        required String notes,
-        required String school,
-        required String residence,
-        required String gender,
-        required List<Goal>selectedGoals ,
-        // Family Information
-        required String fatherOccupation,
-        required String motherOccupation,
-        required String familyMembers,
-        required String siblingsInfluence,
-        required String siblingCloseness,
-        required String motherAge,
-        required String parentsRelationship,
-        required String familyRelationship,
-        required String motherNature,
-        // Developmental History - Pregnancy Phase
-        required String pregnancyNature,
-        required String motherDiseasesDuringPregnancy,
-        required String pregnancyComplications,
-        required String motherStressDuringPregnancy,
-        // Birth Phase
-        required String birthType,
-        required String birthComplications,
-        required String birthTiming,
-        // Post-Birth
-        required String incubator,
-        required String incubatorPeriod,
-        required String jaundice,
-        required String jaundiceRate,
-        // Health History
-        required String vaccinations,
-        required String measles,
-        required String smallpox,
-        required String medications,
-        // First Year Growth
-        required String teething,
-        required String babbling,
-        required String motherVoiceAttention,
-        required String sittingAlone,
-        required String crawling,
-        required String walking,
-        required String handPointing,
-        // Psychological History
-        required String familyDisabilities,
-        // Social History
-        required String socialInteraction,
-        required String parentAbsence,
-        // Medical Examinations
-        required String hearing,
-        required String vision,
-        required String respiratory,
-        required String digestive,
-        required String neurology,
-        required String circulatory,
-        required String vocal,
-        required String head,
-        required String speech,
-        required String lips,
-        required String teeth,
-        required String palate,
-        required String tongue,
-        required String upperJaw,
-        required String lowerJaw,
-        required String pharynx,
-        required String throat,
-        // Diagnosis
-        required String diagnosis,
-      }) async {
+    BuildContext context, {
+    required String name,
+    required String age,
+    required DateTime dateOfBirth,
+    required DateTime startDate,
+    required DateTime endDate,
+    required String period,
+    required String parentPhone,
+    required String notes,
+    required String school,
+    required String residence,
+    required String gender,
+    required List<Goal> selectedGoals,
+    // Family Information
+    required String fatherOccupation,
+    required String motherOccupation,
+    required String familyMembers,
+    required String siblingsInfluence,
+    required String siblingCloseness,
+    required String motherAge,
+    required String parentsRelationship,
+    required String familyRelationship,
+    required String motherNature,
+    // Developmental History - Pregnancy Phase
+    required String pregnancyNature,
+    required String motherDiseasesDuringPregnancy,
+    required String pregnancyComplications,
+    required String motherStressDuringPregnancy,
+    // Birth Phase
+    required String birthType,
+    required String birthComplications,
+    required String birthTiming,
+    // Post-Birth
+    required String incubator,
+    required String incubatorPeriod,
+    required String jaundice,
+    required String jaundiceRate,
+    // Health History
+    required String vaccinations,
+    required String measles,
+    required String smallpox,
+    required String medications,
+    // First Year Growth
+    required String teething,
+    required String babbling,
+    required String motherVoiceAttention,
+    required String sittingAlone,
+    required String crawling,
+    required String walking,
+    required String handPointing,
+    // Psychological History
+    required String familyDisabilities,
+    // Social History
+    required String socialInteraction,
+    required String parentAbsence,
+    // Medical Examinations
+    required String hearing,
+    required String vision,
+    required String respiratory,
+    required String digestive,
+    required String neurology,
+    required String circulatory,
+    required String vocal,
+    required String head,
+    required String speech,
+    required String lips,
+    required String teeth,
+    required String palate,
+    required String tongue,
+    required String upperJaw,
+    required String lowerJaw,
+    required String pharynx,
+    required String throat,
+    // Diagnosis
+    required String diagnosis,
+  }) async {
     emit(AddLoadingState());
 
     try {
-
       final uid = FirebaseAuth.instance.currentUser!.uid;
       print("User Id::::::::::::$uid");
-      print( "Dataaaaaaaaaaaa$startDate $endDate, $period, $name,$selectedGoals}");
+      print(
+          "Dataaaaaaaaaaaa$startDate $endDate, $period, $name,$selectedGoals}");
       print(":::::::::::::::::::::::::::::::::::::1");
       final scheduleGenerator = GenerateSchedule();
 
-      scheduleSesoins = await  scheduleGenerator.generateScheduleWithFallback(
-          startDate:  startDate, endDate: endDate, duration:  period,childName:  name,goalsList: selectedGoals);
+      scheduleSesoins = await scheduleGenerator.generateScheduleWithFallback(
+          startDate: startDate,
+          endDate: endDate,
+          duration: period,
+          childName: name,
+          goalsList: selectedGoals);
       print(":::::::::::::::::::::::::::::::::::::2");
 
       final doctorIdSnap =
-      await FirebaseFirestore.instance.collection("users").doc(uid).get();
+          await FirebaseFirestore.instance.collection("users").doc(uid).get();
       final doctorId = doctorIdSnap['Doctor_id'];
       final doctorName = doctorIdSnap['Doctor_Name'];
+      final doctorPhone = doctorIdSnap['Doctor_phone'];
       id = doctorIdSnap['lastChildId'];
       id++;
       print(":::::::::::::::::::::::::::::::::::::3");
-
-
 
       final newChild = Child(
         id: id,
@@ -212,6 +212,7 @@ class AddChildCubit extends Cubit<AddChildState> {
         scheduleSesoins: scheduleSesoins,
         doctorId: doctorId,
         doctorName: doctorName,
+        doctorPhone: doctorPhone,
         dailyNotes: const [{}],
 
         // Missing fields added here
@@ -262,7 +263,6 @@ class AddChildCubit extends Cubit<AddChildState> {
         diagnosis: diagnosis,
       );
 
-
       await FirebaseFirestore.instance
           .collection("users")
           .doc(uid)
@@ -270,7 +270,10 @@ class AddChildCubit extends Cubit<AddChildState> {
           .doc(parentPhone)
           .set(newChild.toMap());
 
-      await FirebaseFirestore.instance.collection("DailyNotes").doc(parentPhone).set({"notes":[]});
+      await FirebaseFirestore.instance
+          .collection("DailyNotes")
+          .doc(parentPhone)
+          .set({"notes": []});
 
       // Update the lastChildId in the doctor's document
       await FirebaseFirestore.instance
@@ -280,7 +283,7 @@ class AddChildCubit extends Cubit<AddChildState> {
 
       saveToFirestore();
 
-      sendWhatsAppMessage(parentPhone,doctorId,name);
+      sendWhatsAppMessage(parentPhone, doctorId, name);
       Navigator.pop(context);
       emit(AddScuccesState());
     } catch (e) {

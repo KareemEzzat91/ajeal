@@ -2,7 +2,6 @@ import 'package:ajeal/Admin/Screens/AdminLoginScreen/ResetPasswordScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/SignUpScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/cubit/sign_cubit.dart';
 import 'package:ajeal/generated/l10n.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -57,11 +56,14 @@ class AdminLoginScreen extends StatelessWidget {
                         left: 24,
                         right: 24,
                         top: 16,
-                        bottom: MediaQuery.of(context).viewInsets.bottom, // ADJUST HERE
+                        bottom: MediaQuery.of(context)
+                            .viewInsets
+                            .bottom, // ADJUST HERE
                       ),
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
-                          minHeight: constraints.maxHeight, // ENSURE FULL HEIGHT
+                          minHeight:
+                              constraints.maxHeight, // ENSURE FULL HEIGHT
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,17 +81,23 @@ class AdminLoginScreen extends StatelessWidget {
                             const SizedBox(height: 32),
                             Text(
                               s.letsSignIn,
-                              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
                             ),
                             const SizedBox(height: 8),
                             Text(
                               s.enter_information_below,
-                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: Colors.grey.shade600,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color: Colors.grey.shade600,
+                                  ),
                             ),
                             const SizedBox(height: 32),
                             Form(
@@ -126,7 +134,8 @@ class AdminLoginScreen extends StatelessWidget {
                                       onPressed: () => Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (_) => const ResetPasswordScreen(),
+                                          builder: (_) =>
+                                              const ResetPasswordScreen(),
                                         ),
                                       ),
                                       child: Text(
@@ -143,15 +152,16 @@ class AdminLoginScreen extends StatelessWidget {
                                     onPressed: state is SignLoadingState
                                         ? null
                                         : () => context.read<SignCubit>().Login(
-                                      context,
-                                      _formKey,
-                                      _emailController,
-                                      _passwordController,
-                                    ),
+                                              context,
+                                              _formKey,
+                                              _emailController,
+                                              _passwordController,
+                                            ),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: const Color(0xff0186c7),
                                       foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(vertical: 16),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 16),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
@@ -159,14 +169,15 @@ class AdminLoginScreen extends StatelessWidget {
                                       elevation: 2,
                                     ),
                                     child: state is SignLoadingState
-                                        ? const CircularProgressIndicator(color: Colors.white)
+                                        ? const CircularProgressIndicator(
+                                            color: Colors.white)
                                         : Text(
-                                      s.loginPage,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                            s.loginPage,
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                   ),
                                   const SizedBox(height: 24),
                                   Row(
@@ -174,13 +185,15 @@ class AdminLoginScreen extends StatelessWidget {
                                     children: [
                                       Text(
                                         s.dont_have_account,
-                                        style: TextStyle(color: Colors.grey.shade700),
+                                        style: TextStyle(
+                                            color: Colors.grey.shade700),
                                       ),
                                       TextButton(
-                                        onPressed: () => Navigator.pushReplacement(
+                                        onPressed: () =>
+                                            Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (_) => SignupScreen(),
+                                            builder: (_) => const SignupScreen(),
                                           ),
                                         ),
                                         child: Text(
@@ -223,7 +236,8 @@ class AdminLoginScreen extends StatelessWidget {
       obscureText: isPassword,
       validator: validator,
       autofocus: true,
-       decoration: InputDecoration(
+      style: const TextStyle(color: Colors.grey),
+      decoration: InputDecoration(
         labelText: label,
         prefixIcon: Icon(icon, color: const Color(0xff0186c7)),
         border: OutlineInputBorder(
@@ -238,9 +252,8 @@ class AdminLoginScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xff0186c7)),
         ),
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
     );
   }

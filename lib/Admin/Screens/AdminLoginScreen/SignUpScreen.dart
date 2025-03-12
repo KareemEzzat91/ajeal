@@ -103,10 +103,10 @@ class _SignupScreenState extends State<SignupScreen> {
                       Text(
                         S.of(context).register_now,
                         style:
-                        Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
                       ),
 
                       const SizedBox(height: 8),
@@ -114,8 +114,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       Text(
                         S.of(context).enter_information_below,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Colors.grey.shade600,
-                        ),
+                              color: Colors.grey.shade600,
+                            ),
                       ),
 
                       const SizedBox(height: 24),
@@ -204,22 +204,22 @@ class _SignupScreenState extends State<SignupScreen> {
                                   onPressed: state is SignLoadingState
                                       ? null
                                       : () {
-                                    // Handle form submission
-                                    FocusScope.of(context).unfocus();
-                                    context.read<SignCubit>().SignUp(
-                                      context,
-                                      _formKey,
-                                      _emailController,
-                                      _nameController,
-                                      _passwordController,
-                                      _mobileController,
-                                    );
-                                  },
+                                          // Handle form submission
+                                          FocusScope.of(context).unfocus();
+                                          context.read<SignCubit>().SignUp(
+                                                context,
+                                                _formKey,
+                                                _emailController,
+                                                _nameController,
+                                                _passwordController,
+                                                _mobileController,
+                                              );
+                                        },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xff0186c7),
                                     foregroundColor: Colors.white,
-                                    padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -228,20 +228,20 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                   child: state is SignLoadingState
                                       ? const SizedBox(
-                                    height: 24,
-                                    width: 24,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 2,
-                                    ),
-                                  )
+                                          height: 24,
+                                          width: 24,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                            strokeWidth: 2,
+                                          ),
+                                        )
                                       : const Text(
-                                    "Sign Up",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                          "Sign Up",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                 );
                               },
                             ),
@@ -274,7 +274,9 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
 
                             // Add extra space at bottom for keyboard
-                            SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
+                            SizedBox(
+                                height:
+                                    MediaQuery.of(context).viewInsets.bottom),
                           ],
                         ),
                       ),
@@ -315,6 +317,7 @@ class _SignupScreenState extends State<SignupScreen> {
           FocusScope.of(context).unfocus();
         }
       },
+      style: const TextStyle(color: Colors.grey),
       // Handle editing complete event
       onEditingComplete: () {
         // This prevents the flickering issue in some cases
@@ -344,7 +347,7 @@ class _SignupScreenState extends State<SignupScreen> {
         filled: true,
         fillColor: Colors.white,
         contentPadding:
-        const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
     );
   }

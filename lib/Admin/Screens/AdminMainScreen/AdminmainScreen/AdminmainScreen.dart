@@ -5,7 +5,6 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Profile_Screen/AdminPr
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Reports_Screen/Admin_Reports_Screen.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/Allparentschats/GlobalchatScreen.dart';
 import 'package:ajeal/generated/l10n.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/material.dart';
@@ -47,42 +46,57 @@ class _AdminmainScreenState extends State<AdminmainScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-  create: (context) => SignCubit(),
-  child: BlocProvider(
-  create: (context) => AddChildCubit(),
-  child: Scaffold(
-      body: Screens[_selectedIndex],
-      bottomNavigationBar: FlashyTabBar(animationDuration: Duration(milliseconds:540 ),
-        selectedIndex: _selectedIndex,
-        showElevation: true,
-        onItemSelected: (index) => setState(() {
-          _selectedIndex = index;
-        }),
-        items: [
-          FlashyTabBarItem(
-            activeColor: Colors.blue,
-            icon: const Icon(Icons.child_care_rounded),
-            title: Text(S.of(context).childrenPage,style: const TextStyle(fontSize: 12),),
+      create: (context) => SignCubit(),
+      child: BlocProvider(
+        create: (context) => AddChildCubit(),
+        child: Scaffold(
+          backgroundColor: Theme.of(context).primaryColor,
+          body: Screens[_selectedIndex],
+          bottomNavigationBar: FlashyTabBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            animationDuration: const Duration(milliseconds: 540),
+            selectedIndex: _selectedIndex,
+            showElevation: true,
+            onItemSelected: (index) => setState(() {
+              _selectedIndex = index;
+            }),
+            items: [
+              FlashyTabBarItem(
+                activeColor: Colors.blue,
+                icon: const Icon(Icons.child_care_rounded),
+                title: Text(
+                  S.of(context).childrenPage,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
+              FlashyTabBarItem(
+                activeColor: Colors.blue,
+                icon: const Icon(Icons.analytics_outlined),
+                title: Text(
+                  S.of(context).reportsPage,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
+              FlashyTabBarItem(
+                activeColor: Colors.blue,
+                icon: const Icon(Icons.comment_rounded),
+                title: Text(
+                  S.of(context).global_chat,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
+              FlashyTabBarItem(
+                activeColor: Colors.blue,
+                icon: const Icon(Icons.person),
+                title: Text(
+                  S.of(context).profilePage,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
+            ],
           ),
-          FlashyTabBarItem(
-            activeColor: Colors.blue,
-            icon: const Icon(Icons.analytics_outlined),
-            title: Text(S.of(context).reportsPage,style: const TextStyle(fontSize: 12),),
-          ),
-          FlashyTabBarItem(
-            activeColor: Colors.blue,
-            icon: const Icon(Icons.comment_rounded),
-            title: Text(S.of(context).global_chat,style: const TextStyle(fontSize: 12),),
-          ),
-          FlashyTabBarItem(
-            activeColor: Colors.blue,
-            icon: const Icon(Icons.person),
-            title: Text(S.of(context).profilePage,style: const TextStyle(fontSize: 12),),
-          ),
-        ],
+        ),
       ),
-    ),
-),
-);
+    );
   }
 }

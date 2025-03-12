@@ -3,8 +3,9 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.
 
 class SessionTaskRateScreen extends StatefulWidget {
   final Task task;
-  final bool isParent ;
-  const SessionTaskRateScreen({super.key, required this.task, required this.isParent});
+  final bool isParent;
+  const SessionTaskRateScreen(
+      {super.key, required this.task, required this.isParent});
 
   @override
   State<SessionTaskRateScreen> createState() => _SessionTaskRateScreenState();
@@ -118,29 +119,31 @@ class _SessionTaskRateScreenState extends State<SessionTaskRateScreen> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-
                 ),
               ),
               const SizedBox(height: 20),
 
               // زر الحفظ
-             widget.isParent?const SizedBox(): Center(
-                child: ElevatedButton(
-                  onPressed: _saveTaskDetails,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              widget.isParent
+                  ? const SizedBox()
+                  : Center(
+                      child: ElevatedButton(
+                        onPressed: _saveTaskDetails,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueAccent,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 40, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          "حفظ",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    "حفظ",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
             ],
           ),
         ),

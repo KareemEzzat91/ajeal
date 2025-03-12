@@ -195,11 +195,12 @@ class _DailyNotesScreenState extends State<DailyNotesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).primaryColor;
     return Scaffold(
-        backgroundColor: Colors.grey.shade100,
+        backgroundColor: theme,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: theme,
           title: Text(
             "Daily Notes",
             style: TextStyle(
@@ -226,7 +227,7 @@ class _DailyNotesScreenState extends State<DailyNotesScreen> {
         body: Column(
           children: [
             Container(
-              color: Colors.white,
+              color: theme,
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [

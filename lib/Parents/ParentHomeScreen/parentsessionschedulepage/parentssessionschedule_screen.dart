@@ -1,13 +1,13 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/SessionDetailScreen.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class SessionSchedulePage extends StatelessWidget {
   final String childId;
   final List<Map<String, dynamic>> scheduleSesoins;
-  final bool isParent  ;
+  final bool isParent;
 
-  const SessionSchedulePage({super.key, 
+  const SessionSchedulePage({
+    super.key,
     required this.childId,
     required this.scheduleSesoins,
     required this.isParent,
@@ -234,7 +234,8 @@ class SessionSchedulePage extends StatelessWidget {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  const Icon(Icons.calendar_today, size: 16, color: Colors.grey),
+                  const Icon(Icons.calendar_today,
+                      size: 16, color: Colors.grey),
                   const SizedBox(width: 8),
                   Text(
                     session['date'],
@@ -267,7 +268,8 @@ class SessionSchedulePage extends StatelessWidget {
                 runSpacing: 8,
                 children: List<String>.from(session['goals']).map((goal) {
                   return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: Colors.blue.shade50,
                       borderRadius: BorderRadius.circular(20),

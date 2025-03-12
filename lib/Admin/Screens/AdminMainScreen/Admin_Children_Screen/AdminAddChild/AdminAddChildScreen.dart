@@ -29,31 +29,43 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
   final TextEditingController periodController = TextEditingController();
 
   // Family Information Controllers
-  final TextEditingController fatherOccupationController = TextEditingController();
-  final TextEditingController motherOccupationController = TextEditingController();
+  final TextEditingController fatherOccupationController =
+      TextEditingController();
+  final TextEditingController motherOccupationController =
+      TextEditingController();
   final TextEditingController familyMembersController = TextEditingController();
-  final TextEditingController siblingsInfluenceController = TextEditingController();
-  final TextEditingController siblingClosenessController = TextEditingController();
+  final TextEditingController siblingsInfluenceController =
+      TextEditingController();
+  final TextEditingController siblingClosenessController =
+      TextEditingController();
   final TextEditingController motherAgeController = TextEditingController();
-  final TextEditingController parentsRelationshipController = TextEditingController();
-  final TextEditingController familyRelationshipController = TextEditingController();
+  final TextEditingController parentsRelationshipController =
+      TextEditingController();
+  final TextEditingController familyRelationshipController =
+      TextEditingController();
   final TextEditingController motherNatureController = TextEditingController();
 
   // Developmental History Controllers
   // Pregnancy Phase
-  final TextEditingController pregnancyNatureController = TextEditingController();
-  final TextEditingController motherDiseasesDuringPregnancyController = TextEditingController();
-  final TextEditingController pregnancyComplicationsController = TextEditingController();
-  final TextEditingController motherStressDuringPregnancyController = TextEditingController();
+  final TextEditingController pregnancyNatureController =
+      TextEditingController();
+  final TextEditingController motherDiseasesDuringPregnancyController =
+      TextEditingController();
+  final TextEditingController pregnancyComplicationsController =
+      TextEditingController();
+  final TextEditingController motherStressDuringPregnancyController =
+      TextEditingController();
 
   // Birth Phase
   final TextEditingController birthTypeController = TextEditingController();
-  final TextEditingController birthComplicationsController = TextEditingController();
+  final TextEditingController birthComplicationsController =
+      TextEditingController();
   final TextEditingController birthTimingController = TextEditingController();
 
   // Post-Birth
   final TextEditingController incubatorController = TextEditingController();
-  final TextEditingController incubatorPeriodController = TextEditingController();
+  final TextEditingController incubatorPeriodController =
+      TextEditingController();
   final TextEditingController jaundiceController = TextEditingController();
   final TextEditingController jaundiceRateController = TextEditingController();
 
@@ -66,17 +78,20 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
   // First Year Growth
   final TextEditingController teethingController = TextEditingController();
   final TextEditingController babblingController = TextEditingController();
-  final TextEditingController motherVoiceAttentionController = TextEditingController();
+  final TextEditingController motherVoiceAttentionController =
+      TextEditingController();
   final TextEditingController sittingAloneController = TextEditingController();
   final TextEditingController crawlingController = TextEditingController();
   final TextEditingController walkingController = TextEditingController();
   final TextEditingController handPointingController = TextEditingController();
 
   // Psychological History
-  final TextEditingController familyDisabilitiesController = TextEditingController();
+  final TextEditingController familyDisabilitiesController =
+      TextEditingController();
 
   // Social History
-  final TextEditingController socialInteractionController = TextEditingController();
+  final TextEditingController socialInteractionController =
+      TextEditingController();
   final TextEditingController parentAbsenceController = TextEditingController();
 
   // Medical Examinations
@@ -162,17 +177,17 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
 
     return "سنوات $years شهور $months أيام $days";
   }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return BlocProvider(
-  create: (context) => AddChildCubit(),
-  child: Builder(
-    builder: (context) {
-      final addChildCubit = context.read<AddChildCubit>();
+      create: (context) => AddChildCubit(),
+      child: Builder(builder: (context) {
+        final addChildCubit = context.read<AddChildCubit>();
 
-      return BlocListener<AddChildCubit, AddChildState>(
+        return BlocListener<AddChildCubit, AddChildState>(
           listener: (context, state) {
             if (state is AddLoadingState) {
               showDialog(
@@ -295,17 +310,16 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                           S.of(context).familyInformation,
                           [
                             _buildAnimatedTextField(
-                              controller: parentPhoneController,
-                              label: S.of(context).parentsContact,
-                              icon: Icons.phone,
-                              keyboardType: TextInputType.phone,
-                              validator:  (val){
-                                if (val!.length !=13 ){
-                                  return "the Phone number must be like +20xxxxxxxxxx";
-                                }//'+
-                                return null ;
-                               }
-                            ),
+                                controller: parentPhoneController,
+                                label: S.of(context).parentsContact,
+                                icon: Icons.phone,
+                                keyboardType: TextInputType.phone,
+                                validator: (val) {
+                                  if (val!.length != 13) {
+                                    return "the Phone number must be like +20xxxxxxxxxx";
+                                  } //'+
+                                  return null;
+                                }),
                             const SizedBox(height: 16),
                             _buildAnimatedTextField(
                               controller: fatherOccupationController,
@@ -373,8 +387,10 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                             ),
                             const SizedBox(height: 16),
                             _buildAnimatedTextField(
-                              controller: motherDiseasesDuringPregnancyController,
-                              label: S.of(context).mothersDiseasesDuringPregnancy,
+                              controller:
+                                  motherDiseasesDuringPregnancyController,
+                              label:
+                                  S.of(context).mothersDiseasesDuringPregnancy,
                               icon: Icons.medical_services,
                             ),
                             const SizedBox(height: 16),
@@ -735,12 +751,12 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                     ),
                   ),
                 ),
-              ),            ),
+              ),
+            ),
           ),
         );
-    }
-  ),
-);
+      }),
+    );
   }
 
   Widget _buildSection(String title, List<Widget> children) {
@@ -770,34 +786,31 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
     );
   }
 
-  Widget _buildAnimatedTextField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    bool readOnly = false,
-    TextInputType? keyboardType,
-    final String? Function(String?)? validator
-   }) {
+  Widget _buildAnimatedTextField(
+      {required TextEditingController controller,
+      required String label,
+      required IconData icon,
+      bool readOnly = false,
+      TextInputType? keyboardType,
+      final String? Function(String?)? validator}) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       child: TextFormField(
-        controller: controller,
-        readOnly: readOnly,
-        keyboardType: keyboardType,
-        decoration: InputDecoration(
-          labelText: label,
-          prefixIcon: Icon(icon),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+          controller: controller,
+          readOnly: readOnly,
+          keyboardType: keyboardType,
+          decoration: InputDecoration(
+            labelText: label,
+            prefixIcon: Icon(icon),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
-          filled: true,
-          fillColor: Colors.white,
-        ),
-        validator: validator ?? (val) {
-          if (val!.isEmpty) return "$label cannot be empty";
-          return null;
-        }
-      ),
+          validator: validator ??
+              (val) {
+                if (val!.isEmpty) return "$label cannot be empty";
+                return null;
+              }),
     );
   }
 
@@ -815,8 +828,6 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          filled: true,
-          fillColor: Colors.white,
         ),
         child: Text(
           value != null
@@ -831,7 +842,6 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.shade300),
       ),
@@ -948,10 +958,10 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
       context,
       name: nameController.text,
       age: ageController.text,
-      selectedGoals:selectedItems ,
-      dateOfBirth: selectedDate??DateTime.now(),
-      startDate: startDate??DateTime.now(),
-      endDate: endDate??DateTime.now(),
+      selectedGoals: selectedItems,
+      dateOfBirth: selectedDate ?? DateTime.now(),
+      startDate: startDate ?? DateTime.now(),
+      endDate: endDate ?? DateTime.now(),
       period: periodController.text,
       parentPhone: parentPhoneController.text, // Fixed parameter name
       notes: notesController.text,
@@ -971,7 +981,8 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
       motherNature: motherNatureController.text,
       // Developmental History - Pregnancy Phase
       pregnancyNature: pregnancyNatureController.text,
-      motherDiseasesDuringPregnancy: motherDiseasesDuringPregnancyController.text,
+      motherDiseasesDuringPregnancy:
+          motherDiseasesDuringPregnancyController.text,
       pregnancyComplications: pregnancyComplicationsController.text,
       motherStressDuringPregnancy: motherStressDuringPregnancyController.text,
       // Birth Phase
@@ -1022,4 +1033,5 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
       // Diagnosis
       diagnosis: diagnosisController.text,
     );
-  }}
+  }
+}

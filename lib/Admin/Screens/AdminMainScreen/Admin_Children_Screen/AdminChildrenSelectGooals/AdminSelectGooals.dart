@@ -14,66 +14,69 @@ class AdminSelectGoals extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AddChildCubit(),
-      child: Builder(
-          builder: (context) {
-            // Access the cubit after it's been created
-            final addChildCubit = context.read<AddChildCubit>();
+      child: Builder(builder: (context) {
+        // Access the cubit after it's been created
+        final addChildCubit = context.read<AddChildCubit>();
 
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text("اختيار الأهداف"),
-                centerTitle: true,
-                actions: [
-                  BlocBuilder<AddChildCubit, AddChildState>(
-                    builder: (context, state) {
-                      final selectedGoalsCount = addChildCubit.selectedGoals[phone]?.length ?? 0;
-                      final isMaxReached = selectedGoalsCount >= 7;
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text("اختيار الأهداف"),
+            centerTitle: true,
+            actions: [
+              BlocBuilder<AddChildCubit, AddChildState>(
+                builder: (context, state) {
+                  final selectedGoalsCount =
+                      addChildCubit.selectedGoals[phone]?.length ?? 0;
+                  final isMaxReached = selectedGoalsCount >= 7;
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Center(
-                          child: Text(
-                            "$selectedGoalsCount / 7",
-                            style: TextStyle(
-                              color: isMaxReached ? Colors.red : Colors.black,
-                              fontWeight: isMaxReached ? FontWeight.bold : FontWeight.normal,
-                            ),
-                          ),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Center(
+                      child: Text(
+                        "$selectedGoalsCount / 7",
+                        style: TextStyle(
+                          color: isMaxReached ? Colors.red : Colors.black,
+                          fontWeight: isMaxReached
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                         ),
-                      );
-                    },
-                  )
-                ],
-              ),
-              body: PopScope(
-                canPop: false,
-                onPopInvokedWithResult: (didPop, result) async {
-                  if (didPop) return;
-
-                  if (context.mounted && addChildCubit.selectedGoals[phone] != null) {
-                    Navigator.pop(context, addChildCubit.selectedGoals[phone]);
-                  } else {
-                    Navigator.pop(context, []);
-                  }
+                      ),
+                    ),
+                  );
                 },
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: ListView.builder(
-                    itemCount: Goals_Lists.goalList.length,
-                    itemBuilder: (context, index) {
-                      final goal = Goals_Lists.goalList[index];
-                      return _buildGoalCard(context, goal, addChildCubit);
-                    },
-                  ),
-                ),
+              )
+            ],
+          ),
+          body: PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) async {
+              if (didPop) return;
+
+              if (context.mounted &&
+                  addChildCubit.selectedGoals[phone] != null) {
+                Navigator.pop(context, addChildCubit.selectedGoals[phone]);
+              } else {
+                Navigator.pop(context, []);
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: ListView.builder(
+                itemCount: Goals_Lists.goalList.length,
+                itemBuilder: (context, index) {
+                  final goal = Goals_Lists.goalList[index];
+                  return _buildGoalCard(context, goal, addChildCubit);
+                },
               ),
-            );
-          }
-      ),
+            ),
+          ),
+        );
+      }),
     );
   }
 
-  Widget _buildGoalCard(BuildContext context, dynamic goal, AddChildCubit cubit) {
+  Widget _buildGoalCard(
+      BuildContext context, dynamic goal, AddChildCubit cubit) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Container(
@@ -99,7 +102,8 @@ class AdminSelectGoals extends StatelessWidget {
                 topRight: Radius.circular(20),
               ),
               child: CachedNetworkImage(
-                imageUrl: "https://www.ces-schools.net/wp-content/uploads/2020/07/AdobeStock_234287116-1024x683.jpeg",
+                imageUrl:
+                    "https://www.ces-schools.net/wp-content/uploads/2020/07/AdobeStock_234287116-1024x683.jpeg",
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: 180,
@@ -152,7 +156,9 @@ class AdminSelectGoals extends StatelessWidget {
                         onPressed: isSelected || (!isSelected && isMaxReached)
                             ? null
                             : () => cubit.AddGoal(goal, phone, context),
-                        icon: Icon(isSelected ? Icons.check_circle : Icons.add_circle_outline),
+                        icon: Icon(isSelected
+                            ? Icons.check_circle
+                            : Icons.add_circle_outline),
                         label: Text(isSelected ? "تم الاختيار" : "اختر الهدف"),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isSelected ? Colors.green : null,
@@ -161,7 +167,6 @@ class AdminSelectGoals extends StatelessWidget {
                       );
                     },
                   ),
-
                   ElevatedButton.icon(
                     onPressed: () {
                       Navigator.push(

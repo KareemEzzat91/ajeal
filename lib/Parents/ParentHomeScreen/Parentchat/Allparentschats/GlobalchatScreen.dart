@@ -53,7 +53,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: _buildAppBar(),
       body: Stack(
         children: [
@@ -129,7 +129,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.grey[100],
+          color: Theme.of(context).primaryColor,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
         child: StreamBuilder<QuerySnapshot>(
@@ -238,7 +238,8 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
 
     return GestureDetector(
       onTap: () {
-        if (widget.isparent == false && message["sender_id"] != widget.doctorId) {
+        if (widget.isparent == false &&
+            message["sender_id"] != widget.doctorId) {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -257,7 +258,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
         padding: const EdgeInsets.only(bottom: 8),
         child: Row(
           mainAxisAlignment:
-          isMyMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+              isMyMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             if (!isMyMessage) _buildAvatar(isDoctorMessage),
@@ -282,8 +283,9 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Column(
-                crossAxisAlignment:
-                isMyMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                crossAxisAlignment: isMyMessage
+                    ? CrossAxisAlignment.end
+                    : CrossAxisAlignment.start,
                 children: [
                   if (!isMyMessage)
                     Padding(
@@ -292,7 +294,8 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                         isDoctorMessage ? "Doctor" : message["senderName"],
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: isDoctorMessage ? Colors.white : Colors.grey[800],
+                          color:
+                              isDoctorMessage ? Colors.white : Colors.grey[800],
                           fontSize: 13,
                         ),
                       ),
@@ -341,14 +344,14 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
         backgroundColor: isDoctorMessage ? Colors.blue[100] : Colors.grey[200],
         child: isDoctorMessage
             ? const CircleAvatar(
-          radius: 14,
-          backgroundImage: AssetImage('assets/images/Mohsen.jpg'),
-        )
+                radius: 14,
+                backgroundImage: AssetImage('assets/images/Mohsen.jpg'),
+              )
             : Icon(
-          Icons.person,
-          size: 18,
-          color: Colors.grey[600],
-        ),
+                Icons.person,
+                size: 18,
+                color: Colors.grey[600],
+              ),
       ),
     );
   }
@@ -371,7 +374,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).primaryColor,
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),

@@ -1,6 +1,6 @@
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/cubit/sign_cubit.dart';
 import 'package:ajeal/generated/l10n.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,8 +10,9 @@ class AdminProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentUser= FirebaseAuth.instance.currentUser;
-
+    final currentUser = FirebaseAuth.instance.currentUser;
+    final themeCubit = context.read<ThemesCubit>();
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -21,8 +22,9 @@ class AdminProfileScreen extends StatelessWidget {
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title:  Text(S.of(context).profilePage,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              title: Text(S.of(context).profilePage,
+                  style: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
               background: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -47,7 +49,8 @@ class AdminProfileScreen extends StatelessWidget {
                             ),
                             child: const CircleAvatar(
                               radius: 50,
-                              backgroundImage: AssetImage("assets/images/Mohsen.jpg"),
+                              backgroundImage:
+                                  AssetImage("assets/images/Mohsen.jpg"),
                             ),
                           ),
                           Positioned(
@@ -67,7 +70,8 @@ class AdminProfileScreen extends StatelessWidget {
                                 ],
                               ),
                               child: IconButton(
-                                icon: const Icon(Icons.camera_alt, size: 20, color: Colors.blue),
+                                icon: const Icon(Icons.camera_alt,
+                                    size: 20, color: Colors.blue),
                                 onPressed: () {
                                   _showImagePickerDialog(context);
                                 },
@@ -91,25 +95,30 @@ class AdminProfileScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _buildSection(
-                   S.of(context).personalInfo,
+                    S.of(context).personalInfo,
                     [
                       _buildProfileCard(
                         icon: Icons.person,
                         title: S.of(context).name,
-                        value: currentUser!.displayName??"محمد",
-                        onEdit: () => _showEditDialog(context, "الاسم",  currentUser.displayName??"محمد"),
+                        value: currentUser!.displayName ?? "محمد",
+                        onEdit: () => _showEditDialog(context, "الاسم",
+                            currentUser.displayName ?? "محمد"),
                       ),
                       _buildProfileCard(
                         icon: Icons.email,
                         title: S.of(context).email,
-                        value:currentUser.email??"admin@gmail.com" ,
-                        onEdit: () => _showEditDialog(context, "البريد الإلكتروني", currentUser.email??"admin@gmail.com"),
+                        value: currentUser.email ?? "admin@gmail.com",
+                        onEdit: () => _showEditDialog(
+                            context,
+                            "البريد الإلكتروني",
+                            currentUser.email ?? "admin@gmail.com"),
                       ),
                       _buildProfileCard(
                         icon: Icons.phone,
                         title: S.of(context).phone,
                         value: "+20 123 456 789",
-                        onEdit: () => _showEditDialog(context, "رقم الهاتف", "+20 123 456 789"),
+                        onEdit: () => _showEditDialog(
+                            context, "رقم الهاتف", "+20 123 456 789"),
                       ),
                     ],
                   ),
@@ -118,9 +127,16 @@ class AdminProfileScreen extends StatelessWidget {
                     S.of(context).settings,
                     [
                       _buildActionButton(
-                        icon: Icons.lock_outline,
-                        title:S.of(context).changePassword,
-                        onTap: () => _showChangePasswordDialog(context),
+                        icon: isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                        title: S.of(context).changeTheme,
+                        onTap: () => themeCubit.toggleTheme(!isDarkMode),
+                        color: isDarkMode ? Colors.brown : Colors.black12,
+                      ),
+                      const SizedBox(height: 12),
+                      _buildActionButton(
+                        icon: Icons.language,
+                        title: S.of(context).changeLanguage,
+                        onTap: () => themeCubit.changeLang(),
                         color: Colors.blue,
                       ),
                       const SizedBox(height: 12),
@@ -129,8 +145,9 @@ class AdminProfileScreen extends StatelessWidget {
                         builder: (context, state) {
                           return _buildActionButton(
                             icon: Icons.logout,
-                            title:  S.of(context).logout,
-                            onTap: () => context.read<SignCubit>().logout(context),
+                            title: S.of(context).logout,
+                            onTap: () =>
+                                context.read<SignCubit>().logout(context),
                             color: Colors.red,
                           );
                         },
@@ -186,7 +203,7 @@ class AdminProfileScreen extends StatelessWidget {
           child: Icon(icon, color: Colors.blue),
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
-        subtitle: Text(value, style: const TextStyle(color: Colors.black87)),
+        subtitle: Text(value, style: const TextStyle(color: Colors.blue)),
         trailing: IconButton(
           icon: const Icon(Icons.edit, color: Colors.blue),
           onPressed: onEdit,
@@ -220,7 +237,8 @@ class AdminProfileScreen extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(12),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -272,7 +290,8 @@ class AdminProfileScreen extends StatelessWidget {
     );
   }
 
-  void _showEditDialog(BuildContext context, String field, String currentValue) {
+  void _showEditDialog(
+      BuildContext context, String field, String currentValue) {
     final controller = TextEditingController(text: currentValue);
     showDialog(
       context: context,
@@ -296,56 +315,6 @@ class AdminProfileScreen extends StatelessWidget {
               Navigator.pop(context);
             },
             child: const Text('حفظ'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showChangePasswordDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('تغيير كلمة المرور'),
-        content: const Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'كلمة المرور الحالية',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'كلمة المرور الجديدة',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'تأكيد كلمة المرور الجديدة',
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Implement password change logic
-              Navigator.pop(context);
-            },
-            child: const Text('تغيير'),
           ),
         ],
       ),

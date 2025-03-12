@@ -1,4 +1,3 @@
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/sendvreficationmessage.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/AdminmainScreen/AdminmainScreen.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/ParentHomeScreen.dart';
@@ -8,7 +7,6 @@ import 'package:ajeal/generated/l10n.dart';
 import 'package:ajeal/helpers/AIhelper/SecretKey/secretkey.dart';
 import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,7 +38,7 @@ Future<void> main() async {
     // Initialize Gemini
     Gemini.init(apiKey: Env.apiKey);
 
-    runApp( const MyApp());
+    runApp(const MyApp());
   } catch (e) {
     print('Initialization error: $e');
     // You might want to show a user-friendly error screen here
@@ -216,8 +214,8 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-  Future <void> fun() async {
-  }
+
+  Future<void> fun() async {}
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -226,7 +224,7 @@ class _MyAppState extends State<MyApp> {
         builder: (context, state) {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
-            locale: state.loc,  // Ensure locale updates
+            locale: state.loc, // Ensure locale updates
             theme: state.themeData,
             supportedLocales: const [
               Locale('en'), // English
@@ -244,19 +242,20 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-
 }
+
 // Animated ellipsis for loading text
 class LoadingAnimatedText extends StatefulWidget {
   final String text;
 
-  const LoadingAnimatedText(this.text, {Key? key}) : super(key: key);
+  const LoadingAnimatedText(this.text, {super.key});
 
   @override
   _LoadingAnimatedTextState createState() => _LoadingAnimatedTextState();
 }
 
-class _LoadingAnimatedTextState extends State<LoadingAnimatedText> with SingleTickerProviderStateMixin {
+class _LoadingAnimatedTextState extends State<LoadingAnimatedText>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   int _dotCount = 0;
 

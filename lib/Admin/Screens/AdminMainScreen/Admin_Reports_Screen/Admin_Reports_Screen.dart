@@ -1,3 +1,4 @@
+import 'package:ajeal/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AdminReportsScreen extends StatefulWidget {
@@ -17,19 +18,19 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: const Text(
-          'Reports & Analytics',
-          style: TextStyle(fontWeight: FontWeight.w600),
+        title: Text(
+          S.of(context).reportsAnalytics,
+          style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.file_download_outlined),
             onPressed: () {},
-            tooltip: 'Export Reports',
+            tooltip: S.of(context).exportReports,
           ),
         ],
       ),
@@ -60,13 +61,13 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
             children: [
               Expanded(
                 child: _buildDropdown(
-                  value: selectedPeriod,
+                  value: S.of(context).thisMonth,
                   items: [
-                    'Today',
-                    'This Week',
-                    'This Month',
-                    'This Year',
-                    'Custom'
+                    S.of(context).today,
+                    S.of(context).thisWeek,
+                    S.of(context).thisMonth,
+                    S.of(context).thisYear,
+                    S.of(context).custom,
                   ],
                   onChanged: (value) {
                     setState(() {
@@ -153,7 +154,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
     return Row(
       children: [
         _buildStatCard(
-          title: 'Total Children',
+          title: S.of(context).totalChildren,
           value: '156',
           icon: Icons.child_care,
           color: Colors.white,
@@ -161,7 +162,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
           isPositive: true,
         ),
         _buildStatCard(
-          title: 'Active Goals',
+          title: S.of(context).activeGoals,
           value: '342',
           icon: Icons.track_changes,
           color: Colors.white,
@@ -226,11 +227,10 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
               Text(
                 value,
                 style: TextStyle(
-                  fontSize: 21,
-                  fontWeight: FontWeight.bold,
-                  color: secondaryColor,
-                  overflow: TextOverflow.ellipsis
-                ),
+                    fontSize: 21,
+                    fontWeight: FontWeight.bold,
+                    color: secondaryColor,
+                    overflow: TextOverflow.ellipsis),
               ),
               const SizedBox(height: 4),
               Text(
@@ -253,11 +253,11 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSectionTitle('Detailed Reports'),
+          _buildSectionTitle(S.of(context).detailedReports),
           const SizedBox(height: 20),
           _buildReportGrid(),
           const SizedBox(height: 30),
-          _buildSectionTitle('Recent Activities'),
+          _buildSectionTitle(S.of(context).recentActivities),
           const SizedBox(height: 16),
           _buildActivityList(),
         ],
@@ -286,25 +286,25 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
       childAspectRatio: 1.2,
       children: [
         _buildReportCard(
-          title: 'Age Distribution',
+          title: S.of(context).ageDistribution,
           description: 'Distribution of children by age groups',
           icon: Icons.pie_chart,
           color: const Color(0xff9c27b0),
         ),
         _buildReportCard(
-          title: 'Goal Progress',
+          title: S.of(context).goalProgress,
           description: 'Overall progress tracking for goals',
           icon: Icons.bar_chart,
           color: primaryColor,
         ),
         _buildReportCard(
-          title: 'Session Analysis',
+          title: S.of(context).sessionAnalysis,
           description: 'Analysis of therapy sessions',
           icon: Icons.timeline,
           color: const Color(0xffff9800),
         ),
         _buildReportCard(
-          title: 'Success Metrics',
+          title: S.of(context).successMetrics,
           description: 'Key performance indicators',
           icon: Icons.assessment,
           color: const Color(0xff4caf50),
@@ -445,11 +445,11 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
 
   String _getActivityTitle(int index) {
     final activities = [
-      'New child registered',
-      'Goal updated for Ahmed',
-      'Session completed with Sara',
-      'Monthly report generated',
-      'Appointment scheduled',
+      S.of(context).newChildRegistered,
+      S.of(context).goalUpdated,
+      S.of(context).sessionCompleted,
+      S.of(context).monthlyReportGenerated,
+      S.of(context).appointmentScheduled,
     ];
     return activities[index];
   }
