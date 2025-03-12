@@ -9,6 +9,7 @@ plugins {
 }
 
 android {
+
     namespace = "com.example.ajeal"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
