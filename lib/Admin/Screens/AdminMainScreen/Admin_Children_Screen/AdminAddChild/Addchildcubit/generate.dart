@@ -87,7 +87,6 @@ class GenerateSchedule {
   }) async {
     try {
       // First try using Gemini API (your existing method)
-      print('Attempting to generate schedule with Gemini...');
       return await generateSchedule(
           startDate: startDate,
           endDate: endDate,
@@ -96,10 +95,8 @@ class GenerateSchedule {
           goalsList: goalsList);
     } catch (e) {
       // Log the error
-      print('Gemini API failed: $e');
 
       // Use local generation instead
-      print('Falling back to local schedule generation...');
       return await generateScheduleLocally(
         startDate: startDate,
         endDate: endDate,
@@ -118,9 +115,6 @@ class GenerateSchedule {
   }) async {
     // Extract goal information
     final List<String> goals = goalsList.map((goal) => goal.goalName).toList();
-    final List<String> goalsDescription =
-        goalsList.map((goal) => goal.goalDescription).toList();
-
     // Calculate duration and validate inputs
     final durationInDays = endDate.difference(startDate).inDays;
     if (durationInDays <= 0) {
@@ -322,6 +316,4 @@ Requirements:
 
 // Log errors for debugging
 void _logError(String type, dynamic error) {
-  print('[$type] Error in generateSchedule: $error');
-  // You could integrate with a proper logging system here
 }

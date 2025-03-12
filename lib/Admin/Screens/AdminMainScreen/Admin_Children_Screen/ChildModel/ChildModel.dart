@@ -488,7 +488,6 @@ class Child extends Equatable {
         dailyNotes: _parseDailyNotes(json['dailyNotes']),
       );
     } catch (e) {
-      print('Error parsing Child from JSON: $e');
       // Return a minimal valid Child object to prevent app crashes
       return Child(
         id: 0,
@@ -539,7 +538,6 @@ class Child extends Equatable {
             .map((goal) => Goal.fromMap(Map<String, dynamic>.from(goal)))
             .toList();
       } catch (e) {
-        print('Error parsing goals: $e');
         return [];
       }
     }
@@ -552,7 +550,6 @@ class Child extends Equatable {
       try {
         return value.map((e) => Map<String, dynamic>.from(e)).toList();
       } catch (e) {
-        print('Error parsing schedule sessions: $e');
         return [];
       }
     }
@@ -565,7 +562,6 @@ class Child extends Equatable {
       try {
         return value.map((e) => Map<String, dynamic>.from(e)).toList();
       } catch (e) {
-        print('Error parsing daily notes: $e');
         return [];
       }
     }

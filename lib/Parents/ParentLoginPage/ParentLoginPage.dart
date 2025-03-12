@@ -41,7 +41,6 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
       final adminID = _admincodeController.text.trim();
 
       if (parentCode.isNotEmpty) {
-        print(10);
 
         final doctorSnapshot = await FirebaseFirestore.instance
             .collection("Doctors")
@@ -49,9 +48,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
             .get();
 
         if (doctorSnapshot.exists && doctorSnapshot.data()!.isNotEmpty) {
-          print(20);
           final doctorKey = doctorSnapshot.data()!['Doctor_id'];
-          print(doctorKey);
           final userDoc = await FirebaseFirestore.instance
               .collection("users")
               .doc(doctorKey)

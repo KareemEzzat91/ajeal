@@ -40,7 +40,6 @@ Future<void> main() async {
 
     runApp(const MyApp());
   } catch (e) {
-    print('Initialization error: $e');
     // You might want to show a user-friendly error screen here
   }
 }
@@ -75,7 +74,6 @@ class _MyAppState extends State<MyApp> {
       await _loadChildData();
       setState(() => _isLoading = false);
     } catch (e) {
-      print('Error initializing app: $e');
       setState(() {
         _isLoading = false;
         _isParentLogin = false; // Reset login state on error
@@ -113,7 +111,6 @@ class _MyAppState extends State<MyApp> {
           setState(() => _isParentLogin = false);
         }
       } catch (e) {
-        print('Error loading child data: $e');
         setState(() => _isParentLogin = false);
       }
     }
@@ -164,7 +161,7 @@ class _MyAppState extends State<MyApp> {
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.1),
+                    color: Theme.of(context).primaryColor,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(

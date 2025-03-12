@@ -102,7 +102,6 @@ class AdminOrParentsScreen extends StatelessWidget {
                             tooltip: S.of(context).changeLanguage,
                             onPressed: () {
                               themeCubit.changeLang();
-                              print("locale:::$locale");
                             },
                           ),
                           const SizedBox(width: 8),

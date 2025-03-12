@@ -22,7 +22,6 @@ class AddChildCubit extends Cubit<AddChildState> {
     emit(AddLoadingState());
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) {
-      print("User not logged in");
       return;
     }
     final userDoc = FirebaseFirestore.instance.collection("users").doc(userId);
@@ -39,7 +38,6 @@ class AddChildCubit extends Cubit<AddChildState> {
     }
     // حفظ الـ ID
     userDoc.set({"lastChildId": id}, SetOptions(merge: true));
-    print("Data saved successfully!");
     emit(AddScuccesState());
   }
 
@@ -48,7 +46,6 @@ class AddChildCubit extends Cubit<AddChildState> {
 
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) {
-      print("User is not authenticated.");
       return [];
     }
 
@@ -59,7 +56,6 @@ class AddChildCubit extends Cubit<AddChildState> {
           .get();
 
       if (userDoc.exists) {
-        print("User Data: ${userDoc.data()}");
 
         // جلب جميع الوثائق في مجموعة الأطفال (children)
         final childrenSnapshot = await FirebaseFirestore.instance
@@ -75,11 +71,9 @@ class AddChildCubit extends Cubit<AddChildState> {
 
         return Children;
       } else {
-        print("No document found for user.");
       }
       return [];
     } catch (e) {
-      print("Error retrieving data: $e");
       return [];
     }
   }
@@ -165,10 +159,6 @@ class AddChildCubit extends Cubit<AddChildState> {
 
     try {
       final uid = FirebaseAuth.instance.currentUser!.uid;
-      print("User Id::::::::::::$uid");
-      print(
-          "Dataaaaaaaaaaaa$startDate $endDate, $period, $name,$selectedGoals}");
-      print(":::::::::::::::::::::::::::::::::::::1");
       final scheduleGenerator = GenerateSchedule();
 
       scheduleSesoins = await scheduleGenerator.generateScheduleWithFallback(
@@ -177,7 +167,6 @@ class AddChildCubit extends Cubit<AddChildState> {
           duration: period,
           childName: name,
           goalsList: selectedGoals);
-      print(":::::::::::::::::::::::::::::::::::::2");
 
       final doctorIdSnap =
           await FirebaseFirestore.instance.collection("users").doc(uid).get();
@@ -186,7 +175,6 @@ class AddChildCubit extends Cubit<AddChildState> {
       final doctorPhone = doctorIdSnap['Doctor_phone'];
       id = doctorIdSnap['lastChildId'];
       id++;
-      print(":::::::::::::::::::::::::::::::::::::3");
 
       final newChild = Child(
         id: id,
