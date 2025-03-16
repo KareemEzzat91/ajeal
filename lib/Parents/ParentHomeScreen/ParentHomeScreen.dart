@@ -1,4 +1,5 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/DailyNotesScreen/DailyNotesScreen.dart';
+import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/Allparentschats/GlobalchatScreen.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/ParentAdminchat/ParentAdminchatscreen.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/parentchildgoalspage/parentchildgoals_screen.dart';
@@ -8,7 +9,6 @@ import 'package:ajeal/generated/l10n.dart';
 import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -356,6 +356,7 @@ class ParentHomePage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SessionSchedulePage(
+                name :child.name,
                 isParent: true,
                 childId: child.parentPhone,
                 scheduleSesoins: child.scheduleSesoins,

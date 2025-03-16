@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/generate.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/sendvreficationmessage.dart';
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
+import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
+import 'package:ajeal/Admin/models/doctor_model/doctor_model.dart';
+import 'package:ajeal/Admin/models/goals_model/Goals.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,10 +14,13 @@ part 'add_child_state.dart';
 class AddChildCubit extends Cubit<AddChildState> {
   AddChildCubit() : super(AddChildInitial());
   static int id = 0;
-  final Map<String, List<Goal>> selectedGoals =
-      {}; // لتخزين الأهداف المختارة //id == ParentsPhone
+  final Map<String, List<Goal>> selectedGoals = {}; // لتخزين الأهداف المختارة //id == ParentsPhone
   List<Map<String, Child>> Children = []; // id =  ParentsPhone+ id
   List<Map<String, dynamic>> scheduleSesoins = [];
+  String lastChattedWith ="Mohammed";
+  String lastSessionWith = "Mohammed";
+  String taskAddedFor = "Mohammed";
+  String lastChildName = "Ahmed";
 
   void saveToFirestore() async {
     emit(AddLoadingState());
@@ -41,6 +45,39 @@ class AddChildCubit extends Cubit<AddChildState> {
     emit(AddScuccesState());
   }
 
+   Future <void >updateUserInfo({required String key, required String value})async{
+  final uid=  FirebaseAuth.instance.currentUser!.uid;
+   await FirebaseFirestore.instance.collection("users").doc(uid).update({
+     key:value
+   });
+
+   }
+   Future<Doctor?>getUserInfo()async{
+     final uid=  FirebaseAuth.instance.currentUser!.uid;
+     final snapshot= await FirebaseFirestore.instance.collection("users").doc(uid).get();
+     if(snapshot.exists)
+     {
+      return Doctor.fromJson(snapshot.data()??{"Doctor_Name":"",
+        "Doctor_id":"",
+        "Doctor_phone":"",
+        "lastChildId":0,
+        "lastChildName":"",
+        "lastSessionWith":"",
+        "taskAddedFor":"",
+        "lastChattedWith":"",
+      });
+     }
+     return  Doctor.fromJson({"Doctor_Name":"",
+       "Doctor_id":"",
+       "Doctor_phone":"",
+       "lastChildId":0,
+       "lastChildName":"",
+       "lastSessionWith":"",
+       "taskAddedFor":"",
+     "lastChattedWith":"",
+     });
+
+   }
   Future<List<Map<String, Child>>>? getAllDataFromFirestore() async {
     Children = []; // id =  ParentsPhone+ id
 
@@ -174,6 +211,7 @@ class AddChildCubit extends Cubit<AddChildState> {
       final doctorName = doctorIdSnap['Doctor_Name'];
       final doctorPhone = doctorIdSnap['Doctor_phone'];
       id = doctorIdSnap['lastChildId'];
+
       id++;
 
       final newChild = Child(
@@ -264,10 +302,12 @@ class AddChildCubit extends Cubit<AddChildState> {
           .set({"notes": []});
 
       // Update the lastChildId in the doctor's document
+      lastChildName=name;
       await FirebaseFirestore.instance
           .collection("users")
           .doc(uid)
-          .update({'lastChildId': id});
+          .update({'lastChildId': id,"lastChildName":lastChildName});
+
 
       saveToFirestore();
 

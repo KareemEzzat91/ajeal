@@ -167,8 +167,9 @@
   "sessionAnalysis": "تحليل الجلسات",
   "successMetrics": "مقاييس النجاح",
   "newChildRegistered": "تم تسجيل طفل جديد",
-  "goalUpdated": "تم تحديث هدف لأحمد",
-  "sessionCompleted": "تمت جلسة مع سارة",
+  "goalUpdated": "تم تحديث هدف ل",
+  "sessionCompleted": "تمت جلسة مع ",
   "monthlyReportGenerated": "تم إنشاء التقرير الشهري",
-  "appointmentScheduled": "تم تحديد موعد"
+  "appointmentScheduled": "تم تحديد موعد",
+  "doctorCode":" Code"
 }

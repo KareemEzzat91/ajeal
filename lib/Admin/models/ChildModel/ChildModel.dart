@@ -1,4 +1,4 @@
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
+import 'package:ajeal/Admin/models/goals_model/Goals.dart';
 import 'package:equatable/equatable.dart';
 
 class Child extends Equatable {

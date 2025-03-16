@@ -38,16 +38,18 @@ class SignCubit extends Cubit<SignState> {
                 .get();
             final doctorId = doctorIdsnap['Doctor_id'];
             final doctorName = doctorIdsnap['Doctor_Name'];
+            final doctorPhone = doctorIdsnap['Doctor_phone'];
 
             FirebaseFirestore.instance
                 .collection("Doctors")
                 .doc(doctorId)
                 .update({"Doctor_id": user.uid});
-            saveToken(doctorId, doctorName);
+            saveToken(doctorId, doctorName,doctorPhone);
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
                     builder: (context) => AdminmainScreen(
+                      doctorPhone: doctorPhone,
                         doctorId: doctorId, doctorName: doctorName)),
                 (Route<dynamic> route) => false);
           } else {
@@ -69,12 +71,13 @@ class SignCubit extends Cubit<SignState> {
     }
   }
 
-  void saveToken(String doctorId, String doctorName) async {
+  void saveToken(String doctorId, String doctorName,String doctorPhone) async {
     try {
       final pref = await SharedPreferences.getInstance();
       pref.setBool("AdminLogin", true);
       pref.setString("adminDoctorId", doctorId);
       pref.setString("adminDoctorName", doctorName);
+      pref.setString("adminDoctorPhone", doctorName);
     } catch (e) {}
   }
 
@@ -84,6 +87,7 @@ class SignCubit extends Cubit<SignState> {
     pref.setBool("AdminLogin", false);
     pref.remove("doctorId");
     pref.remove("doctorName");
+    pref.remove("adminDoctorPhone");
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const AdminOrParentsScreen()),
@@ -119,14 +123,18 @@ class SignCubit extends Cubit<SignState> {
             'Doctor_Name': nameController.text,
             'Doctor_id': doctorId, //name+phone number
             "Doctor_phone": MobileController.text,
-            "lastChildId": 0
+            "lastChildId": 0,
+             "lastChattedWith":"",
+            "lastChildName":"",
+            "lastSessionWith":"",
+            "taskAddedFor":""
           });
           // Doctor_id
           FirebaseFirestore.instance
               .collection("Doctors")
               .doc(doctorId)
               .set({"Doctor_id": user.uid});
-          saveToken(doctorId, nameController.text);
+          saveToken(doctorId, nameController.text,MobileController.text);
           emit(SignSuccesState());
         } else {
           emit(SignFaliureState("User creation failed"));

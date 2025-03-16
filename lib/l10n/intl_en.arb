@@ -174,10 +174,14 @@
   "sessionAnalysis": "Session Analysis",
   "successMetrics": "Success Metrics",
   "newChildRegistered": "New child registered",
-  "goalUpdated": "Goal updated for Ahmed",
-  "sessionCompleted": "Session completed with Sara",
+  "goalUpdated": "Goal updated for  ",
+  "sessionCompleted": "Session completed with  ",
+
   "monthlyReportGenerated": "Monthly report generated",
-  "appointmentScheduled": "Appointment scheduled"
+  "appointmentScheduled": "Appointment scheduled",
+
+  "doctorCode":" الكود "
+
 
 
 }

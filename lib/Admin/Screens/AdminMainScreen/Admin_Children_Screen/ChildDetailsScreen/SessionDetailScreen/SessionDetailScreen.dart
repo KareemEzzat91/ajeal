@@ -1,10 +1,12 @@
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/add_child_cubit.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/choosetasks_screen/choosetasks_screen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/sessiontaskrate_screen/sessiontaskrate_screen.dart';
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/goal_lists/goal_lists.dart';
+import 'package:ajeal/Admin/models/goals_model/Goals.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SessionDetailScreen extends StatefulWidget {
   final String childId;
@@ -15,10 +17,12 @@ class SessionDetailScreen extends StatefulWidget {
   final String notes;
   final List tasks;
   final bool isParent;
+  final String childName ;
 
   const SessionDetailScreen({
     super.key,
     required this.sessionName,
+    required this.childName,
     required this.date,
     required this.goals,
     required this.childId,
@@ -67,7 +71,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
     );
   }
 
-  Future<void> _saveSessionDetails() async {
+  Future<void>
+  _saveSessionDetails() async {
     setState(() => _isSaving = true);
 
     try {
@@ -121,11 +126,13 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        title: const Row(
+        title:
+
+     const Row(
           children: [
             Icon(Icons.check_circle, color: Colors.green),
             SizedBox(width: 10),
-            Text("تم الحفظ بنجاح قم بعمل تحديث للبيانات "),
+            Text("تم الحفظ بنجاح   "),
           ],
         ),
         content: Column(
@@ -223,10 +230,15 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         leading: const Icon(Icons.flag, color: Colors.blue),
-        trailing: IconButton(
+        trailing: BlocBuilder<AddChildCubit, AddChildState>(
+  builder: (context, state) {
+    
+    return IconButton(
           icon: const Icon(Icons.add_task),
-          onPressed: () => _addTasksToGoal(goalIndex),
-        ),
+          onPressed: () { context.read<AddChildCubit>().updateUserInfo(key: "taskAddedFor", value: widget.childName)   ;_addTasksToGoal(goalIndex);}
+        );
+  },
+),
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
@@ -290,6 +302,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   }
 
   Future<void> _addTasksToGoal(int goalIndex) async {
+    
     final thisGoal = getGoal(widget.goals[goalIndex]);
     final selectedTasks = await Navigator.push(
       context,
@@ -391,61 +404,69 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "تفاصيل الجلسة ${widget.sessionName}",
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.blue[700],
-      ),
-      body: Stack(
-        children: [
-          ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              _buildHeader(),
-              const SizedBox(height: 16),
-              ...List.generate(
-                widget.goals.length,
-                (index) => _buildGoalItem(index),
-              ),
-              const SizedBox(height: 16),
-              _buildRatingSection(),
-              const SizedBox(height: 16),
-              _buildNotesSection(),
-              const SizedBox(height: 80),
-            ],
+    return BlocProvider(
+  create: (context) => AddChildCubit(),
+  child: Builder(
+    builder: (context) {
+      final bloc = context.read<AddChildCubit>();
+      return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              "تفاصيل الجلسة ${widget.sessionName}",
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            centerTitle: true,
+            backgroundColor: Colors.blue[700],
           ),
-          widget.isParent
-              ? const SizedBox()
-              : Positioned(
-                  bottom: 16,
-                  left: 16,
-                  right: 16,
-                  child: ElevatedButton(
-                    onPressed: _isSaving ? null : _saveSessionDetails,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[700],
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+          body: Stack(
+            children: [
+              ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  _buildHeader(),
+                  const SizedBox(height: 16),
+                  ...List.generate(
+                    widget.goals.length,
+                    (index) => _buildGoalItem(index),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildRatingSection(),
+                  const SizedBox(height: 16),
+                  _buildNotesSection(),
+                  const SizedBox(height: 80),
+                ],
+              ),
+              widget.isParent
+                  ? const SizedBox()
+                  : Positioned(
+                      bottom: 16,
+                      left: 16,
+                      right: 16,
+                      child: ElevatedButton(
+                        onPressed: _isSaving ? null : (){_saveSessionDetails();bloc.updateUserInfo(key: "lastSessionWith", value:widget.childName); },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue[700],
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: _isSaving
+                            ? const CircularProgressIndicator(color: Colors.white)
+                            : const Text(
+                                "حفظ التفاصيل",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                       ),
                     ),
-                    child: _isSaving
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text(
-                            "حفظ التفاصيل",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                  ),
-                ),
-        ],
-      ),
-    );
+            ],
+          ),
+        );
+    }
+  ),
+);
   }
 }

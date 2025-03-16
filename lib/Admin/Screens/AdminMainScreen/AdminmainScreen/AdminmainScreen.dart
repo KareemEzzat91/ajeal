@@ -13,8 +13,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AdminmainScreen extends StatefulWidget {
   final String doctorId;
   final String doctorName;
+  final String doctorPhone;
   const AdminmainScreen(
-      {super.key, required this.doctorId, required this.doctorName});
+      {super.key, required this.doctorId, required this.doctorName, required this.doctorPhone});
 
   @override
   State<AdminmainScreen> createState() => _AdminmainScreenState();
@@ -24,9 +25,13 @@ class _AdminmainScreenState extends State<AdminmainScreen> {
   int _selectedIndex = 0;
   String doctorId = '';
   String doctorName = '';
+  String doctorPhone = '';
   late List<Widget> Screens;
   @override
   void initState() {
+    doctorId=widget.doctorId;
+    doctorPhone=widget.doctorPhone;
+    doctorName=widget.doctorName;
     super.initState();
     Screens = [
       AdminChildrenScreen(
@@ -39,7 +44,7 @@ class _AdminmainScreenState extends State<AdminmainScreen> {
           doctorId: FirebaseAuth.instance.currentUser!.uid,
           parentId: '',
           isparent: false),
-      const AdminProfileScreen(),
+      AdminProfileScreen(doctorPhone:doctorPhone ,doctorName: doctorName,doctorId: doctorId,),
     ];
   }
 

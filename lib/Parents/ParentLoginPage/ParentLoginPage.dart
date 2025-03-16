@@ -1,4 +1,4 @@
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
+import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/ParentHomeScreen.dart';
 import 'package:ajeal/generated/l10n.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

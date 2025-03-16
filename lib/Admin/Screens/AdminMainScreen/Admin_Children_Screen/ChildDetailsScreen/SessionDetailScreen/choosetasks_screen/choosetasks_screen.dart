@@ -1,5 +1,5 @@
+import 'package:ajeal/Admin/models/goals_model/Goals.dart';
 import 'package:flutter/material.dart';
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
 
 class ChooseTasksScreen extends StatefulWidget {
   final Goal selectedGoal;

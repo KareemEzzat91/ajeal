@@ -1,5 +1,5 @@
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/AdminmainScreen/AdminmainScreen.dart';
+import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/ParentHomeScreen.dart';
 import 'package:ajeal/Screens/AdminOrparents/AdminOrParintsScreen.dart';
 import 'package:ajeal/firebase_options.dart';
@@ -22,6 +22,7 @@ class PreferenceKeys {
   static const String parentLogin = "ParentLogin";
   static const String adminDoctorId = "adminDoctorId";
   static const String adminDoctorName = "adminDoctorName";
+  static const String adminDoctorPhone = "adminDoctorPhone";
   static const String parentDoctorKey = "parentDoctorKey";
   static const String parentCode = "parentCode";
 }
@@ -57,6 +58,7 @@ class _MyAppState extends State<MyApp> {
   bool _isParentLogin = false;
   String _adminDoctorId = '';
   String _adminDoctorName = '';
+  String _adminDoctorPhone = '';
   String _parentDoctorKey = '';
   String _parentCode = '';
   Child? _child;
@@ -88,9 +90,10 @@ class _MyAppState extends State<MyApp> {
       _isParentLogin = _prefs.getBool(PreferenceKeys.parentLogin) ?? false;
       _adminDoctorId = _prefs.getString(PreferenceKeys.adminDoctorId) ?? '';
       _adminDoctorName = _prefs.getString(PreferenceKeys.adminDoctorName) ?? '';
+      _adminDoctorPhone = _prefs.getString(PreferenceKeys.adminDoctorPhone) ?? '';
       _parentDoctorKey = _prefs.getString(PreferenceKeys.parentDoctorKey) ?? '';
       _parentCode = _prefs.getString(PreferenceKeys.parentCode) ?? '';
-    });
+     });
   }
 
   Future<void> _loadChildData() async {
@@ -121,6 +124,9 @@ class _MyAppState extends State<MyApp> {
       return AdminmainScreen(
         doctorId: _adminDoctorId,
         doctorName: _adminDoctorName,
+        doctorPhone: _adminDoctorPhone,
+
+
       );
     }
 

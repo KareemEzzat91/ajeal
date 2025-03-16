@@ -1,5 +1,8 @@
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/add_child_cubit.dart';
+import 'package:ajeal/Admin/models/doctor_model/doctor_model.dart';
 import 'package:ajeal/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdminReportsScreen extends StatefulWidget {
   const AdminReportsScreen({super.key});
@@ -15,9 +18,12 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
   final Color primaryColor = const Color(0xff0186c7);
   final Color secondaryColor = const Color(0xff1e3a5c);
 
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocProvider(
+  create: (context) => AddChildCubit(),
+  child: Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -34,18 +40,30 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          _buildReportHeader(),
-          Expanded(
-            child: _buildReportContent(),
-          ),
-        ],
+      body: FutureBuilder<Doctor?>(
+        future: context.read<AddChildCubit>().getUserInfo(),
+        builder: (context,snap) {
+          final Doctor? data  ;
+          if (snap.connectionState==ConnectionState.waiting){return const Center(child: CircularProgressIndicator());}
+          if (snap.hasError){
+            data = Doctor(lastChattedWith: " ", lastChildId: 0,lastChildName: "",lastSessionWith: "",taskAddedFor: "");
+          }
+          else {data= snap.data;}
+          return Column(
+              children: [
+                _buildReportHeader(data?.lastChildId.toString()??"0"),
+                Expanded(
+                  child: _buildReportContent(data),
+                ),
+              ],
+            );
+        }
       ),
-    );
+    ),
+);
   }
 
-  Widget _buildReportHeader() {
+  Widget _buildReportHeader( String totalChildren ) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -99,7 +117,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
             ],
           ),
           const SizedBox(height: 20),
-          _buildQuickStats(),
+          _buildQuickStats(totalChildren),
         ],
       ),
     );
@@ -150,27 +168,32 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
     );
   }
 
-  Widget _buildQuickStats() {
+  Widget _buildQuickStats(String totalChildren) {
     return Row(
       children: [
-        _buildStatCard(
+        BlocBuilder<AddChildCubit, AddChildState>(
+  builder: (context, state) {
+
+    return _buildStatCard(
           title: S.of(context).totalChildren,
-          value: '156',
+          value: totalChildren,
           icon: Icons.child_care,
           color: Colors.white,
           trend: '+12%',
           isPositive: true,
-        ),
+        );
+  },
+),
         _buildStatCard(
           title: S.of(context).activeGoals,
-          value: '342',
+          value: '7',
           icon: Icons.track_changes,
           color: Colors.white,
           trend: '+8%',
           isPositive: true,
         ),
         _buildStatCard(
-          title: 'Success Rate',
+          title: S.of(context).successRate,
           value: '78%',
           icon: Icons.trending_up,
           color: Colors.white,
@@ -207,7 +230,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
                   Icon(icon, color: primaryColor, size: 20),
                   Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: isPositive ? Colors.green[50] : Colors.red[50],
                       borderRadius: BorderRadius.circular(12),
@@ -247,7 +270,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
     );
   }
 
-  Widget _buildReportContent() {
+  Widget _buildReportContent(Doctor? data) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -259,7 +282,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
           const SizedBox(height: 30),
           _buildSectionTitle(S.of(context).recentActivities),
           const SizedBox(height: 16),
-          _buildActivityList(),
+          _buildActivityList(data ),
         ],
       ),
     );
@@ -375,60 +398,67 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
     );
   }
 
-  Widget _buildActivityList() {
+  Widget _buildActivityList(Doctor? data) {
     return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return Card(
-          elevation: 2,
-          margin: const EdgeInsets.only(bottom: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: ListTile(
-            contentPadding: const EdgeInsets.all(16),
-            leading: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.primaries[index % Colors.primaries.length]
-                    .withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                _getActivityIcon(index),
-                color: Colors.primaries[index % Colors.primaries.length],
-                size: 24,
-              ),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          final List <String>names=[
+            data?.lastChildName??"",
+            data?.taskAddedFor??"",
+            data?.lastSessionWith??"",
+            data?.lastChildId.toString()??"",
+            data?.lastChattedWith??"",
+          ];
+      return Card(
+            elevation: 2,
+            margin: const EdgeInsets.only(bottom: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-            title: Text(
-              _getActivityTitle(index),
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                color: secondaryColor,
-                fontSize: 15,
-              ),
-            ),
-            subtitle: Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text(
-                _getActivityTime(index),
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 13,
+            child: ListTile(
+              contentPadding: const EdgeInsets.all(16),
+              leading: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.primaries[index % Colors.primaries.length]
+                      .withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  _getActivityIcon(index),
+                  color: Colors.primaries[index % Colors.primaries.length],
+                  size: 24,
                 ),
               ),
+              title: Text(
+                _getActivityTitle(index),
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: secondaryColor,
+                  fontSize: 15,
+                ),
+              ),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  names[index],
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+              trailing: IconButton(
+                icon: Icon(Icons.chevron_right, color: primaryColor),
+                onPressed: () {
+                  // Add navigation or action here
+                },
+              ),
             ),
-            trailing: IconButton(
-              icon: Icon(Icons.chevron_right, color: primaryColor),
-              onPressed: () {
-                // Add navigation or action here
-              },
-            ),
-          ),
-        );
-      },
+          );
+        }
     );
   }
 
@@ -445,7 +475,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
 
   String _getActivityTitle(int index) {
     final activities = [
-      S.of(context).newChildRegistered,
+      S.of(context).newChildRegistered ,
       S.of(context).goalUpdated,
       S.of(context).sessionCompleted,
       S.of(context).monthlyReportGenerated,
@@ -454,14 +484,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
     return activities[index];
   }
 
-  String _getActivityTime(int index) {
-    final times = [
-      '2 hours ago',
-      '4 hours ago',
-      'Yesterday',
-      'Yesterday',
-      '2 days ago',
-    ];
-    return times[index];
+  String _getActivityTime(int index, List<String> names) {
+    return names[index];
   }
 }

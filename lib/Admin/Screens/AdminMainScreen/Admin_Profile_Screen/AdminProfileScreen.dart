@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdminProfileScreen extends StatelessWidget {
-  const AdminProfileScreen({super.key});
+  final String doctorId;
+  final String doctorName;
+  final String doctorPhone;
+  const AdminProfileScreen({super.key, required this.doctorId, required this.doctorName, required this.doctorPhone});
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +50,9 @@ class AdminProfileScreen extends StatelessWidget {
                               shape: BoxShape.circle,
                               border: Border.all(color: Colors.white, width: 3),
                             ),
-                            child: const CircleAvatar(
+                            child: CircleAvatar(
                               radius: 50,
-                              backgroundImage:
-                                  AssetImage("assets/images/Mohsen.jpg"),
+                             child:  Text(doctorName[0],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 40), ),
                             ),
                           ),
                           Positioned(
@@ -100,26 +102,19 @@ class AdminProfileScreen extends StatelessWidget {
                       _buildProfileCard(
                         icon: Icons.person,
                         title: S.of(context).name,
-                        value: currentUser!.displayName ?? "محمد",
-                        onEdit: () => _showEditDialog(context, "الاسم",
-                            currentUser.displayName ?? "محمد"),
+                        value: doctorName ?? "محمد", onEdit: () {  },
+
                       ),
                       _buildProfileCard(
                         icon: Icons.email,
                         title: S.of(context).email,
-                        value: currentUser.email ?? "admin@gmail.com",
-                        onEdit: () => _showEditDialog(
-                            context,
-                            "البريد الإلكتروني",
-                            currentUser.email ?? "admin@gmail.com"),
-                      ),
+                        value: currentUser?.email ?? "admin@gmail.com", onEdit: () {  },
+                       ),
                       _buildProfileCard(
                         icon: Icons.phone,
-                        title: S.of(context).phone,
-                        value: "+20 123 456 789",
-                        onEdit: () => _showEditDialog(
-                            context, "رقم الهاتف", "+20 123 456 789"),
-                      ),
+                        title: S.of(context).doctorCode,
+                        value: doctorId, onEdit: () {  },
+                       ),
                     ],
                   ),
                   const SizedBox(height: 24),
@@ -204,11 +199,7 @@ class AdminProfileScreen extends StatelessWidget {
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
         subtitle: Text(value, style: const TextStyle(color: Colors.blue)),
-        trailing: IconButton(
-          icon: const Icon(Icons.edit, color: Colors.blue),
-          onPressed: onEdit,
-        ),
-      ),
+       ),
     );
   }
 

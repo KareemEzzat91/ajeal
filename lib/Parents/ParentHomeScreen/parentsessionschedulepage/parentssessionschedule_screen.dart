@@ -5,12 +5,16 @@ class SessionSchedulePage extends StatelessWidget {
   final String childId;
   final List<Map<String, dynamic>> scheduleSesoins;
   final bool isParent;
+  final String name ;
 
   const SessionSchedulePage({
     super.key,
     required this.childId,
     required this.scheduleSesoins,
     required this.isParent,
+    required this.name ,
+
+
   });
 
   @override
@@ -200,6 +204,7 @@ class SessionSchedulePage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SessionDetailScreen(
+                childName: name,
                 isParent: true,
                 childId: childId,
                 sessionName: session['session'],
@@ -313,6 +318,7 @@ class SessionSchedulePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => SessionDetailScreen(
+                            childName: name ,
                             isParent: true,
                             childId: childId,
                             sessionName: session['session'],

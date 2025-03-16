@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
+import 'package:ajeal/Admin/models/goals_model/Goals.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 
 class GenerateSchedule {

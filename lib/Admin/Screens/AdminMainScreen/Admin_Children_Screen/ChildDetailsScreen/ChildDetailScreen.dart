@@ -1,11 +1,13 @@
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/add_child_cubit.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenSelectGooals/GoalDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/DailyNotesScreen/DailyNotesScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/SessionDetailScreen.dart';
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildModel/ChildModel.dart';
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/Goals.dart';
+import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
+import 'package:ajeal/Admin/models/goals_model/Goals.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/ParentAdminchat/ParentAdminchatscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChildDetailScreen extends StatelessWidget {
   final Child child;
@@ -28,7 +30,9 @@ class ChildDetailScreen extends StatelessWidget {
     final AdminId = FirebaseAuth.instance.currentUser?.uid;
     final theme = Theme.of(context);
 
-    return Scaffold(
+    return BlocProvider(
+  create: (context) => AddChildCubit(),
+  child: Scaffold(
       backgroundColor: theme.primaryColor,
       appBar: AppBar(
         title: Text(
@@ -39,9 +43,13 @@ class ChildDetailScreen extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        leading: IconButton(
+        leading: BlocBuilder<AddChildCubit, AddChildState>(
+  builder: (context, state) {
+    return IconButton(
           icon: const Icon(Icons.chat_bubble_outline, color: Colors.white),
           onPressed: () {
+            context.read<AddChildCubit>().lastChattedWith=childName;
+            context.read<AddChildCubit>().updateUserInfo(key: "lastChattedWith", value: childName);
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -55,7 +63,9 @@ class ChildDetailScreen extends StatelessWidget {
               ),
             );
           },
-        ),
+        );
+  },
+),
         actions: [
           IconButton(
             icon: const Icon(Icons.note_add_outlined, color: Colors.white),
@@ -87,7 +97,8 @@ class ChildDetailScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ),
+);
   }
 
   Widget _buildHeaderSection() {
@@ -218,8 +229,12 @@ class ChildDetailScreen extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: InkWell(
-        onTap: () => _navigateToSessionDetail(context, session),
+      child: BlocBuilder<AddChildCubit, AddChildState>(
+  builder: (context, state) {
+    return InkWell(
+        onTap: () {
+          context.read<AddChildCubit>().updateUserInfo(key: "", value: "");
+          _navigateToSessionDetail(context, session);},
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -272,7 +287,9 @@ class ChildDetailScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
+      );
+  },
+),
     );
   }
 
@@ -282,6 +299,8 @@ class ChildDetailScreen extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) => SessionDetailScreen(
+          childName: childName,
+
           isParent: false,
           childId: child.parentPhone,
           sessionName: session['session'],
