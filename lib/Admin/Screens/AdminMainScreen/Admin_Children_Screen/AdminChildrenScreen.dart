@@ -643,10 +643,14 @@ class ChildCard extends StatelessWidget {
               onConfirmBtnTap: (){
                 try {
 
-                  FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("children").doc(parentPhone).delete();
+                  FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("children").doc("201019526682+").delete();
+                  ScaffoldMessenger.of(context).showSnackBar( const SnackBar(content: Text("Deleted Scuccfluy")));
 
+                  Navigator.pop(context);
                 }catch(e){
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("error")));
+                  ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(e.toString())));
+                  print(e.toString());
+                  Navigator.pop(context);
                 }
               }
             );

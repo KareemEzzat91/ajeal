@@ -55,7 +55,7 @@ class AdminProfileScreen extends StatelessWidget {
                             ),
                             child: CircleAvatar(
                               radius: 50,
-                             child:  Text(doctorName[0],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 40), ),
+                             child:  Text(doctorName[0].toUpperCase(),style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 40), ),
                             ),
                           ),
                          ],

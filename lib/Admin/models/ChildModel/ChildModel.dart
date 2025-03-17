@@ -735,6 +735,7 @@ class Child extends Equatable {
         endDate,
         period,
         parentPhone,
+        parentPhoneNumber,
         notes,
         school,
         residence,

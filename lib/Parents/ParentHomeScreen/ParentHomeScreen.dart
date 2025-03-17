@@ -1,3 +1,4 @@
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/AllDetailsScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/DailyNotesScreen/DailyNotesScreen.dart';
 import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/Allparentschats/GlobalchatScreen.dart';
@@ -110,7 +111,7 @@ class ParentHomePage extends StatelessWidget {
                   radius: 100,
                   backgroundColor: isDarkMode
                       ? Colors.black12
-                      : Colors.white ,
+                      : Colors.teal.shade700 ,
                 ),
               ),
             ],
@@ -224,7 +225,7 @@ class ParentHomePage extends StatelessWidget {
         ),
         _buildStatCard(
           S.of(context).progress,
-          "75%",
+          "0%",
           Icons.trending_up,
           Colors.orange,
         ),
@@ -243,21 +244,21 @@ class ParentHomePage extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(icon, color: color),
+          Icon(icon, color: Colors.white),
           const SizedBox(height: 8),
           Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: color,
+              color: Colors.white,
             ),
           ),
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
-              color: color,
+              color: Colors.white,
             ),
           ),
         ],
@@ -332,6 +333,20 @@ class ParentHomePage extends StatelessWidget {
   Widget _buildActionCards(BuildContext context) {
     return Column(
       children: [
+        _buildActionCard(
+          context,
+          S.of(context).childDetails,
+          S.of(context).detailedReports,
+          Icons.person,
+          Colors.red,
+          () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AllDetailsScreen(child),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
         _buildActionCard(
           context,
           S.of(context).view_child_goals,
@@ -453,7 +468,7 @@ class ParentHomePage extends StatelessWidget {
                   color: color ,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: color),
+                child: Icon(icon, color: Colors.white),
               ),
               const SizedBox(width: 16),
               Expanded(

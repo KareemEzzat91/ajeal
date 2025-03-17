@@ -171,5 +171,35 @@
   "sessionCompleted": "تمت جلسة مع ",
   "monthlyReportGenerated": "تم إنشاء التقرير الشهري",
   "appointmentScheduled": "تم تحديد موعد",
-  "doctorCode":" Code"
+  "doctorCode":" Code",
+  "childDetails": "تفاصيل الطفل",
+  "period": "المدة",
+  "gender": "الجنس",
+  "school": "المدرسة",
+  "parentPhone": "رقم هاتف ولي الأمر",
+
+  "fatherOccupation": "مهنة الأب",
+  "motherOccupation": "مهنة الأم",
+
+  "motherAge": "عمر الأم",
+
+  "motherNature": "طبيعة الأم",
+
+  "pregnancyPhase": "تاريخ النمو - مرحلة الحمل",
+  "motherDiseasesDuringPregnancy": "أمراض الأم أثناء الحمل",
+  "motherStressDuringPregnancy": "توتر الأم أثناء الحمل",
+
+  "birthPhase": "مرحلة الولادة",
+
+
+  "postBirth": "ما بعد الولادة",
+
+  "motherVoiceAttention": "الانتباه لصوت الأم",
+
+  "diagnosisDetails": "تفاصيل التشخيص",
+
+  "doctorInformation": "معلومات الطبيب",
+  "doctorName": "اسم الطبيب",
+  "doctorPhone": "رقم هاتف الطبيب",
+  "printReport": "طباعة التقرير"
 }

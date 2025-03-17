@@ -180,7 +180,35 @@
   "monthlyReportGenerated": "Monthly report generated",
   "appointmentScheduled": "Appointment scheduled",
 
-  "doctorCode":" الكود "
+  "doctorCode":" الكود ",
+  "childDetails": "Child Details",
+
+  "period": "Period",
+  "gender": "Gender",
+  "school": "School",
+  "parentPhone": "Parent Phone",
+
+  "fatherOccupation": "Father Occupation",
+  "motherOccupation": "Mother Occupation",
+
+  "motherAge": "Mother Age",
+  "motherNature": "Mother Nature",
+
+  "pregnancyPhase": "Developmental History - Pregnancy Phase",
+  "motherDiseasesDuringPregnancy": "Mother Diseases During Pregnancy",
+  "motherStressDuringPregnancy": "Mother Stress During Pregnancy",
+
+  "birthPhase": "Birth Phase",
+
+  "postBirth": "Post-Birth",
+
+
+  "diagnosisDetails": "Diagnosis Details",
+
+  "doctorInformation": "Doctor Information",
+  "doctorName": "Doctor Name",
+  "doctorPhone": "Doctor Phone",
+  "printReport": "Print Report"
 
 
 

@@ -48,6 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "birthInformation": MessageLookupByLibrary.simpleMessage(
       "Birth Information",
     ),
+    "birthPhase": MessageLookupByLibrary.simpleMessage("Birth Phase"),
     "birthTiming": MessageLookupByLibrary.simpleMessage("Birth Timing"),
     "birthType": MessageLookupByLibrary.simpleMessage("Type of Birth"),
     "call_emergency": MessageLookupByLibrary.simpleMessage(
@@ -58,6 +59,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "changePassword": MessageLookupByLibrary.simpleMessage("Change Password"),
     "changeTheme": MessageLookupByLibrary.simpleMessage("Change Theme"),
     "chat_teacher": MessageLookupByLibrary.simpleMessage("Chat with Teacher"),
+    "childDetails": MessageLookupByLibrary.simpleMessage("Child Details"),
     "childName": MessageLookupByLibrary.simpleMessage("Child\'s Name"),
     "children": MessageLookupByLibrary.simpleMessage("Children"),
     "childrenList": MessageLookupByLibrary.simpleMessage("Children List "),
@@ -83,11 +85,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "Developmental History - Pregnancy",
     ),
     "diagnosis": MessageLookupByLibrary.simpleMessage("Diagnosis"),
+    "diagnosisDetails": MessageLookupByLibrary.simpleMessage(
+      "Diagnosis Details",
+    ),
     "digestive": MessageLookupByLibrary.simpleMessage("Digestive System"),
     "direct_communication": MessageLookupByLibrary.simpleMessage(
       "Direct communication channel",
     ),
     "doctorCode": MessageLookupByLibrary.simpleMessage(" الكود "),
+    "doctorInformation": MessageLookupByLibrary.simpleMessage(
+      "Doctor Information",
+    ),
+    "doctorName": MessageLookupByLibrary.simpleMessage("Doctor Name"),
+    "doctorPhone": MessageLookupByLibrary.simpleMessage("Doctor Phone"),
     "dont_have_account": MessageLookupByLibrary.simpleMessage(
       "Don\'t have an account?",
     ),
@@ -121,6 +131,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "familyRelationship": MessageLookupByLibrary.simpleMessage(
       "Family Relationship",
     ),
+    "fatherOccupation": MessageLookupByLibrary.simpleMessage(
+      "Father Occupation",
+    ),
     "fathersOccupation": MessageLookupByLibrary.simpleMessage(
       "Father\'s Occupation",
     ),
@@ -128,6 +141,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "First-Year Growth",
     ),
     "forgot_password": MessageLookupByLibrary.simpleMessage("Forgot Password"),
+    "gender": MessageLookupByLibrary.simpleMessage("Gender"),
     "global_chat": MessageLookupByLibrary.simpleMessage("Global Chat"),
     "goalProgress": MessageLookupByLibrary.simpleMessage("Goal Progress"),
     "goalUpdated": MessageLookupByLibrary.simpleMessage("Goal updated for  "),
@@ -168,6 +182,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "monthlyReportGenerated": MessageLookupByLibrary.simpleMessage(
       "Monthly report generated",
     ),
+    "motherAge": MessageLookupByLibrary.simpleMessage("Mother Age"),
+    "motherDiseasesDuringPregnancy": MessageLookupByLibrary.simpleMessage(
+      "Mother Diseases During Pregnancy",
+    ),
+    "motherNature": MessageLookupByLibrary.simpleMessage("Mother Nature"),
+    "motherOccupation": MessageLookupByLibrary.simpleMessage(
+      "Mother Occupation",
+    ),
+    "motherStressDuringPregnancy": MessageLookupByLibrary.simpleMessage(
+      "Mother Stress During Pregnancy",
+    ),
     "mothersAge": MessageLookupByLibrary.simpleMessage("Mother\'s Age"),
     "mothersDiseasesDuringPregnancy": MessageLookupByLibrary.simpleMessage(
       "Mother\'s Diseases During Pregnancy",
@@ -192,6 +217,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "overview": MessageLookupByLibrary.simpleMessage("Overview"),
     "palate": MessageLookupByLibrary.simpleMessage("Palate"),
     "parentAbsence": MessageLookupByLibrary.simpleMessage("Parent Absence"),
+    "parentPhone": MessageLookupByLibrary.simpleMessage("Parent Phone"),
     "parent_code": MessageLookupByLibrary.simpleMessage("Parent Code"),
     "parents": MessageLookupByLibrary.simpleMessage("Parents"),
     "parentsContact": MessageLookupByLibrary.simpleMessage(
@@ -200,11 +226,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "parentsRelationship": MessageLookupByLibrary.simpleMessage(
       "Parents\' Relationship",
     ),
+    "period": MessageLookupByLibrary.simpleMessage("Period"),
     "personalInfo": MessageLookupByLibrary.simpleMessage(
       "Personal Information",
     ),
     "pharynx": MessageLookupByLibrary.simpleMessage("Pharynx"),
     "phone": MessageLookupByLibrary.simpleMessage("Phone Number"),
+    "postBirth": MessageLookupByLibrary.simpleMessage("Post-Birth"),
     "postBirthInformation": MessageLookupByLibrary.simpleMessage(
       "Post-Birth Information",
     ),
@@ -212,6 +240,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Pregnancy Complications",
     ),
     "pregnancyNature": MessageLookupByLibrary.simpleMessage("Pregnancy Nature"),
+    "pregnancyPhase": MessageLookupByLibrary.simpleMessage(
+      "Developmental History - Pregnancy Phase",
+    ),
+    "printReport": MessageLookupByLibrary.simpleMessage("Print Report"),
     "profilePage": MessageLookupByLibrary.simpleMessage("Profile"),
     "progress": MessageLookupByLibrary.simpleMessage("Progress"),
     "progress_overview": MessageLookupByLibrary.simpleMessage(
@@ -238,6 +270,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "schedule_sessions": MessageLookupByLibrary.simpleMessage(
       "Schedule Sessions",
     ),
+    "school": MessageLookupByLibrary.simpleMessage("School"),
     "schoolCollege": MessageLookupByLibrary.simpleMessage("School/College"),
     "selectGoals": MessageLookupByLibrary.simpleMessage("Select Goals"),
     "sessionAnalysis": MessageLookupByLibrary.simpleMessage("Session Analysis"),

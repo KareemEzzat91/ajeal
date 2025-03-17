@@ -1,5 +1,6 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/add_child_cubit.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenSelectGooals/GoalDetailScreen.dart';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/AllDetailsScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/DailyNotesScreen/DailyNotesScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/SessionDetailScreen.dart';
 import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
@@ -89,8 +90,9 @@ class ChildDetailScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+
             _buildHeaderSection(),
-            _buildInfoSection(theme),
+            _buildInfoSection(theme,context),
             _buildSessionsSection(context),
             _buildGoalsSection(context),
             _buildProgressSection(theme.primaryColor),
@@ -128,7 +130,7 @@ class ChildDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoSection(theme) {
+  Widget _buildInfoSection(theme,context ) {
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
@@ -161,6 +163,16 @@ class ChildDetailScreen extends StatelessWidget {
             "تاريخ النهاية",
             "${child.endDate.year}-${child.endDate.month}-${child.endDate.day}",
           ),
+          const Divider(height: 24),
+          GestureDetector(
+            onTap: (){ Navigator.push(context , MaterialPageRoute(builder: (context )=>AllDetailsScreen(child)));},
+            child: _buildInfoRow(
+              Icons.align_horizontal_left,
+              "باقي التفاصيل ",
+              "اضغط هنا "
+            ),
+          ),
+
         ],
       ),
     );

@@ -1409,6 +1409,161 @@ class S {
   String get doctorCode {
     return Intl.message(' الكود ', name: 'doctorCode', desc: '', args: []);
   }
+
+  /// `Child Details`
+  String get childDetails {
+    return Intl.message(
+      'Child Details',
+      name: 'childDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Period`
+  String get period {
+    return Intl.message('Period', name: 'period', desc: '', args: []);
+  }
+
+  /// `Gender`
+  String get gender {
+    return Intl.message('Gender', name: 'gender', desc: '', args: []);
+  }
+
+  /// `School`
+  String get school {
+    return Intl.message('School', name: 'school', desc: '', args: []);
+  }
+
+  /// `Parent Phone`
+  String get parentPhone {
+    return Intl.message(
+      'Parent Phone',
+      name: 'parentPhone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Father Occupation`
+  String get fatherOccupation {
+    return Intl.message(
+      'Father Occupation',
+      name: 'fatherOccupation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mother Occupation`
+  String get motherOccupation {
+    return Intl.message(
+      'Mother Occupation',
+      name: 'motherOccupation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mother Age`
+  String get motherAge {
+    return Intl.message('Mother Age', name: 'motherAge', desc: '', args: []);
+  }
+
+  /// `Mother Nature`
+  String get motherNature {
+    return Intl.message(
+      'Mother Nature',
+      name: 'motherNature',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Developmental History - Pregnancy Phase`
+  String get pregnancyPhase {
+    return Intl.message(
+      'Developmental History - Pregnancy Phase',
+      name: 'pregnancyPhase',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mother Diseases During Pregnancy`
+  String get motherDiseasesDuringPregnancy {
+    return Intl.message(
+      'Mother Diseases During Pregnancy',
+      name: 'motherDiseasesDuringPregnancy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mother Stress During Pregnancy`
+  String get motherStressDuringPregnancy {
+    return Intl.message(
+      'Mother Stress During Pregnancy',
+      name: 'motherStressDuringPregnancy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Birth Phase`
+  String get birthPhase {
+    return Intl.message('Birth Phase', name: 'birthPhase', desc: '', args: []);
+  }
+
+  /// `Post-Birth`
+  String get postBirth {
+    return Intl.message('Post-Birth', name: 'postBirth', desc: '', args: []);
+  }
+
+  /// `Diagnosis Details`
+  String get diagnosisDetails {
+    return Intl.message(
+      'Diagnosis Details',
+      name: 'diagnosisDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Doctor Information`
+  String get doctorInformation {
+    return Intl.message(
+      'Doctor Information',
+      name: 'doctorInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Doctor Name`
+  String get doctorName {
+    return Intl.message('Doctor Name', name: 'doctorName', desc: '', args: []);
+  }
+
+  /// `Doctor Phone`
+  String get doctorPhone {
+    return Intl.message(
+      'Doctor Phone',
+      name: 'doctorPhone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Print Report`
+  String get printReport {
+    return Intl.message(
+      'Print Report',
+      name: 'printReport',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
