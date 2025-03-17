@@ -11,6 +11,7 @@ class Child extends Equatable {
   final DateTime endDate;
   final String period;
   final String parentPhone;
+  final String parentPhoneNumber;
   final String notes;
   final String school;
   final String residence;
@@ -110,6 +111,7 @@ class Child extends Equatable {
     required this.endDate,
     required this.period,
     required this.parentPhone,
+    required this.parentPhoneNumber,
     required this.notes,
     required this.school,
     required this.residence,
@@ -212,6 +214,7 @@ class Child extends Equatable {
       'endDate': endDate.toIso8601String(),
       'period': period,
       'parentPhone': parentPhone,
+      'parentPhoneNumber': parentPhoneNumber,
       'notes': notes,
       'school': school,
       'residence': residence,
@@ -395,6 +398,7 @@ class Child extends Equatable {
         parentPhone: json['parentPhone'] ??
             json['parentOccupation'] ??
             '', // Handle legacy data
+        parentPhoneNumber: json["parentPhoneNumber"],
         notes: json['notes'] ?? '',
         school: json['school'] ?? '',
         residence: json['residence'] ?? '',
@@ -497,7 +501,7 @@ class Child extends Equatable {
         startDate: DateTime.now(),
         endDate: DateTime.now().add(const Duration(days: 30)),
         period: '',
-        parentPhone: '',
+        parentPhone: '',parentPhoneNumber: "",
         notes: 'Error loading data: $e',
         school: '',
         residence: '',
@@ -578,6 +582,7 @@ class Child extends Equatable {
     DateTime? endDate,
     String? period,
     String? parentPhone,
+    String? parentPhoneNumber,
     String? notes,
     String? school,
     String? residence,
@@ -650,6 +655,7 @@ class Child extends Equatable {
       endDate: endDate ?? this.endDate,
       period: period ?? this.period,
       parentPhone: parentPhone ?? this.parentPhone,
+      parentPhoneNumber: parentPhoneNumber ?? this.parentPhoneNumber,
       notes: notes ?? this.notes,
       school: school ?? this.school,
       residence: residence ?? this.residence,

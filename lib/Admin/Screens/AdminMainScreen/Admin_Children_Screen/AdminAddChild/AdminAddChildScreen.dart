@@ -2,6 +2,8 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminA
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenSelectGooals/AdminSelectGooals.dart';
 import 'package:ajeal/Admin/models/goals_model/Goals.dart';
 import 'package:ajeal/generated/l10n.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -211,7 +213,7 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                   );
                 },
               );
-            } else if (state is AddScuccesState) {
+            } else if (state is AddSuccessState) {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -245,7 +247,7 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    theme.primaryColor.withOpacity(0.1),
+                    theme.primaryColor,
                     Colors.white,
                   ],
                 ),
@@ -315,8 +317,8 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                                 icon: Icons.phone,
                                 keyboardType: TextInputType.phone,
                                 validator: (val) {
-                                  if (val!.length != 13) {
-                                    return "the Phone number must be like +20xxxxxxxxxx";
+                                  if (val!.length != 12) {
+                                    return "the Phone number must be like 20xxxxxxxxxx";
                                   } //'+
                                   return null;
                                 }),
@@ -941,9 +943,21 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
     );
   }
 
-  void _handleSave(AddChildCubit bloc, BuildContext context) {
+  void _handleSave(AddChildCubit bloc, BuildContext context) async{
     if (!_formKey.currentState!.validate()) return;
+    if (! await checkNumber(parentPhoneController.text)){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('The Parent Phone number already exist Please Change The name '),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
 
+
+
+
+    }
     if (selectedItems.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -963,7 +977,8 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
       startDate: startDate ?? DateTime.now(),
       endDate: endDate ?? DateTime.now(),
       period: periodController.text,
-      parentPhone: parentPhoneController.text, // Fixed parameter name
+      parentPhone: parentPhoneController.text+nameController.text, // Fixed parameter name//number+ name Likecode
+      parentPhoneNumber:parentPhoneController.text,//Only Number
       notes: notesController.text,
       school: schoolController.text,
       residence: residenceController.text,
@@ -1034,4 +1049,27 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
       diagnosis: diagnosisController.text,
     );
   }
-}
+  Future<bool> checkNumber(String phoneNumber) async {
+    try {
+      // Get current user ID
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+      if (uid == null) {
+        throw Exception("User not authenticated");
+      }
+
+      // Check if a child document with this phone number exists
+      final childSnapshot = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .collection("children")
+          .doc(phoneNumber)
+          .get();
+
+      // Return false if document exists (number is already used)
+      // Return true if document doesn't exist (number is available)
+      return !childSnapshot.exists;
+    } catch (e) {
+      // In case of error, assume number might be in use for safety
+      return false;
+    }
+  }}

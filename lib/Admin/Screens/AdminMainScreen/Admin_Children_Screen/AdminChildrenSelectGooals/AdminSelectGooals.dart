@@ -83,12 +83,12 @@ class AdminSelectGoals extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
+              color: Colors.grey,
               spreadRadius: 2,
               blurRadius: 5,
-              offset: const Offset(0, 3),
+              offset: Offset(0, 3),
             ),
           ],
         ),
@@ -155,7 +155,7 @@ class AdminSelectGoals extends StatelessWidget {
                       return ElevatedButton.icon(
                         onPressed: isSelected || (!isSelected && isMaxReached)
                             ? null
-                            : () => cubit.AddGoal(goal, phone, context),
+                            : () => cubit.addGoal(goal, phone, context),
                         icon: Icon(isSelected
                             ? Icons.check_circle
                             : Icons.add_circle_outline),

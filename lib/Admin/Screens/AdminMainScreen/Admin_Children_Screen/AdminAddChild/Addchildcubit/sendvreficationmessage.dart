@@ -21,7 +21,8 @@ void sendWhatsAppMessage(
       options: Options(
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}),
     );
-
+    _launchUrl("https://wa.me/<+$parentPhone>?text=لقد تم تسجيلك بنجاح الاسم$name "
+        "الكود الخاص بالمعلم $adminCode ");
     print('✅ Message sent successfully: ${response.data}');
   } catch (e) {
 

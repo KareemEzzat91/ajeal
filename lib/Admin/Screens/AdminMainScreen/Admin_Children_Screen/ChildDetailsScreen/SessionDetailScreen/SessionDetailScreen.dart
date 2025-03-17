@@ -113,6 +113,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       }
 
       await userRef.update({'scheduleSesoins': currentScheduleSesoins});
+      await FirebaseFirestore.instance.collection("Children").doc(widget.childId).update({'scheduleSesoins': currentScheduleSesoins});
       _showSuccessDialog();
     } catch (e) {
       _showErrorDialog("حدث خطأ أثناء الحفظ: $e");

@@ -27,7 +27,7 @@ class ChildDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AdminId = FirebaseAuth.instance.currentUser?.uid;
+    final String? adminId = FirebaseAuth.instance.currentUser?.uid;
     final theme = Theme.of(context);
 
     return BlocProvider(
@@ -55,8 +55,8 @@ class ChildDetailScreen extends StatelessWidget {
               MaterialPageRoute(
                 builder: (c) => ChatScreen(
                   role: "doctor",
-                  chatId: AdminId! + child.parentPhone,
-                  doctorId: AdminId,
+                  chatId: adminId! + child.parentPhone,
+                  doctorId: adminId,
                   parentId: child.parentPhone,
                   isParent: false,
                 ),
@@ -135,9 +135,9 @@ class ChildDetailScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.primaryColor,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey,
             spreadRadius: 1,
             blurRadius: 10,
           ),
@@ -413,9 +413,9 @@ class ChildDetailScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey,
             spreadRadius: 1,
             blurRadius: 10,
           ),

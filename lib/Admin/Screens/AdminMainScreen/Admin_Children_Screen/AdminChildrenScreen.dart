@@ -117,9 +117,9 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
-        border: Border(
+        border: const Border(
           bottom: BorderSide(
-            color: AppColors.textSecondary.withOpacity(0.1),
+            color: AppColors.textSecondary,
           ),
         ),
       ),
@@ -151,7 +151,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
           _filterAnimationController.forward(from: 0);
         },
         backgroundColor: AppColors.surface,
-        selectedColor: AppColors.primary.withOpacity(0.1),
+        selectedColor: AppColors.primary,
         labelStyle: TextStyle(
           color: isSelected ? AppColors.primary : AppColors.textSecondary,
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
@@ -161,7 +161,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
           side: BorderSide(
             color: isSelected
                 ? AppColors.primary
-                : AppColors.textSecondary.withOpacity(0.2),
+                : AppColors.textSecondary,
           ),
         ),
       ),
@@ -277,9 +277,9 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
       ),
-      itemCount: bloc.Children.length,
+      itemCount: bloc.children.length,
       itemBuilder: (context, index) {
-        final map = bloc.Children[index];
+        final map = bloc.children[index];
         final id = map.keys.first;
         final child = map[id]!;
         return ChildGridCard(
@@ -293,9 +293,9 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
   Widget _buildChildrenList(AddChildCubit bloc) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: bloc.Children.length,
+      itemCount: bloc.children.length,
       itemBuilder: (context, index) {
-        final map = bloc.Children[index];
+        final map = bloc.children[index];
         final id = map.keys.first;
         final child = map[id]!;
         return ChildCard(
@@ -377,11 +377,11 @@ class ChildCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+        boxShadow: const [
+         BoxShadow(
+            color: Colors.black,
             blurRadius: 16,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -400,7 +400,7 @@ class ChildCard extends StatelessWidget {
                     _buildAvatar(),
                     const SizedBox(width: 16),
                     Expanded(child: _buildChildInfo()),
-                    _buildMoreButton(context),
+                    _buildMoreButton(context,child.parentPhone),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -422,7 +422,7 @@ class ChildCard extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: AppColors.primary.withOpacity(0.1),
+            color: AppColors.primary,
             width: 3,
           ),
         ),
@@ -481,9 +481,9 @@ class ChildCard extends StatelessWidget {
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: LinearProgressIndicator(
+                child: const LinearProgressIndicator(
                   value: 0.5,
-                  backgroundColor: AppColors.primary.withOpacity(0.1),
+                  backgroundColor: AppColors.primary,
                   color: AppColors.primary,
                   minHeight: 8,
                 ),
@@ -512,16 +512,10 @@ class ChildCard extends StatelessWidget {
     );
   }
 
-  Widget _buildMoreButton(BuildContext context) {
+  Widget _buildMoreButton(BuildContext context, String parentPhone) {
     return PullDownButton(
       itemBuilder: (context) => [
-        PullDownMenuItem(
-          onTap: () {},
-          title: 'Edit',
-          icon: CupertinoIcons.pencil,
-          iconColor: AppColors.primary,
-        ),
-        PullDownMenuItem(
+         PullDownMenuItem(
           onTap: () async {
             // Controllers for doctorName and doctorId
             TextEditingController doctorNameController =
@@ -637,7 +631,26 @@ class ChildCard extends StatelessWidget {
           icon: CupertinoIcons.arrow_2_circlepath,
         ),
         PullDownMenuItem(
-          onTap: () {},
+          onTap: () {
+
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.confirm,
+              text: 'Do you want to Remove ${child.name}',
+              confirmBtnText: 'Yes',
+              cancelBtnText: 'No',
+              confirmBtnColor: Colors.green,
+              onConfirmBtnTap: (){
+                try {
+
+                  FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("children").doc(parentPhone).delete();
+
+                }catch(e){
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("error")));
+                }
+              }
+            );
+          },
           title: 'Remove',
           icon: CupertinoIcons.delete,
           iconColor: AppColors.error,
@@ -672,11 +685,11 @@ class ChildGridCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black ,
             blurRadius: 16,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -700,7 +713,7 @@ class ChildGridCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: AppColors.primary.withOpacity(0.1),
+                        color: AppColors.primary,
                         width: 2,
                       ),
                     ),
@@ -755,9 +768,9 @@ class ChildGridCard extends StatelessWidget {
                     Expanded(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: LinearProgressIndicator(
+                        child: const LinearProgressIndicator(
                           value: 0.5,
-                          backgroundColor: AppColors.primary.withOpacity(0.1),
+                          backgroundColor: AppColors.primary,
                           color: AppColors.primary,
                           minHeight: 8,
                         ),

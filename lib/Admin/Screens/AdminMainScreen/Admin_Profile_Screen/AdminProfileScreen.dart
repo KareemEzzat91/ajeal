@@ -3,6 +3,7 @@ import 'package:ajeal/generated/l10n.dart';
 import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdminProfileScreen extends StatelessWidget {
@@ -25,7 +26,9 @@ class AdminProfileScreen extends StatelessWidget {
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
+               centerTitle: true,
               title: Text(S.of(context).profilePage,
+
                   style: const TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold)),
               background: Container(
@@ -55,32 +58,7 @@ class AdminProfileScreen extends StatelessWidget {
                              child:  Text(doctorName[0],style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 40), ),
                             ),
                           ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    spreadRadius: 2,
-                                    blurRadius: 4,
-                                  ),
-                                ],
-                              ),
-                              child: IconButton(
-                                icon: const Icon(Icons.camera_alt,
-                                    size: 20, color: Colors.blue),
-                                onPressed: () {
-                                  _showImagePickerDialog(context);
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
+                         ],
                       ),
                     ],
                   ),
@@ -99,21 +77,23 @@ class AdminProfileScreen extends StatelessWidget {
                   _buildSection(
                     S.of(context).personalInfo,
                     [
-                      _buildProfileCard(
+                      _buildProfileCard(context,
                         icon: Icons.person,
                         title: S.of(context).name,
-                        value: doctorName ?? "محمد", onEdit: () {  },
+                        value: doctorName
 
                       ),
                       _buildProfileCard(
+                        context,
                         icon: Icons.email,
                         title: S.of(context).email,
-                        value: currentUser?.email ?? "admin@gmail.com", onEdit: () {  },
+                        value: currentUser?.email ?? "admin@gmail.com",
                        ),
                       _buildProfileCard(
+                        context,
                         icon: Icons.phone,
                         title: S.of(context).doctorCode,
-                        value: doctorId, onEdit: () {  },
+                        value: doctorId,
                        ),
                     ],
                   ),
@@ -178,11 +158,10 @@ class AdminProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileCard({
+  Widget _buildProfileCard(context,{
     required IconData icon,
     required String title,
     required String value,
-    required VoidCallback onEdit,
   }) {
     return Card(
       elevation: 2,
@@ -191,14 +170,18 @@ class AdminProfileScreen extends StatelessWidget {
       child: ListTile(
         leading: Container(
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.1),
+          decoration: const BoxDecoration(
+            color: Colors.blue,
             shape: BoxShape.circle,
           ),
           child: Icon(icon, color: Colors.blue),
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
         subtitle: Text(value, style: const TextStyle(color: Colors.blue)),
+        trailing: IconButton(onPressed: (){
+          Clipboard.setData(ClipboardData(text: value));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("تم نسخ $title")));
+         }, icon: const Icon(Icons.copy)),
        ),
     );
   }
@@ -214,7 +197,7 @@ class AdminProfileScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.2),
+            color: color,
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),
@@ -247,67 +230,6 @@ class AdminProfileScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  void _showImagePickerDialog(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            leading: const Icon(Icons.photo_library),
-            title: const Text('اختيار من المعرض'),
-            onTap: () {
-              // Implement gallery picker
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.camera_alt),
-            title: const Text('التقاط صورة'),
-            onTap: () {
-              // Implement camera picker
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showEditDialog(
-      BuildContext context, String field, String currentValue) {
-    final controller = TextEditingController(text: currentValue);
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('تعديل $field'),
-        content: TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            labelText: field,
-            border: const OutlineInputBorder(),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Implement save logic
-              Navigator.pop(context);
-            },
-            child: const Text('حفظ'),
-          ),
-        ],
       ),
     );
   }

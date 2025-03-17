@@ -135,6 +135,7 @@ class _DailyNotesScreenState extends State<DailyNotesScreen> {
               .doc(widget.childID),
           {"dailyNotes": notesData},
         );
+        batch.update(FirebaseFirestore.instance.collection("Children").doc(widget.childID),  {"dailyNotes": notesData},);
       }
 
       await batch.commit();
