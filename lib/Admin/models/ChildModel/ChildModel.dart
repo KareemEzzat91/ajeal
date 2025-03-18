@@ -96,7 +96,7 @@ class Child extends Equatable {
   // Doctor Information
   String doctorId;
   String doctorName;
-  final String doctorPhone;
+   String doctorPhone;
 
   // Progress Tracking
   final List<Map<String, dynamic>> dailyNotes;

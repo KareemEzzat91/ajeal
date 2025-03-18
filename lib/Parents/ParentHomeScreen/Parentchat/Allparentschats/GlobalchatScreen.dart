@@ -135,7 +135,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
         child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('global_chat')
-              .doc('messages')
+              .doc(widget.doctorId)
               .collection('messages')
               .orderBy('timestamp', descending: false)
               .snapshots(),
@@ -273,11 +273,11 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                   bottomLeft: isMyMessage ? null : const Radius.circular(0),
                   bottomRight: isMyMessage ? const Radius.circular(0) : null,
                 ),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black,
                     blurRadius: 5,
-                    offset: const Offset(0, 2),
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),
@@ -315,7 +315,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                     style: TextStyle(
                       fontSize: 11,
                       color: isDoctorMessage || isMyMessage
-                          ? Colors.white.withOpacity(0.7)
+                          ? Colors.white
                           : Colors.grey[600],
                     ),
                   ),
@@ -345,7 +345,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
         child: isDoctorMessage
             ? const CircleAvatar(
                 radius: 14,
-                backgroundImage: AssetImage('assets/images/Mohsen.jpg'),
+                backgroundImage: AssetImage('assets/images/man-teacher-with-chalkboard-on-blue-background-vector-33671420.jpg'),
               )
             : Icon(
                 Icons.person,
@@ -375,12 +375,12 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey,
             spreadRadius: 1,
             blurRadius: 10,
-            offset: const Offset(0, -3),
+            offset:  Offset(0, -3),
           ),
         ],
       ),
@@ -419,12 +419,12 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                   colors: [Colors.blue[700]!, Colors.blue[500]!],
                 ),
                 shape: BoxShape.circle,
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
-                    color: Colors.blue.withOpacity(0.3),
+                    color: Colors.blue ,
                     spreadRadius: 1,
                     blurRadius: 5,
-                    offset: const Offset(0, 2),
+                    offset:  Offset(0, 2),
                   ),
                 ],
               ),
@@ -442,10 +442,10 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
   void _sendMessage() async {
     if (_messageController.text.trim().isNotEmpty) {
       final messageText = _messageController.text;
-
+// update to send the message to doctor only and his patient
       await FirebaseFirestore.instance
           .collection('global_chat')
-          .doc('messages')
+          .doc(widget.doctorId)
           .collection('messages')
           .add({
         'sender_id': widget.isparent ? widget.parentId : widget.doctorId,

@@ -8,7 +8,6 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 part 'add_child_state.dart';
 
@@ -23,6 +22,7 @@ class AddChildCubit extends Cubit<AddChildState> {
   static int id = 0;
   final Map<String, List<Goal>> selectedGoals = {}; // Used to store selected goals by parentPhone
   List<Map<String, Child>> children = []; // List of children with parentPhone as key
+  List<Map<String, Child>> Otherschildren = []; // List of children with parentPhone as key
   List<Map<String, dynamic>> scheduleSessions = [];
 
   // Tracking data
@@ -144,6 +144,38 @@ class AddChildCubit extends Cubit<AddChildState> {
         }
 
         return children;
+      }
+
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
+  Future<List<Map<String, Child>>> getAllChildrenFromOtherDoctors() async {
+    Otherschildren = [];
+
+    final userId = _currentUserId;
+    if (userId == null) {
+      return [];
+    }
+
+    try {
+      final userDoc = await _firestore.collection("users").doc(userId).get();
+
+      if (userDoc.exists) {
+        // Get all documents in the children collection
+        final childrenSnapshot = await _firestore
+            .collection("users")
+            .doc(userId)
+            .collection("OthersChildren")
+            .get();
+
+        for (var childDoc in childrenSnapshot.docs) {
+          final child = Child.fromJson(childDoc.data());
+          Otherschildren.add({childDoc.id: child});
+        }
+
+        return Otherschildren;
       }
 
       return [];
@@ -416,13 +448,3 @@ class AddChildCubit extends Cubit<AddChildState> {
   }
 }
 
-Future<void> _launchUrl(String url) async {
-  try {
-    final Uri url0 = Uri.parse(url); // Convert the string URL to a Uri
-    if (!await launchUrl(url0)) {
-      throw Exception('Could not launch $url0');
-    }
-  } catch (e) {
-    throw Exception('Could not launch $e');
-  }
-}

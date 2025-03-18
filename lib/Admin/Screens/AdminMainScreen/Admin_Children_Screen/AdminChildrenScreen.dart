@@ -80,7 +80,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
             Expanded(child: _buildBody(context.read<AddChildCubit>())),
           ],
         ),
-        floatingActionButton: _buildAnimatedFAB(context),
+        floatingActionButton: _currentFilter=="Others"?_buildAnimatedFAB(context,true): _buildAnimatedFAB(context,false),
       ),
     );
   }
@@ -128,7 +128,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
         child: Row(
           children: [
             _buildFilterChip('all', 'All'),
-            _buildFilterChip('active', 'Active'),
+            _buildFilterChip('Others', 'Others'),
             _buildFilterChip('completed', 'Completed'),
             _buildFilterChip('pending', 'Pending'),
           ],
@@ -168,9 +168,14 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
     );
   }
 
+ Future< List<Map<String, Child>>> getEmpty()async{
+    return[];
+  }
+
+
   Widget _buildBody(AddChildCubit bloc) {
     return FutureBuilder<List<Map<String, Child>>>(
-      future: bloc.getAllDataFromFirestore(),
+      future: _currentFilter=="Others" ?bloc.getAllChildrenFromOtherDoctors():_currentFilter=="completed"?getEmpty():bloc.getAllDataFromFirestore(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return _buildLoadingState();
@@ -247,8 +252,8 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
             color: Colors.grey[400],
           ),
           const SizedBox(height: 16),
-          Text(
-            "لا يوجد أطفال مسجلين بعد",
+         Text(
+           _currentFilter == "completed"?"لا يوجد فترة منتهية":"لا يوجد أطفال مسجلين بعد",
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -257,7 +262,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
           ),
           const SizedBox(height: 8),
           Text(
-            "اضغط على زر الإضافة لتسجيل طفل جديد",
+            _currentFilter == "completed"?"":  "اضغط على زر الإضافة لتسجيل طفل جديد",
             style: TextStyle(
               fontSize: 16,
               color: Colors.grey[600],
@@ -299,6 +304,8 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
         final id = map.keys.first;
         final child = map[id]!;
         return ChildCard(
+
+
           child: child,
           onTap: () => _navigateToDetails(context, child),
         ).animate().fadeIn(delay: (index * 100).ms).slideX(begin: 0.2, end: 0);
@@ -306,11 +313,11 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
     );
   }
 
-  Widget _buildAnimatedFAB(BuildContext context) {
+  Widget _buildAnimatedFAB(BuildContext context,bool isOthers) {
     return FloatingActionButton.extended(
       onPressed: () {
         _fabAnimationController.forward(from: 0);
-        Navigator.push(
+        isOthers?showCustomDialog(context):Navigator.push(
           context,
           MaterialPageRoute(
             builder: (c) => AdminAddChildScreen(
@@ -319,6 +326,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
             ),
           ),
         );
+
       },
       backgroundColor: AppColors.primary,
       elevation: 4,
@@ -326,9 +334,9 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
         borderRadius: BorderRadius.circular(16),
       ),
       icon: const Icon(Icons.add, color: Colors.white),
-      label: const Text(
-        'إضافة طفل',
-        style: TextStyle(
+      label:  Text(
+      isOthers? "اضافة طفل من دكتور اخر ": 'إضافة طفل جديد',
+        style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w600,
         ),
@@ -342,6 +350,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
         .then()
         .shake(hz: 4, curve: Curves.easeOut);
   }
+
 
   void _navigateToDetails(BuildContext context, Child child) {
     Navigator.push(
@@ -517,115 +526,8 @@ class ChildCard extends StatelessWidget {
       itemBuilder: (context) => [
          PullDownMenuItem(
           onTap: () async {
-            // Controllers for doctorName and doctorId
-            TextEditingController doctorNameController =
-                TextEditingController();
-            TextEditingController doctorIdController = TextEditingController();
 
-            // Show QuickAlert with two fields
-            QuickAlert.show(
-              context: context,
-              type: QuickAlertType.custom,
-              barrierDismissible: true,
-              confirmBtnText: 'Save',
-              customAsset: 'assets/images/giphy.gif',
-              widget: Column(
-                children: [
-                  // Field for Doctor Name
-                  TextFormField(
-                    controller: doctorNameController,
-                    decoration: const InputDecoration(
-                      alignLabelWithHint: true,
-                      hintText: 'Enter Doctor Name',
-                      prefixIcon: Icon(Icons.person_outline),
-                    ),
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.text,
-                  ),
-                  const SizedBox(height: 10), // Spacing between fields
-                  // Field for Doctor ID
-                  TextFormField(
-                    controller: doctorIdController,
-                    decoration: const InputDecoration(
-                      alignLabelWithHint: true,
-                      hintText: 'Enter Doctor ID',
-                      prefixIcon: Icon(Icons.numbers_outlined),
-                    ),
-                    textInputAction: TextInputAction.done,
-                    keyboardType: TextInputType.text,
-                  ),
-                ],
-              ),
-              onConfirmBtnTap: () async {
-                // Validate inputs
-                if (doctorNameController.text.isEmpty ||
-                    doctorIdController.text.isEmpty) {
-                  await QuickAlert.show(
-                    context: context,
-                    type: QuickAlertType.error,
-                    text: 'Please fill all fields',
-                  );
-                  return;
-                }
-
-                // Close the dialog
-                Navigator.pop(context);
-
-                // Show success message
-                await Future.delayed(const Duration(milliseconds: 500));
-                await QuickAlert.show(
-                  context: context,
-                  type: QuickAlertType.success,
-                  text:
-                      "Doctor '${doctorNameController.text}' has been assigned!",
-                );
-
-                // Save data to Firestore
-                try {
-                  final uid = FirebaseAuth.instance.currentUser!.uid;
-                  final doctorSnap = await FirebaseFirestore.instance
-                      .collection('Doctors')
-                      .doc(doctorIdController.text)
-                      .get();
-
-                  if (!doctorSnap.exists) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Doctor ID does not exist")),
-                    );
-                    return;
-                  }
-
-                  // Update child data
-                  child.doctorId = doctorIdController.text;
-                  child.doctorName = doctorNameController.text;
-
-                  // Save to Firestore
-                  await FirebaseFirestore.instance
-                      .collection("users")
-                      .doc(doctorSnap['Doctor_id'])
-                      .collection("children")
-                      .doc(child.parentPhone)
-                      .set(child.toMap());
-
-                  // Delete from current user's collection
-                  await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(uid)
-                      .collection("children")
-                      .doc(child.parentPhone)
-                      .delete();
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text("Child transferred successfully!")),
-                  );
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Error: $e")),
-                  );
-                }
-              },
-            );
+            showCustomDialog(context,child: child);
           },
           title: 'Transfer',
           icon: CupertinoIcons.arrow_2_circlepath,
@@ -798,4 +700,248 @@ class ChildGridCard extends StatelessWidget {
       ),
     );
   }
+}
+Future<dynamic> showCustomDialog(BuildContext context, {Child? child}) {
+  // Determine if we're handling an "Others" case or not
+  final bool isOthers = child == null;
+
+  // Initialize controllers with existing values if available
+  final TextEditingController doctorNameController = TextEditingController(
+  );
+
+  final TextEditingController doctorIdController = TextEditingController(
+  );
+
+  final TextEditingController childCodeController = TextEditingController();
+
+  // Form key for validation
+  final formKey = GlobalKey<FormState>();
+
+  return QuickAlert.show(
+    context: context,
+    type: QuickAlertType.custom,
+    barrierDismissible: true,
+    confirmBtnText: 'Save',
+    customAsset: 'assets/images/giphy.gif',
+    widget: Form(
+      key: formKey,
+      child: Column(
+        children: [
+          // Field for Doctor Name
+          if (!isOthers)
+            TextFormField(
+              controller: doctorNameController,
+              decoration: const InputDecoration(
+                alignLabelWithHint: true,
+                labelText: 'Doctor Name',
+                hintText: 'Enter Doctor Name',
+                prefixIcon: Icon(Icons.person_outline),
+              ),
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.text,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter doctor name';
+                }
+                return null;
+              },
+            ),
+
+          if (!isOthers) const SizedBox(height: 16),
+
+          // Field for Doctor ID
+          if (!isOthers)
+            TextFormField(
+              controller: doctorIdController,
+              decoration: const InputDecoration(
+                alignLabelWithHint: true,
+                labelText: 'Doctor ID',
+                hintText: 'Enter Doctor ID',
+                prefixIcon: Icon(Icons.numbers_outlined),
+              ),
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.text,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter doctor ID';
+                }
+                return null;
+              },
+            ),
+
+          if (isOthers) const SizedBox(height: 16),
+
+          // Field for Child Code
+          if (isOthers)
+            TextFormField(
+              controller: childCodeController,
+              decoration: const InputDecoration(
+                alignLabelWithHint: true,
+                labelText: 'Child Code',
+                hintText: 'Enter Child Code',
+                prefixIcon: Icon(Icons.numbers_outlined),
+              ),
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.text,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter child code';
+                }
+                return null;
+              },
+            ),
+        ],
+      ),
+    ),
+    onConfirmBtnTap: () async {
+      // Validate form
+      if (formKey.currentState?.validate() != true) {
+        return;
+      }
+
+      try {
+        if (isOthers) {
+          await _handleOthersCase(context, childCodeController.text);
+        } else {
+          await _handleDoctorAssignment(
+              context,
+              child,
+              doctorNameController.text,
+              doctorIdController.text
+          );
+        }
+      } catch (e) {
+        // Handle errors centrally
+        _showErrorMessage(context, e.toString());
+      }
+    },
+  );
+}
+
+// Handle the case where user is adding someone else's child
+Future<void> _handleOthersCase(BuildContext context, String childCode) async {
+  // Show loading indicator
+  _showLoadingDialog(context);
+
+  try {
+    final childSnap = await FirebaseFirestore.instance
+        .collection("Children")
+        .doc(childCode)
+        .get();
+
+    // Close loading dialog
+    Navigator.pop(context);
+
+    if (!childSnap.exists || childSnap.data() == null || childSnap.data()!.isEmpty) {
+      _showErrorMessage(context, 'Child code not found');
+      return;
+    }
+
+    final Child child = Child.fromJson(childSnap.data()!);
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .collection("OthersChildren")
+        .doc(child.parentPhone)
+        .set(child.toMap());
+
+    // Close dialog and show success message
+    Navigator.pop(context);
+    _showSuccessMessage(context, 'Child added successfully');
+
+  } catch (e) {
+    Navigator.pop(context); // Close loading dialog if open
+    _showErrorMessage(context, e.toString());
+  }
+}
+
+// Handle the case where a doctor is being assigned to a child
+Future<void> _handleDoctorAssignment(
+    BuildContext context,
+    Child child,
+    String doctorName,
+    String doctorId
+    ) async {
+  // Show loading indicator
+  _showLoadingDialog(context);
+
+  try {
+    final doctorSnap = await FirebaseFirestore.instance
+        .collection('Doctors')
+        .doc(doctorId)
+        .get();
+
+    // Close loading dialog
+    Navigator.pop(context);
+
+    if (!doctorSnap.exists) {
+      _showErrorMessage(context, 'Doctor ID does not exist');
+      return;
+    }
+
+    // Extract doctor's phone number (only digits) from doctorId or use a dedicated field
+    final String doctorPhone = doctorId.replaceAll(RegExp(r'[^0-9]'), '');
+
+    // Update child data
+    child.doctorId = doctorId;
+    child.doctorName = doctorName;
+    child.doctorPhone = doctorPhone;
+
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    // Save to doctor's collection
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(doctorSnap['Doctor_id'])
+        .collection("children")
+        .doc(child.parentPhone)
+        .set(child.toMap());
+
+    // Delete from current user's collection
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection("children")
+        .doc(child.parentPhone)
+        .delete();
+
+    // Close dialog and show success message
+    Navigator.pop(context);
+    _showSuccessMessage(
+        context,
+        "Child transferred to Dr. $doctorName successfully!"
+    );
+  } catch (e) {
+    Navigator.pop(context); // Close loading dialog if open
+    _showErrorMessage(context, e.toString());
+  }
+}
+
+// Helper methods to show dialog messages
+void _showLoadingDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => const Center(
+      child: CircularProgressIndicator(),
+    ),
+  );
+}
+
+void _showSuccessMessage(BuildContext context, String message) {
+  QuickAlert.show(
+    context: context,
+    type: QuickAlertType.success,
+    text: message,
+  );
+}
+
+void _showErrorMessage(BuildContext context, String error) {
+  QuickAlert.show(
+    context: context,
+    type: QuickAlertType.error,
+    text: 'Error: $error',
+  );
 }

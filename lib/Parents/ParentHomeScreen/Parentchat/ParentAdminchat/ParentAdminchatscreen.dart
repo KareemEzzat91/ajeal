@@ -160,7 +160,7 @@ class _ChatScreenState extends State<ChatScreen> {
               backgroundImage: isDoctor
                   ? const NetworkImage(
                       "https://img.freepik.com/premium-vector/parents-with-kids-avatars-characters_24877-24085.jpg")
-                  : const AssetImage("assets/images/Mohsen.jpg"),
+                  : const AssetImage("assets/images/man-teacher-with-chalkboard-on-blue-background-vector-33671420.jpg"),
             ),
           ),
           const SizedBox(width: 12),
@@ -452,11 +452,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   bottomRight:
                       isCurrentUserMessage ? const Radius.circular(0) : null,
                 ),
-                boxShadow: [
+                boxShadow:const  [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black,
                     blurRadius: 5,
-                    offset: const Offset(0, 2),
+                    offset:  Offset(0, 2),
                   ),
                 ],
               ),
@@ -483,7 +483,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         style: TextStyle(
                           fontSize: 11,
                           color: isCurrentUserMessage
-                              ? Colors.white.withOpacity(0.7)
+                              ? Colors.white
                               : Colors.grey[600],
                         ),
                       ),
@@ -492,7 +492,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         Icon(
                           message['read'] == true ? Icons.done_all : Icons.done,
                           size: 14,
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white,
                         ),
                       ],
                     ],
@@ -527,25 +527,20 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _buildMessageInput() {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey,
             spreadRadius: 1,
             blurRadius: 10,
-            offset: const Offset(0, -3),
+            offset: Offset(0, -3),
           ),
         ],
       ),
       child: SafeArea(
         child: Row(
           children: [
-            IconButton(
-              icon: const Icon(Icons.attach_file),
-              color: Colors.blue[700],
-              onPressed: _showAttachmentOptions,
-            ),
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -575,18 +570,18 @@ class _ChatScreenState extends State<ChatScreen> {
                   colors: [Colors.blue[700]!, Colors.blue[500]!],
                 ),
                 shape: BoxShape.circle,
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
-                    color: Colors.blue.withOpacity(0.3),
+                    color: Colors.blue,
                     spreadRadius: 1,
                     blurRadius: 5,
-                    offset: const Offset(0, 2),
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),
               child: IconButton(
-                icon: Icon(
-                  _isTyping ? Icons.send : Icons.mic,
+                icon: const Icon(
+                   Icons.send ,
                   color: Colors.white,
                 ),
                 onPressed: _isTyping ? sendMessage : _handleVoiceMessage,
@@ -598,44 +593,8 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Future<void> _showAttachmentOptions() async {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.image),
-                title: const Text('Photo'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _handleImageAttachment();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.file_copy),
-                title: const Text('Document'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _handleDocumentAttachment();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
-  Future<void> _handleImageAttachment() async {
-    // Implement image picker functionality
-  }
 
-  Future<void> _handleDocumentAttachment() async {
-    // Implement document picker functionality
-  }
 
   Future<void> _handleVoiceMessage() async {
     // Implement voice recording functionality

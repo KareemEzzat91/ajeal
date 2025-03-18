@@ -18,7 +18,6 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
   final _admincodeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
-  bool _isPasswordVisible = false;
 
   Future<void> _launchUrl(String url) async {
     try {
@@ -38,10 +37,12 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
 
     try {
       final parentCode = _parentCodeController.text.trim();
-      final adminID = _admincodeController.text.trim();
 
       if (parentCode.isNotEmpty) {
-
+        final childSnapshot = await FirebaseFirestore.instance.collection("Children").doc(parentCode).get();
+        if (childSnapshot.exists){
+          final Child  child = Child.fromJson(childSnapshot.data()!);
+         final adminID = child.doctorId;
         final doctorSnapshot = await FirebaseFirestore.instance
             .collection("Doctors")
             .doc(adminID)
@@ -49,15 +50,8 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
 
         if (doctorSnapshot.exists && doctorSnapshot.data()!.isNotEmpty) {
           final doctorKey = doctorSnapshot.data()!['Doctor_id'];
-          final userDoc = await FirebaseFirestore.instance
-              .collection("users")
-              .doc(doctorKey)
-              .collection("children")
-              .doc(parentCode)
-              .get();
 
-          if (userDoc.exists && userDoc.data()!.isNotEmpty) {
-            final child = Child.fromJson(userDoc.data()!);
+          if (doctorKey !=null) {
             saveToken(parentCode, child, doctorKey);
             Navigator.pushAndRemoveUntil(
                 context,
@@ -76,6 +70,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
           _showErrorSnackBar("Invalid admin code. Please try again.");
         }
       }
+          }
     } catch (e) {
       _showErrorSnackBar(
           "An error occurred. Please try again later.${e.toString()}");
@@ -199,7 +194,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
             return null;
           },
         ),
-        const SizedBox(height: 16),
+ /*       const SizedBox(height: 16),
         TextFormField(
           controller: _admincodeController,
           obscureText: !_isPasswordVisible,
@@ -235,7 +230,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
             }
             return null;
           },
-        ),
+        ),*/
       ],
     );
   }
