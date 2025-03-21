@@ -49,9 +49,9 @@ class _SignupScreenState extends State<SignupScreen> {
         listener: (context, state) {
           if (state is SignFaliureState) {
             Get.snackbar(
-              "Error",
+              "Validation ",
               state.error,
-              backgroundColor: Colors.red.withOpacity(0.9),
+              backgroundColor: Colors.red,
               colorText: Colors.white,
               borderRadius: 10,
               margin: const EdgeInsets.all(10),

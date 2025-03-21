@@ -22,7 +22,7 @@ class AddChildCubit extends Cubit<AddChildState> {
   static int id = 0;
   final Map<String, List<Goal>> selectedGoals = {}; // Used to store selected goals by parentPhone
   List<Map<String, Child>> children = []; // List of children with parentPhone as key
-  List<Map<String, Child>> Otherschildren = []; // List of children with parentPhone as key
+  List<Map<String, Child>> othersChildren = []; // List of children with parentPhone as key
   List<Map<String, dynamic>> scheduleSessions = [];
 
   // Tracking data
@@ -152,38 +152,104 @@ class AddChildCubit extends Cubit<AddChildState> {
     }
   }
   Future<List<Map<String, Child>>> getAllChildrenFromOtherDoctors() async {
-    Otherschildren = [];
-
+    othersChildren = [];
     final userId = _currentUserId;
+
     if (userId == null) {
       return [];
     }
 
     try {
       final userDoc = await _firestore.collection("users").doc(userId).get();
-
-      if (userDoc.exists) {
-        // Get all documents in the children collection
-        final childrenSnapshot = await _firestore
-            .collection("users")
-            .doc(userId)
-            .collection("OthersChildren")
-            .get();
-
-        for (var childDoc in childrenSnapshot.docs) {
-          final child = Child.fromJson(childDoc.data());
-          Otherschildren.add({childDoc.id: child});
-        }
-
-        return Otherschildren;
+      if (!userDoc.exists) {
+        return [];
       }
 
-      return [];
+      // جلب كل الوثائق من OthersChildren
+      final othersChildrenSnapshot = await _firestore
+          .collection("users")
+          .doc(userId)
+          .collection("OthersChildren")
+          .get();
+
+      if (othersChildrenSnapshot.docs.isEmpty) {
+        return [];
+      }
+
+      // استخراج أرقام هواتف الآباء مباشرة من doc.id
+      List<String> parentPhones = othersChildrenSnapshot.docs.map((doc) => doc.id).toList();
+
+      // تقسيم القائمة إلى مجموعات لا تزيد عن 10 عناصر لكل استعلام
+      List<Future<QuerySnapshot>> futures = [];
+      for (int i = 0; i < parentPhones.length; i += 10) {
+        int end = (i + 10 < parentPhones.length) ? i + 10 : parentPhones.length;
+        List<String> chunk = parentPhones.sublist(i, end);
+
+        // استخدام FieldPath.documentId للبحث عن المستندات مباشرةً عبر معرّفها (parentPhone)
+        futures.add(
+          _firestore.collection("Children").where(FieldPath.documentId, whereIn: chunk).get(),
+        );
+
+    }
+
+
+      // تنفيذ كل الاستعلامات بالتوازي
+      List<QuerySnapshot> snapshots = await Future.wait(futures);
+      /*
+      * Every element in query return like list of documents of Children
+      *
+      * */
+
+      // تخزين البيانات المسترجعة في خريطة
+      Map<String, Child> mainChildrenMap = {};
+      for (var snapshot in snapshots) {
+        for (var doc in snapshot.docs) {
+           mainChildrenMap[doc.id] = Child.fromJson(doc.data()as Map<String,dynamic>);
+        }
+      }
+
+      // إنشاء Batch للكتابة بكفاءة عالية
+      WriteBatch batch = _firestore.batch();
+
+      // تحديث البيانات داخل OthersChildren
+      for (var childDoc in othersChildrenSnapshot.docs) {
+        final String parentPhone = childDoc.id;
+
+        if (mainChildrenMap.containsKey(parentPhone)) {
+          // استبدال البيانات إذا كان الطفل موجودًا في المجموعة الرئيسية
+          final updatedChild = mainChildrenMap[parentPhone]!;
+          othersChildren.add({parentPhone: updatedChild});
+
+          batch.set(
+            _firestore.collection("users").doc(userId).collection("OthersChildren").doc(parentPhone),
+            updatedChild.toMap(),
+          );
+        } else {
+          // الاحتفاظ بالبيانات القديمة إذا لم يتم العثور على الطفل
+          final existingChild = Child.fromJson(childDoc.data());
+          othersChildren.add({parentPhone: existingChild});
+        }
+      }
+
+      // تنفيذ جميع التحديثات دفعة واحدة
+      await batch.commit();
+
+      return othersChildren;
     } catch (e) {
+      print('Error getting children: $e');
       return [];
     }
   }
 
+  /*
+  * get others Children 
+  * get all 
+  * loop on the others Children 
+  * replace it with its in the Children 
+  * Update the Others Children 
+  * 
+  * 
+  * */
   // Save a new child
   Future<void> saveChild(
       BuildContext context, {

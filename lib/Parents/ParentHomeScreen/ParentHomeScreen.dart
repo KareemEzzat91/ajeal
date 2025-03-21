@@ -390,6 +390,7 @@ class ParentHomePage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => ChatScreen(
+                isOthers: false ,
                 role: "parent",
                 isParent: true,
                 chatId: AdminId + child.parentPhone,
@@ -429,6 +430,7 @@ class ParentHomePage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => DailyNotesScreen(
+                isOthers: false,
                 childID: parentCode,
                 userType: "Parent",
               ),

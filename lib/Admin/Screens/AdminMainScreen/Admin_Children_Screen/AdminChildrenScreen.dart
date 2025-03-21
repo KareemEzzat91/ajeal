@@ -282,9 +282,9 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
       ),
-      itemCount: bloc.children.length,
+      itemCount: _currentFilter=="Others" ?bloc.othersChildren.length:bloc.children.length,
       itemBuilder: (context, index) {
-        final map = bloc.children[index];
+        final map =  _currentFilter=="Others" ?bloc.othersChildren[index]:bloc.children[index];
         final id = map.keys.first;
         final child = map[id]!;
         return ChildGridCard(
@@ -298,14 +298,14 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
   Widget _buildChildrenList(AddChildCubit bloc) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: bloc.children.length,
+      itemCount: _currentFilter=="Others" ?bloc.othersChildren.length:bloc.children.length,
       itemBuilder: (context, index) {
-        final map = bloc.children[index];
+        final map =  _currentFilter=="Others" ?bloc.othersChildren[index]:bloc.children[index];
         final id = map.keys.first;
         final child = map[id]!;
         return ChildCard(
 
-
+          isOthers: _currentFilter=="Others",
           child: child,
           onTap: () => _navigateToDetails(context, child),
         ).animate().fadeIn(delay: (index * 100).ms).slideX(begin: 0.2, end: 0);
@@ -359,6 +359,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
         builder: (context) => ChildDetailScreen(
           child: child,
           childName: child.name,
+          isOthers: _currentFilter=="Others",
           birthDate:
               "${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
           goals: child.selectedGoals,
@@ -372,11 +373,13 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
 class ChildCard extends StatelessWidget {
   final Child child;
   final VoidCallback onTap;
+  final bool isOthers ;
 
   const ChildCard({
     super.key,
     required this.child,
     required this.onTap,
+    required this.isOthers,
   });
 
   @override
@@ -522,9 +525,11 @@ class ChildCard extends StatelessWidget {
   }
 
   Widget _buildMoreButton(BuildContext context, String parentPhone) {
+
     return PullDownButton(
       itemBuilder: (context) => [
-         PullDownMenuItem(
+        PullDownMenuItem(
+          enabled: !isOthers,
           onTap: () async {
 
             showCustomDialog(context,child: child);
@@ -544,8 +549,8 @@ class ChildCard extends StatelessWidget {
               confirmBtnColor: Colors.green,
               onConfirmBtnTap: (){
                 try {
-
-                  FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("children").doc("201019526682+").delete();
+                  isOthers?FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("OthersChildren").doc(child.parentPhone).delete()
+                      :FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("children").doc(child.parentPhone).delete();
                   ScaffoldMessenger.of(context).showSnackBar( const SnackBar(content: Text("Deleted Scuccfluy")));
 
                   Navigator.pop(context);

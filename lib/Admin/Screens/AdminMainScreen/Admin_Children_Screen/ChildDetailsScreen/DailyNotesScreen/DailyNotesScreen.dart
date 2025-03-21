@@ -39,11 +39,13 @@ class Note {
 class DailyNotesScreen extends StatefulWidget {
   final String userType;
   final String childID;
+  final bool isOthers ;
+  final String? otherDoctorId ;
 
   const DailyNotesScreen({
     super.key,
     required this.userType,
-    required this.childID,
+    required this.childID, required this. isOthers,this.otherDoctorId
   });
 
   @override
@@ -125,7 +127,13 @@ class _DailyNotesScreenState extends State<DailyNotesScreen> {
       );
 
       // Save to user's children collection
-      final userId = FirebaseAuth.instance.currentUser?.uid;
+      final userId;
+
+      if(widget.isOthers) {
+        final doctorSnap= await FirebaseFirestore.instance.collection("Doctors").doc(widget.otherDoctorId).get();
+        userId=  doctorSnap["Doctor_id"];
+      }
+      else {userId =  FirebaseAuth.instance.currentUser?.uid;}
       if (userId != null) {
         batch.update(
           FirebaseFirestore.instance
@@ -138,6 +146,10 @@ class _DailyNotesScreenState extends State<DailyNotesScreen> {
         batch.update(FirebaseFirestore.instance.collection("Children").doc(widget.childID),  {"dailyNotes": notesData},);
       }
 
+      else {
+
+
+      }
       await batch.commit();
     } catch (e) {
       _showErrorSnackBar('Error saving note: $e');

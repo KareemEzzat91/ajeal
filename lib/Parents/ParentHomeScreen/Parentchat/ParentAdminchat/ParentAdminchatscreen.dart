@@ -1,7 +1,153 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+// ----- MODELS -----
+
+class ChatMessage {
+  final String senderId;
+  final String senderRole;
+  final String text;
+  final Timestamp? timestamp;
+  final bool read;
+  final String type;
+
+  ChatMessage({
+    required this.senderId,
+    required this.senderRole,
+    required this.text,
+    this.timestamp,
+    this.read = false,
+    this.type = 'text',
+  });
+
+  factory ChatMessage.fromMap(Map<String, dynamic> map) {
+    return ChatMessage(
+      senderId: map['sender_id'] ?? '',
+      senderRole: map['sender_role'] ?? '',
+      text: map['text'] ?? '',
+      timestamp: map['timestamp'] as Timestamp?,
+      read: map['read'] ?? false,
+      type: map['type'] ?? 'text',
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'sender_id': senderId,
+      'sender_role': senderRole,
+      'text': text,
+      'timestamp': timestamp ?? FieldValue.serverTimestamp(),
+      'read': read,
+      'type': type,
+    };
+  }
+}
+
+// ----- CONTROLLERS/SERVICES -----
+
+class ChatService {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  User? get currentUser => _auth.currentUser;
+
+  // Initialize chat document
+  Future<void> initializeChatDocument(String chatId, String doctorId, String parentId) async {
+    await _firestore
+        .collection('Chats')
+        .doc(chatId)
+        .set({
+      'doctor_id': doctorId,
+      'parent_id': parentId,
+      'participants': [doctorId, parentId],
+      'created_at': FieldValue.serverTimestamp(),
+      'updated_at': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
+
+  // Get messages stream
+  Stream<QuerySnapshot> getMessagesStream(String chatId) {
+    return _firestore
+        .collection('Chats')
+        .doc(chatId)
+        .collection('Messages')
+        .orderBy('timestamp', descending: false)
+        .snapshots();
+  }
+
+  // Get user online status stream
+  Stream<DocumentSnapshot> getUserStatusStream(String userId) {
+    return _firestore
+        .collection('UserStatus')
+        .doc(userId)
+        .snapshots();
+  }
+
+  // Send a message
+  Future<void> sendMessage(String chatId, ChatMessage message) async {
+    await _firestore
+        .collection('Chats')
+        .doc(chatId)
+        .collection('Messages')
+        .add(message.toMap());
+
+    await _firestore
+        .collection('Chats')
+        .doc(chatId)
+        .update({
+      'updated_at': FieldValue.serverTimestamp(),
+    });
+  }
+
+  // Update typing status
+  Future<void> updateTypingStatus(String chatId, String role, bool isTyping) async {
+    await _firestore
+        .collection('Chats')
+        .doc(chatId)
+        .update({
+      '${role}_typing': isTyping,
+      'updated_at': FieldValue.serverTimestamp(),
+    });
+  }
+
+  // Clear chat messages
+  Future<void> clearChat(String chatId) async {
+    final batch = _firestore.batch();
+    final messages = await _firestore
+        .collection('Chats')
+        .doc(chatId)
+        .collection('Messages')
+        .get();
+
+    for (var message in messages.docs) {
+      batch.delete(message.reference);
+    }
+
+    await batch.commit();
+  }
+
+  // Submit a report
+  Future<void> submitReport(String chatId, String reporterId, String reporterRole, String reportText) async {
+    await _firestore.collection('Reports').add({
+      'chat_id': chatId,
+      'reporter_id': reporterId,
+      'reporter_role': reporterRole,
+      'report_text': reportText,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+
+  }
+
+  // Get doctor information
+  Future<DocumentSnapshot> getDoctorInfo(String doctorId) {
+    return _firestore.collection("Doctors").doc(doctorId).get();
+  }
+}
+
+// ----- UI COMPONENTS -----
 
 class ChatScreen extends StatefulWidget {
   final String role; // 'doctor' or 'parent'
@@ -9,6 +155,8 @@ class ChatScreen extends StatefulWidget {
   final String doctorId; // Doctor's ID
   final String parentId; // Parent's ID
   final bool isParent; // Whether current user is parent
+  final bool isOthers; // Whether current user is others
+  final String? doctorOthersId; // DoctorName + DoctorPhone
 
   const ChatScreen({
     super.key,
@@ -17,6 +165,8 @@ class ChatScreen extends StatefulWidget {
     required this.doctorId,
     required this.parentId,
     required this.isParent,
+    required this.isOthers,
+    this.doctorOthersId
   });
 
   @override
@@ -26,63 +176,20 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final ChatService _chatService = ChatService();
+
   bool _showScrollToBottom = false;
   bool _isTyping = false;
-  late String _currentUserId;
-  late bool _isAuthorized;
+  String _currentUserId = '';
+  bool _isAuthorized = false;
+  bool _isLoading = true;
+  late String _chatId;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
     _setupAuthorization();
-  }
-
-  void _setupAuthorization() {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser == null) {
-      _currentUserId = widget.parentId;
-      _isAuthorized = true;
-      return;
-    }
-
-    _currentUserId = currentUser.uid;
-
-    // Verify if the current user is authorized to access this chat
-    if (widget.isParent) {
-      _isAuthorized = _currentUserId == widget.parentId;
-    } else {
-      _isAuthorized = _currentUserId == widget.doctorId;
-    }
-
-    // If not authorized, show error and navigate back
-    if (!_isAuthorized) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('You are not authorized to access this chat'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      });
-    }
-
-    // Create or update chat document
-    _initializeChatDocument();
-  }
-
-  Future<void> _initializeChatDocument() async {
-    await FirebaseFirestore.instance
-        .collection('Chats')
-        .doc(widget.chatId)
-        .set({
-      'doctor_id': widget.doctorId,
-      'parent_id': widget.parentId,
-      'participants': [widget.doctorId, widget.parentId],
-      'created_at': FieldValue.serverTimestamp(),
-      'updated_at': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
   }
 
   void _scrollListener() {
@@ -105,12 +212,217 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  Future<void> _setupAuthorization() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final currentUser = _chatService.currentUser;
+
+      // Handle parent access without authentication
+      if (currentUser == null && widget.role != "Doctor") {
+        _currentUserId = widget.parentId;
+        _isAuthorized = true;
+        _chatId = widget.chatId;
+        await _chatService.initializeChatDocument(_chatId, widget.doctorId, widget.parentId);
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
+
+      // Handle unauthorized doctor access
+      if (currentUser == null && widget.role == "Doctor") {
+        _handleUnauthorizedAccess('You need to be logged in to access doctor chats');
+        return;
+      }
+
+      // User is authenticated
+      _currentUserId = currentUser!.uid;
+
+      // Handle doctor info retrieval for "others" mode
+      if (widget.isOthers) {
+        try {
+          final doctorDoc = await _chatService.getDoctorInfo(widget.doctorOthersId!);
+
+          if (doctorDoc.exists) {
+            final doctorData = doctorDoc.data() as Map<String, dynamic>?;
+            _currentUserId = doctorData?["Doctor_id"];
+            _chatId = _currentUserId + widget.parentId;
+
+            if (_currentUserId.isEmpty) {
+              throw Exception("Doctor_id not found in document");
+            }
+          } else {
+            throw Exception("Doctor document not found");
+          }
+          _isAuthorized = true;
+          setState(() {
+            _isLoading = false;
+          });
+
+          await _chatService.initializeChatDocument(_chatId, widget.doctorId, widget.parentId);
+          return;
+        } catch (e) {
+          _handleUnauthorizedAccess('Error retrieving doctor information: ${e.toString()}');
+          return;
+        }
+      }
+
+      // Check authorization based on role
+      _chatId = widget.chatId;
+      if (widget.isParent) {
+        _isAuthorized = _currentUserId == widget.parentId;
+      } else {
+        _isAuthorized = _currentUserId == widget.doctorId;
+      }
+
+      // Handle unauthorized access
+      if (!_isAuthorized) {
+        _handleUnauthorizedAccess('You are not authorized to access this chat');
+        return;
+      }
+
+      // Initialize chat document if authorized
+      setState(() {
+        _isLoading = false;
+      });
+      await _chatService.initializeChatDocument(_chatId, widget.doctorId, widget.parentId);
+    } catch (e) {
+      _handleUnauthorizedAccess('Authorization error: ${e.toString()}');
+    }
+  }
+
+  void _handleUnauthorizedAccess(String message) {
+    setState(() {
+      _isLoading = false;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Colors.red,
+        ),
+      );
+    });
+  }
+
+  Future<void> _sendMessage() async {
+    if (!_isAuthorized) return;
+
+    final messageText = _messageController.text.trim();
+    if (messageText.isEmpty) return;
+
+    final message = ChatMessage(
+      senderId: _currentUserId,
+      senderRole: widget.role,
+      text: messageText,
+    );
+
+    try {
+      await _chatService.sendMessage(_chatId, message);
+
+      _messageController.clear();
+      setState(() => _isTyping = false);
+      await _chatService.updateTypingStatus(_chatId, widget.role, false);
+      _scrollToBottom();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to send message: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  void _updateTypingStatus(bool isTyping) {
+    if (_isTyping != isTyping) {
+      setState(() => _isTyping = isTyping);
+      _chatService.updateTypingStatus(_chatId, widget.role, isTyping);
+    }
+  }
+
+  Future<void> _showClearChatDialog() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Clear Chat'),
+          content: const Text('Are you sure you want to clear all messages?'),
+          actions: [
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: const Text('Clear'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _chatService.clearChat(_chatId);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showReportDialog() async {
+    final TextEditingController reportController = TextEditingController();
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Report Issue'),
+          content: TextField(
+            controller: reportController,
+            decoration: const InputDecoration(
+              hintText: 'Describe the issue...',
+            ),
+            maxLines: 3,
+          ),
+          actions: [
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: const Text('Submit'),
+              onPressed: () async {
+                await _chatService.submitReport(
+                    _chatId,
+                    _currentUserId,
+                    widget.role,
+                    reportController.text
+                );
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Sent Successfully "),backgroundColor: CupertinoColors.activeGreen,));
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (!_isAuthorized) {
+    if (_isLoading) {
       return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (!_isAuthorized) {
+      return const Scaffold(
+        body: Center(
+          child: Text('You are not authorized to access this chat'),
         ),
       );
     }
@@ -144,6 +456,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   PreferredSizeWidget _buildAppBar() {
     final isDoctor = !widget.isParent;
+    final otherUserId = isDoctor ? widget.parentId : widget.doctorId;
+
     return AppBar(
       elevation: 0,
       backgroundColor: Colors.blue[700],
@@ -158,9 +472,8 @@ class _ChatScreenState extends State<ChatScreen> {
             child: CircleAvatar(
               radius: 18,
               backgroundImage: isDoctor
-                  ? const NetworkImage(
-                      "https://img.freepik.com/premium-vector/parents-with-kids-avatars-characters_24877-24085.jpg")
-                  : const AssetImage("assets/images/man-teacher-with-chalkboard-on-blue-background-vector-33671420.jpg"),
+                  ? const NetworkImage("https://img.freepik.com/premium-vector/parents-with-kids-avatars-characters_24877-24085.jpg")
+                  : const AssetImage("assets/images/man-teacher-with-chalkboard-on-blue-background-vector-33671420.jpg") as ImageProvider,
             ),
           ),
           const SizedBox(width: 12),
@@ -175,10 +488,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
               StreamBuilder<DocumentSnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('UserStatus')
-                    .doc(isDoctor ? widget.parentId : widget.doctorId)
-                    .snapshots(),
+                stream: _chatService.getUserStatusStream(otherUserId),
                 builder: (context, snapshot) {
                   final isOnline = snapshot.hasData &&
                       snapshot.data!.exists &&
@@ -211,15 +521,9 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
       actions: [
-        IconButton(
-          icon: const Icon(Icons.video_call),
-          onPressed: () {
-            // Implement video call functionality
-          },
-        ),
+
         PopupMenuButton<String>(
           onSelected: (value) {
-            // Handle menu options
             switch (value) {
               case 'clear':
                 _showClearChatDialog();
@@ -244,98 +548,10 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Future<void> _showClearChatDialog() async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Clear Chat'),
-          content: const Text('Are you sure you want to clear all messages?'),
-          actions: [
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: const Text('Clear'),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                await _clearChat();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _clearChat() async {
-    final batch = FirebaseFirestore.instance.batch();
-    final messages = await FirebaseFirestore.instance
-        .collection('Chats')
-        .doc(widget.chatId)
-        .collection('Messages')
-        .get();
-
-    for (var message in messages.docs) {
-      batch.delete(message.reference);
-    }
-
-    await batch.commit();
-  }
-
-  Future<void> _showReportDialog() async {
-    final TextEditingController reportController = TextEditingController();
-
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Report Issue'),
-          content: TextField(
-            controller: reportController,
-            decoration: const InputDecoration(
-              hintText: 'Describe the issue...',
-            ),
-            maxLines: 3,
-          ),
-          actions: [
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: const Text('Submit'),
-              onPressed: () async {
-                await _submitReport(reportController.text);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _submitReport(String reportText) async {
-    await FirebaseFirestore.instance.collection('Reports').add({
-      'chat_id': widget.chatId,
-      'reporter_id': _currentUserId,
-      'reporter_role': widget.role,
-      'report_text': reportText,
-      'timestamp': FieldValue.serverTimestamp(),
-    });
-  }
-
   Widget _buildChatMessages() {
     return Expanded(
       child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('Chats')
-            .doc(widget.chatId)
-            .collection('Messages')
-            .orderBy('timestamp', descending: false)
-            .snapshots(),
+        stream: _chatService.getMessagesStream(_chatId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -373,8 +589,9 @@ class _ChatScreenState extends State<ChatScreen> {
             padding: const EdgeInsets.all(16),
             itemCount: messages.length,
             itemBuilder: (context, index) {
-              final message = messages[index].data() as Map<String, dynamic>;
-              final timestamp = message['timestamp'] as Timestamp?;
+              final messageData = messages[index].data() as Map<String, dynamic>;
+              final message = ChatMessage.fromMap(messageData);
+              final timestamp = message.timestamp;
               final currentDate = timestamp != null
                   ? DateFormat('MMMM d, y').format(timestamp.toDate())
                   : null;
@@ -421,9 +638,9 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _buildMessageBubble(Map<String, dynamic> message) {
-    final isCurrentUserMessage = message['sender_id'] == _currentUserId;
-    final timestamp = message['timestamp'] as Timestamp?;
+  Widget _buildMessageBubble(ChatMessage message) {
+    final isCurrentUserMessage = message.senderId == _currentUserId;
+    final timestamp = message.timestamp;
     final time = timestamp != null
         ? DateFormat('h:mm a').format(timestamp.toDate())
         : 'N/A';
@@ -437,7 +654,7 @@ class _ChatScreenState extends State<ChatScreen> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (!isCurrentUserMessage)
-            _buildAvatar(message['sender_role'] == 'doctor'),
+            _buildAvatar(message.senderRole == 'doctor'),
           if (!isCurrentUserMessage) const SizedBox(width: 8),
           Flexible(
             child: Container(
@@ -448,15 +665,15 @@ class _ChatScreenState extends State<ChatScreen> {
                 color: isCurrentUserMessage ? Colors.blue[700] : Colors.white,
                 borderRadius: BorderRadius.circular(20).copyWith(
                   bottomLeft:
-                      !isCurrentUserMessage ? const Radius.circular(0) : null,
+                  !isCurrentUserMessage ? const Radius.circular(0) : null,
                   bottomRight:
-                      isCurrentUserMessage ? const Radius.circular(0) : null,
+                  isCurrentUserMessage ? const Radius.circular(0) : null,
                 ),
-                boxShadow:const  [
+                boxShadow: const [
                   BoxShadow(
-                    color: Colors.black,
+                    color: Colors.black12,
                     blurRadius: 5,
-                    offset:  Offset(0, 2),
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),
@@ -467,10 +684,10 @@ class _ChatScreenState extends State<ChatScreen> {
                     : CrossAxisAlignment.start,
                 children: [
                   Text(
-                    message['text'],
+                    message.text,
                     style: TextStyle(
                       color:
-                          isCurrentUserMessage ? Colors.white : Colors.black87,
+                      isCurrentUserMessage ? Colors.white : Colors.black87,
                       fontSize: 15,
                     ),
                   ),
@@ -483,16 +700,16 @@ class _ChatScreenState extends State<ChatScreen> {
                         style: TextStyle(
                           fontSize: 11,
                           color: isCurrentUserMessage
-                              ? Colors.white
+                              ? Colors.white70
                               : Colors.grey[600],
                         ),
                       ),
                       if (isCurrentUserMessage) ...[
                         const SizedBox(width: 4),
                         Icon(
-                          message['read'] == true ? Icons.done_all : Icons.done,
+                          message.read ? Icons.done_all : Icons.done,
                           size: 14,
-                          color: Colors.white,
+                          color: Colors.white70,
                         ),
                       ],
                     ],
@@ -517,9 +734,8 @@ class _ChatScreenState extends State<ChatScreen> {
       child: CircleAvatar(
         radius: 16,
         backgroundImage: isDoctor
-            ? const AssetImage("assets/images/Mohsen.jpg")
-            : const NetworkImage(
-                "https://img.freepik.com/premium-vector/parents-with-kids-avatars-characters_24877-24085.jpg"),
+            ? const AssetImage("assets/images/man-teacher-with-chalkboard-on-blue-background-vector-33671420.jpg") as ImageProvider
+            : const NetworkImage("https://img.freepik.com/premium-vector/parents-with-kids-avatars-characters_24877-24085.jpg"),
       ),
     );
   }
@@ -531,7 +747,7 @@ class _ChatScreenState extends State<ChatScreen> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: Colors.black12,
             spreadRadius: 1,
             blurRadius: 10,
             offset: Offset(0, -3),
@@ -551,8 +767,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: TextField(
                   controller: _messageController,
                   onChanged: (text) {
-                    setState(() => _isTyping = text.isNotEmpty);
-                    _updateTypingStatus(isTyping: text.isNotEmpty);
+                    _updateTypingStatus(text.isNotEmpty);
                   },
                   decoration: const InputDecoration(
                     hintText: 'Type your message...',
@@ -580,11 +795,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 ],
               ),
               child: IconButton(
-                icon: const Icon(
-                   Icons.send ,
+                icon: Icon(
+                  _isTyping ? Icons.send : Icons.mic,
                   color: Colors.white,
                 ),
-                onPressed: _isTyping ? sendMessage : _handleVoiceMessage,
+                onPressed: _isTyping ? _sendMessage : _handleVoiceMessage,
               ),
             ),
           ],
@@ -593,62 +808,13 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-
-
-
   Future<void> _handleVoiceMessage() async {
     // Implement voice recording functionality
   }
 
-  Future<void> _updateTypingStatus({required bool isTyping}) async {
-    await FirebaseFirestore.instance
-        .collection('Chats')
-        .doc(widget.chatId)
-        .update({
-      '${widget.role}_typing': isTyping,
-      'updated_at': FieldValue.serverTimestamp(),
-    });
-  }
-
-  Future<void> sendMessage() async {
-    if (!_isAuthorized) return;
-
-    final messageText = _messageController.text.trim();
-    if (messageText.isEmpty) return;
-
-    final message = {
-      'sender_id': _currentUserId,
-      'sender_role': widget.role,
-      'text': messageText,
-      'timestamp': FieldValue.serverTimestamp(),
-      'read': false,
-      'type': 'text',
-    };
-
-    try {
-      // Add message to the messages subcollection
-      await FirebaseFirestore.instance
-          .collection('Chats')
-          .doc(widget.chatId)
-          .collection('Messages')
-          .add(message);
-
-      _messageController.clear();
-      setState(() => _isTyping = false);
-      _scrollToBottom();
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to send message: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
   @override
   void dispose() {
-    _updateTypingStatus(isTyping: false);
+    _chatService.updateTypingStatus(_chatId, widget.role, false);
     _messageController.dispose();
     _scrollController.dispose();
     super.dispose();

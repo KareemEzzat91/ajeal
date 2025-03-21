@@ -16,6 +16,7 @@ class ChildDetailScreen extends StatelessWidget {
   final String birthDate;
   final List<Goal> goals;
   final String progress;
+  final bool isOthers;
 
   const ChildDetailScreen({
     super.key,
@@ -23,6 +24,7 @@ class ChildDetailScreen extends StatelessWidget {
     required this.birthDate,
     required this.goals,
     required this.progress,
+    required this.isOthers,
     required this.child,
   });
 
@@ -55,11 +57,13 @@ class ChildDetailScreen extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (c) => ChatScreen(
+                  isOthers: isOthers,
                   role: "doctor",
                   chatId: adminId! + child.parentPhone,
                   doctorId: adminId,
                   parentId: child.parentPhone,
                   isParent: false,
+                  doctorOthersId: isOthers?child.doctorId:null,
                 ),
               ),
             );
@@ -75,7 +79,10 @@ class ChildDetailScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => DailyNotesScreen(
-                    userType: 'Doctor',
+                    isOthers: isOthers,
+                    otherDoctorId: child.doctorId,
+
+                    userType: isOthers?"Teacher":'Doctor',
                     childID: child.parentPhone,
                   ),
                 ),
