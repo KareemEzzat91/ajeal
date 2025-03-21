@@ -59,8 +59,7 @@ class ChildDetailScreen extends StatelessWidget {
                 builder: (c) => ChatScreen(
                   isOthers: isOthers,
                   role: "doctor",
-                  chatId: adminId! + child.parentPhone,
-                  doctorId: adminId,
+                  doctorId: adminId!,
                   parentId: child.parentPhone,
                   isParent: false,
                   doctorOthersId: isOthers?child.doctorId:null,

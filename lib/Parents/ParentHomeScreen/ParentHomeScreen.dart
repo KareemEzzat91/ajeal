@@ -393,7 +393,6 @@ class ParentHomePage extends StatelessWidget {
                 isOthers: false ,
                 role: "parent",
                 isParent: true,
-                chatId: AdminId + child.parentPhone,
                 doctorId: AdminId,
                 parentId: child.parentPhone,
               ),

@@ -246,7 +246,6 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
               builder: (context) => ChatScreen(
                 isOthers: false,
                 role: "doctor",
-                chatId: widget.doctorId + message['sender_id'],
                 doctorId: widget.doctorId,
                 parentId: message['sender_id'],
                 isParent: false,
