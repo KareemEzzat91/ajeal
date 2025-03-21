@@ -1,6 +1,6 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/add_child_cubit.dart';
 import 'package:ajeal/Admin/models/doctor_model/doctor_model.dart';
-import 'package:ajeal/generated/l10n.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -134,11 +134,11 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black,
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -353,7 +353,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            border: Border.all(color: color.withOpacity(0.1)),
+            border: Border.all(color: color),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -362,7 +362,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color, size: 28),
@@ -422,8 +422,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
               leading: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.primaries[index % Colors.primaries.length]
-                      .withOpacity(0.1),
+                  color: Colors.primaries[index % Colors.primaries.length],
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -484,7 +483,4 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
     return activities[index];
   }
 
-  String _getActivityTime(int index, List<String> names) {
-    return names[index];
-  }
 }

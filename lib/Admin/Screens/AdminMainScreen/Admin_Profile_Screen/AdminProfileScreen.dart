@@ -1,5 +1,5 @@
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/cubit/sign_cubit.dart';
-import 'package:ajeal/generated/l10n.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

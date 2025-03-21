@@ -1,5 +1,5 @@
 import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
-import 'package:ajeal/generated/l10n.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';

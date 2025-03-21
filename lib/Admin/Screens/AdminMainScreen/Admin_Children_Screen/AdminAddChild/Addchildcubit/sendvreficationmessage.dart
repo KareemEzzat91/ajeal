@@ -1,5 +1,5 @@
+import 'package:ajeal/helpers/url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 void sendWhatsAppMessage(
     String parentPhone, String adminCode, String name) async {
@@ -21,24 +21,14 @@ void sendWhatsAppMessage(
       options: Options(
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}),
     );
-    _launchUrl("https://wa.me/<+$parentPhone>?text=لقد تم تسجيلك بنجاح الاسم$name "
+    LauncherHelper.launchUrlFromString("https://wa.me/<+$parentPhone>?text=لقد تم تسجيلك بنجاح الاسم$name "
         "الكود الخاص بالمعلم $adminCode ");
     print('✅ Message sent successfully: ${response.data}');
   } catch (e) {
 
-    _launchUrl("https://wa.me/<$parentPhone>?text=لقد تم تسجيلك بنجاح الاسم$name "
+    LauncherHelper.launchUrlFromString("https://wa.me/<$parentPhone>?text=لقد تم تسجيلك بنجاح الاسم$name "
         "الكود الخاص بالمعلم $adminCode ");
 
     print('❌ Error sending message: $e');
-  }
-}
-Future<void> _launchUrl(String url) async {
-  try {
-    final Uri url0 = Uri.parse(url); // Convert the string URL to a Uri
-    if (!await launchUrl(url0)) {
-      throw Exception('Could not launch $url0');
-    }
-  } catch (e) {
-    throw Exception('Could not launch $e');
   }
 }

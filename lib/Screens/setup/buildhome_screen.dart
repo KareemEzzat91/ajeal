@@ -1,0 +1,117 @@
+
+import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
+import 'package:ajeal/Screens/setup/PreferenceKeys.dart';
+import 'package:ajeal/Screens/setup/home_screenbuilder.dart';
+import 'package:ajeal/Screens/setup/loading_screen.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
+import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late SharedPreferences _prefs;
+  bool _isAdminLogin = false;
+  bool _isParentLogin = false;
+  String _adminDoctorId = '';
+  String _adminDoctorName = '';
+  String _adminDoctorPhone = '';
+  String _parentDoctorKey = '';
+  String _parentCode = '';
+  Child? _child;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    try {
+      await _loadPreferences();
+      await _loadChildData();
+      setState(() => _isLoading = false);
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _isParentLogin = false; // Reset login state on error
+      });
+    }
+  }
+
+  Future<void> _loadPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isAdminLogin = _prefs.getBool(PreferenceKeys.adminLogin) ?? false;
+      _isParentLogin = _prefs.getBool(PreferenceKeys.parentLogin) ?? false;
+      _adminDoctorId = _prefs.getString(PreferenceKeys.adminDoctorId) ?? '';
+      _adminDoctorName = _prefs.getString(PreferenceKeys.adminDoctorName) ?? '';
+      _adminDoctorPhone = _prefs.getString(PreferenceKeys.adminDoctorPhone) ?? '';
+      _parentDoctorKey = _prefs.getString(PreferenceKeys.parentDoctorKey) ?? '';
+      _parentCode = _prefs.getString(PreferenceKeys.parentCode) ?? '';
+    });
+  }
+
+  Future<void> _loadChildData() async {
+    if (_parentCode.isNotEmpty && _parentDoctorKey.isNotEmpty) {
+      try {
+        final userDoc = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(_parentDoctorKey)
+            .collection("children")
+            .doc(_parentCode)
+            .get();
+
+        if (userDoc.exists && userDoc.data() != null) {
+          setState(() {
+            _child = Child.fromJson(userDoc.data()!);
+          });
+        } else {
+          setState(() => _isParentLogin = false);
+        }
+      } catch (e) {
+        setState(() => _isParentLogin = false);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ThemesCubit(),
+      child: BlocBuilder<ThemesCubit, ThemState>(
+        builder: (context, state) {
+          return GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            locale: state.loc, // Ensure locale updates
+            theme: state.themeData,
+            supportedLocales: const [
+              Locale('en'), // English
+              Locale('ar'), // Arabic
+            ],
+            localizationsDelegates: const [
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            home: _isLoading ? LoadingScreen(context: context) : HomeScreenBuilder(isAdminLogin: _isAdminLogin, adminDoctorId: _adminDoctorId, adminDoctorName: _adminDoctorName, adminDoctorPhone: _adminDoctorPhone, isParentLogin: _isParentLogin, child: _child, parentCode: _parentCode, parentDoctorKey: _parentDoctorKey),
+          );
+        },
+      ),
+    );
+  }
+}
+
+

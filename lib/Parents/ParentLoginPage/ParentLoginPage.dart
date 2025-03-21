@@ -1,10 +1,10 @@
 import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/ParentHomeScreen.dart';
-import 'package:ajeal/generated/l10n.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
+import 'package:ajeal/helpers/url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ParentLoginPage extends StatefulWidget {
   const ParentLoginPage({super.key});
@@ -19,16 +19,6 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
 
-  Future<void> _launchUrl(String url) async {
-    try {
-      final Uri url0 = Uri.parse(url); // Convert the string URL to a Uri
-      if (!await launchUrl(url0)) {
-        throw Exception('Could not launch $url0');
-      }
-    } catch (e) {
-      throw Exception('Could not launch $e');
-    }
-  }
 
   void _login() async {
     if (!_formKey.currentState!.validate()) return;
@@ -59,7 +49,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
                   builder: (c) => ParentHomePage(
                     parentCode: parentCode,
                     child: child,
-                    AdminId: doctorKey,
+                    adminId: doctorKey,
                   ),
                 ),
                 (Route<dynamic> route) => false);
@@ -194,44 +184,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
             return null;
           },
         ),
- /*       const SizedBox(height: 16),
-        TextFormField(
-          controller: _admincodeController,
-          obscureText: !_isPasswordVisible,
-          decoration: InputDecoration(
-            labelText: S.of(context).admin_code,
-            hintText: S.of(context).enter_admin_code,
-            prefixIcon: const Icon(Icons.admin_panel_settings_outlined,
-                color: Colors.teal),
-            suffixIcon: IconButton(
-              icon: Icon(
-                _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
-                color: Colors.grey,
-              ),
-              onPressed: () {
-                setState(() => _isPasswordVisible = !_isPasswordVisible);
-              },
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.shade300),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.teal),
-            ),
-          ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter the admin code';
-            }
-            return null;
-          },
-        ),*/
-      ],
+       ],
     );
   }
 
@@ -275,7 +228,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
         ),
         TextButton(
           onPressed: () {
-            _launchUrl("https://wa.me/<+20 100 409 2979>?text=السلام عليكم");
+            LauncherHelper.launchUrlFromString("https://wa.me/<+20 100 409 2979>?text=السلام عليكم");
           },
           child: Text(
             S.of(context).contact_support,

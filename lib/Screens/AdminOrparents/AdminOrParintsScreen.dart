@@ -1,6 +1,6 @@
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/LoginScreen.dart';
 import 'package:ajeal/Parents/ParentLoginPage/ParentLoginPage.dart';
-import 'package:ajeal/generated/l10n.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +11,6 @@ class AdminOrParentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final locale = context.watch<ThemesCubit>().state.loc.languageCode;
     final themeCubit = context.read<ThemesCubit>();
     final size = MediaQuery.of(context).size;
 
@@ -29,7 +28,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                 ),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                  Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
+                  Theme.of(context).scaffoldBackgroundColor,
                   BlendMode.srcOver,
                 ),
               ),
@@ -43,9 +42,9 @@ class AdminOrParentsScreen extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
-                  Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
-                  Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
+                  Theme.of(context).scaffoldBackgroundColor,
+                  Theme.of(context).scaffoldBackgroundColor,
+                  Theme.of(context).scaffoldBackgroundColor,
                 ],
               ),
             ),
@@ -70,7 +69,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                           color: Theme.of(context)
                               .colorScheme
                               .surface
-                              .withOpacity(0.8),
+                             ,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
@@ -131,11 +130,11 @@ class AdminOrParentsScreen extends StatelessWidget {
                         color: Theme.of(context)
                             .colorScheme
                             .surface
-                            .withOpacity(0.9),
+                            ,
                         boxShadow: [
                           BoxShadow(
                             color:
-                                Theme.of(context).shadowColor.withOpacity(0.1),
+                                Theme.of(context).shadowColor,
                             blurRadius: 20,
                             spreadRadius: 5,
                           ),
@@ -162,7 +161,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                             color: Theme.of(context)
                                 .colorScheme
                                 .primary
-                                .withOpacity(0.1),
+                               ,
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Text(
@@ -247,7 +246,7 @@ class AdminOrParentsScreen extends StatelessWidget {
       icon: Icon(icon),
       tooltip: tooltip,
       style: IconButton.styleFrom(
-        backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.primary,
         padding: const EdgeInsets.all(12),
         shape: RoundedRectangleBorder(
@@ -270,7 +269,7 @@ class AdminOrParentsScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: gradientColors.last.withOpacity(0.3),
+            color: gradientColors.last,
             spreadRadius: 1,
             blurRadius: 10,
             offset: const Offset(0, 4),
@@ -299,7 +298,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                     height: 64,
                     width: 64,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Icon(
@@ -324,9 +323,9 @@ class AdminOrParentsScreen extends StatelessWidget {
                         const SizedBox(height: 6),
                         Text(
                           description,
-                          style: TextStyle(
+                          style:const  TextStyle(
                             fontSize: 14,
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -337,8 +336,8 @@ class AdminOrParentsScreen extends StatelessWidget {
                   Container(
                     height: 36,
                     width: 36,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                    decoration:const  BoxDecoration(
+                      color: Colors.white,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(

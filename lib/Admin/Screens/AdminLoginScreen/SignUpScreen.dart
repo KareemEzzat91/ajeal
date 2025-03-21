@@ -1,6 +1,6 @@
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/LoginScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/cubit/sign_cubit.dart';
-import 'package:ajeal/generated/l10n.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';

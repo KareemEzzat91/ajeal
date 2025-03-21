@@ -55,7 +55,7 @@ class ChildGoalsPage extends StatelessWidget {
               colors: [Colors.teal, Colors.teal.shade700],
             ),
           ),
-          child: Stack(
+          child: const Stack(
             children: [
               Positioned(
                 right: -30,
@@ -63,7 +63,7 @@ class ChildGoalsPage extends StatelessWidget {
                 child: Icon(
                   Icons.stars,
                   size: 150,
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white
                 ),
               ),
             ],
@@ -80,9 +80,9 @@ class ChildGoalsPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey,
             spreadRadius: 1,
             blurRadius: 10,
           ),
@@ -185,12 +185,12 @@ class ChildGoalsPage extends StatelessWidget {
                     right: 0,
                     child: Container(
                       padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                           colors: [
-                            Colors.black.withOpacity(0.7),
+                            Colors.black,
                             Colors.transparent,
                           ],
                         ),
@@ -253,7 +253,7 @@ class ChildGoalsPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(

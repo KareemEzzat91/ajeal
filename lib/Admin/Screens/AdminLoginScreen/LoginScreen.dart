@@ -1,7 +1,7 @@
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/ResetPasswordScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/SignUpScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminLoginScreen/cubit/sign_cubit.dart';
-import 'package:ajeal/generated/l10n.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -26,7 +26,7 @@ class AdminLoginScreen extends StatelessWidget {
             Get.snackbar(
               "Error",
               state.error,
-              backgroundColor: Colors.red.withOpacity(0.9),
+              backgroundColor: Colors.red,
               colorText: Colors.white,
               borderRadius: 10,
               margin: const EdgeInsets.all(10),
