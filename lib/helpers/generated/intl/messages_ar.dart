@@ -140,6 +140,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "head": MessageLookupByLibrary.simpleMessage("الرأس"),
     "healthHistory": MessageLookupByLibrary.simpleMessage("التاريخ الصحي"),
     "hearing": MessageLookupByLibrary.simpleMessage("السمع"),
+    "hello": MessageLookupByLibrary.simpleMessage("اهلا"),
     "in_progress": MessageLookupByLibrary.simpleMessage("قيد التنفيذ"),
     "incubator": MessageLookupByLibrary.simpleMessage("الحاضنة"),
     "incubatorPeriod": MessageLookupByLibrary.simpleMessage("فترة الحاضنة"),
@@ -154,6 +155,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "letsSignIn": MessageLookupByLibrary.simpleMessage("لنقم بتسجيل دخولك"),
     "lips": MessageLookupByLibrary.simpleMessage("الشفاه"),
     "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
+    "loginAsAdmin": MessageLookupByLibrary.simpleMessage(
+      "سجل دخولك ك اخصائي لادارة ",
+    ),
+    "loginAsParent": MessageLookupByLibrary.simpleMessage(
+      "سجل دخولك ك والد لمتابعة تقدم طفلك",
+    ),
     "loginPage": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
     "logout": MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
     "logout_ar": MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
@@ -251,6 +258,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "school": MessageLookupByLibrary.simpleMessage("المدرسة"),
     "schoolCollege": MessageLookupByLibrary.simpleMessage("المدرسة/الكلية"),
     "selectGoals": MessageLookupByLibrary.simpleMessage("اختيار الأهداف"),
+    "selectRole": MessageLookupByLibrary.simpleMessage("اختر من الاسفل للتقدم"),
     "sessionAnalysis": MessageLookupByLibrary.simpleMessage("تحليل الجلسات"),
     "sessionCompleted": MessageLookupByLibrary.simpleMessage("تمت جلسة مع "),
     "sessions": MessageLookupByLibrary.simpleMessage("الجلسات"),

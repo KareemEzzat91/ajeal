@@ -165,10 +165,10 @@ class AdminOrParentsScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Text(
-                            "Select your role to continue",
-                            style: TextStyle(
+                           S.of(context).selectRole,
+                            style:  TextStyle(
                               fontSize: 16,
-                              color: Theme.of(context).colorScheme.primary,
+                              color:isDarkMode? Colors.black:Colors.white,
                             ),
                           ),
                         ),
@@ -184,7 +184,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                     icon: Icons.family_restroom,
                     label: S.of(context).parents,
                     description:
-                        "Login as a parent to monitor your child's progress",
+                        S.of(context).loginAsParent,
                     gradientColors: isDarkMode
                         ? [const Color(0xFF9C27B0), const Color(0xFF673AB7)]
                         : [const Color(0xFFE1BEE7), const Color(0xFF9C27B0)],
@@ -201,7 +201,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                     context,
                     icon: Icons.admin_panel_settings_outlined,
                     label: S.of(context).admin,
-                    description: "Login as admin to manage the system",
+                    description: S.of(context).loginAsAdmin,
                     gradientColors: isDarkMode
                         ? [const Color(0xFF00BCD4), const Color(0xFF2196F3)]
                         : [const Color(0xFFB2EBF2), const Color(0xFF00BCD4)],

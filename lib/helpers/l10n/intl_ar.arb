@@ -201,5 +201,10 @@
   "doctorInformation": "معلومات الطبيب",
   "doctorName": "اسم الطبيب",
   "doctorPhone": "رقم هاتف الطبيب",
-  "printReport": "طباعة التقرير"
+  "printReport": "طباعة التقرير",
+  "selectRole": "اختر من الاسفل للتقدم",
+  "hello": "اهلا",
+  "loginAsParent": "سجل دخولك ك والد لمتابعة تقدم طفلك",
+  "loginAsAdmin": "سجل دخولك ك اخصائي لادارة "
+
 }

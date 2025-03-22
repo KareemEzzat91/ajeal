@@ -1564,6 +1564,41 @@ class S {
       args: [],
     );
   }
+
+  /// `Select your role to continue`
+  String get selectRole {
+    return Intl.message(
+      'Select your role to continue',
+      name: 'selectRole',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `hello`
+  String get hello {
+    return Intl.message('hello', name: 'hello', desc: '', args: []);
+  }
+
+  /// `Login as a parent to monitor your child's progress`
+  String get loginAsParent {
+    return Intl.message(
+      'Login as a parent to monitor your child\'s progress',
+      name: 'loginAsParent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login as admin to manage the system`
+  String get loginAsAdmin {
+    return Intl.message(
+      'Login as admin to manage the system',
+      name: 'loginAsAdmin',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
