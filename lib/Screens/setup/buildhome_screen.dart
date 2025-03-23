@@ -64,12 +64,10 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _loadChildData() async {
-    if (_parentCode.isNotEmpty && _parentDoctorKey.isNotEmpty) {
+    if (_parentCode.isNotEmpty ) {
       try {
         final userDoc = await FirebaseFirestore.instance
-            .collection("users")
-            .doc(_parentDoctorKey)
-            .collection("children")
+            .collection("Children")
             .doc(_parentCode)
             .get();
 
