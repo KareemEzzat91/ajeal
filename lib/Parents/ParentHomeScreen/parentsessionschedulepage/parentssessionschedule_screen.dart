@@ -6,6 +6,7 @@ class SessionSchedulePage extends StatelessWidget {
   final List<Map<String, dynamic>> scheduleSesoins;
   final bool isParent;
   final String name ;
+  final int completedSesions;
 
   const SessionSchedulePage({
     super.key,
@@ -13,6 +14,7 @@ class SessionSchedulePage extends StatelessWidget {
     required this.scheduleSesoins,
     required this.isParent,
     required this.name ,
+    required this.completedSesions ,
 
 
   });
@@ -79,7 +81,7 @@ class SessionSchedulePage extends StatelessWidget {
       return _buildEmptyState();
     }
 
-    final nextSession = scheduleSesoins.first;
+    final nextSession = scheduleSesoins[ completedSesions==scheduleSesoins.length?completedSesions:completedSesions+1];
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -235,7 +237,7 @@ class SessionSchedulePage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  _buildSessionStatus(),
+                  _buildSessionStatus(session["completed"]),
                 ],
               ),
               const SizedBox(height: 12),
@@ -251,14 +253,6 @@ class SessionSchedulePage extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  const Icon(Icons.access_time, size: 16, color: Colors.grey),
-                  const SizedBox(width: 8),
-                  Text(
-                    "45 min", // Example duration
-                    style: TextStyle(
-                      color: Colors.grey.shade700,
-                    ),
-                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -347,7 +341,7 @@ class SessionSchedulePage extends StatelessWidget {
     );
   }
 
-  Widget _buildSessionStatus() {
+  Widget _buildSessionStatus(bool isCompleted ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
@@ -355,7 +349,7 @@ class SessionSchedulePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        "Scheduled",
+       isCompleted?"Completed ": "Scheduled",
         style: TextStyle(
           color: Colors.green.shade700,
           fontSize: 12,
@@ -365,144 +359,5 @@ class SessionSchedulePage extends StatelessWidget {
     );
   }
 
-/*
-  void _showScheduleSessionDialog(BuildContext context) {
-    DateTime selectedDate = DateTime.now();
-    TimeOfDay selectedTime = TimeOfDay.now();
-    String selectedDuration = "45 minutes";
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Schedule New Session"),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: Icon(Icons.calendar_today),
-                title: Text("Select Date"),
-                subtitle: Text(selectedDate.toString().split(' ')[0]),
-                onTap: () async {
-                  final DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: selectedDate,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime.now().add(Duration(days: 365)),
-                  );
-                  if (picked != null) {
-                    selectedDate = picked;
-                  }
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.access_time),
-                title: Text("Select Time"),
-                subtitle: Text(selectedTime.format(context)),
-                onTap: () async {
-                  final TimeOfDay? picked = await showTimePicker(
-                    context: context,
-                    initialTime: selectedTime,
-                  );
-                  if (picked != null) {
-                    selectedTime = picked;
-                  }
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.timer),
-                title: Text("Duration"),
-                subtitle: Text(selectedDuration),
-                onTap: () {
-                  // Add duration selection
-                },
-              ),
-              const TextField(
-                decoration: InputDecoration(
-                  labelText: "Session Notes",
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 3,
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Cancel"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Add session scheduling logic
-              Navigator.pop(context);
-            },
-            child: Text("Schedule"),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-*/
-
-/*  void _showRescheduleDialog(
-      BuildContext context, Map<String, dynamic> session) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Reschedule Session"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Current session:",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text("Date: ${session['date']}"),
-            SizedBox(height: 16),
-            const Text(
-              "Select new date and time:",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            ListTile(
-              leading: Icon(Icons.calendar_today),
-              title: Text("Pick new date"),
-              onTap: () {
-                // Add date picker
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.access_time),
-              title: Text("Pick new time"),
-              onTap: () {
-                // Add time picker
-              },
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Cancel"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Add rescheduling logic
-              Navigator.pop(context);
-            },
-            child: Text("Confirm"),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-            ),
-          ),
-        ],
-      ),
-    );
-  }*/
 }

@@ -19,27 +19,6 @@ class AdminOrParentsScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Background with shimmer effect
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  isDarkMode
-                      ? 'assets/images/freepik__deep-blue-to-purple-gradient-background-with-subtl__45166.jpeg'
-                      : 'assets/images/freepik__a-subtle-lightcolored-gradient-background-for-a-ph__45167.jpeg',
-                ),
-                fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(
-                  Theme.of(context).scaffoldBackgroundColor,
-                  BlendMode.srcOver,
-                ),
-              ),
-            ),
-          ).animate()
-              .shimmer(duration: 3.seconds, delay: 500.ms)
-              .then()
-              .shimmer(duration: 3.seconds, delay: 8.seconds),
-
           // Gradient overlay with animated pattern
           Container(
             decoration: BoxDecoration(

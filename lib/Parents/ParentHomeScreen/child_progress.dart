@@ -43,9 +43,9 @@ class ChildProgressSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ProgressDetail(label: S.of(context).completed, value: "${child.selectedGoals.length}"),
-              ProgressDetail(label: S.of(context).in_progress, value: "${child.selectedGoals.length}"),
-              ProgressDetail(label: S.of(context).upcoming, value: "3"),
+              ProgressDetail(label: S.of(context).completed, value: "${child.completedSessions}"),
+              ProgressDetail(label: S.of(context).in_progress, value: "${child.scheduleSesoins.length-child.completedSessions}"),
+              ProgressDetail(label: S.of(context).upcoming, value:"${child.completedSessions+1}"),
             ],
           ),
         ],
