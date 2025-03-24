@@ -39,11 +39,10 @@ class LoadingScreen extends StatelessWidget  {
                     color: Theme.of(context).primaryColor, // ✅ Fix: Using context correctly
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
+                  child:const  Icon(
                     Icons.hourglass_bottom,
                     size: 50,
-                    color: Theme.of(context).primaryColor,
-                  ),
+                   ),
                 ),
                 const SizedBox(height: 32),
                 const DefaultTextStyle(

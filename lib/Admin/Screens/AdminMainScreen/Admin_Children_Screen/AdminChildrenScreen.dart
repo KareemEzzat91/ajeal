@@ -1,6 +1,8 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/add_child_cubit.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/AdminAddChildScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/ChildDetailScreen.dart';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/colors.dart';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/dialogs.dart';
 import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
 import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,16 +17,7 @@ import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-class AppColors {
-  static const primary = Color(0xff0186c7); // اللون الأساسي الجديد
-  static const secondary = Color(0xff1e3a5c); // اللون الثانوي الجديد
-  static const background = Color(0xFFF8FAFC); // لون الخلفية
-  static const surface = Colors.white; // لون السطح
-  static const text = Color(0xFF1E293B); // لون النص الأساسي
-  static const textSecondary = Color(0xFF64748B); // لون النص الثانوي
-  static const error = Color(0xFFEF4444); // لون الخطأ
-  static const success = Color(0xFF22C55E); // لون النجاح
-}
+
 
 class AdminChildrenScreen extends StatefulWidget {
   final String doctorId;
@@ -73,19 +66,19 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
       create: (context) => AddChildCubit(),
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        appBar: _buildAppBar(context, context.read<AddChildCubit>()),
+        appBar: buildAppBar(context, context.read<AddChildCubit>()),
         body: Column(
           children: [
             _buildFilterBar(),
             Expanded(child: _buildBody(context.read<AddChildCubit>())),
           ],
         ),
-        floatingActionButton: _currentFilter=="Others"?_buildAnimatedFAB(context,true): _buildAnimatedFAB(context,false),
+        floatingActionButton: _currentFilter=="Others"?AddChildButton(fabAnimationController: _fabAnimationController, widget: widget, context: context, isOthers: true): AddChildButton(fabAnimationController: _fabAnimationController, widget: widget, context: context, isOthers: false),
       ),
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context, AddChildCubit bloc) {
+  PreferredSizeWidget buildAppBar(BuildContext context, AddChildCubit bloc) {
     return AppBar(
       elevation: 0,
       backgroundColor: Theme.of(context).primaryColor,
@@ -127,10 +120,10 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            _buildFilterChip('all', 'All'),
-            _buildFilterChip('Others', 'Others'),
-            _buildFilterChip('completed', 'Completed'),
-            _buildFilterChip('pending', 'Pending'),
+            _buildFilterChip('all', 'All',_currentFilter),
+            _buildFilterChip('Others', 'Others',_currentFilter),
+            _buildFilterChip('completed', 'Completed',_currentFilter),
+            _buildFilterChip('pending', 'Pending',_currentFilter),
           ],
         ),
       ),
@@ -139,8 +132,8 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
         .slideY(begin: -1, end: 0, duration: 500.ms, curve: Curves.easeOut);
   }
 
-  Widget _buildFilterChip(String filter, String label) {
-    final isSelected = _currentFilter == filter;
+  Widget _buildFilterChip(String filter, String label,String currentFilter, ) {
+    final isSelected = currentFilter == filter;
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: FilterChip(
@@ -178,98 +171,16 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
       future: _currentFilter=="Others" ?bloc.getAllChildrenFromOtherDoctors():_currentFilter=="completed"?getEmpty():bloc.getAllDataFromFirestore(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return _buildLoadingState();
+          return const ChildrenScreenLoadingState();
         } else if (snapshot.hasError) {
-          return _buildErrorState(snapshot.error.toString());
+          return ChildrenScreenErrorState(error: snapshot.error.toString());
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return _buildEmptyState();
+          return ChildrenScreenEmptyState(currentFilter: _currentFilter);
         }
         return _isListView
             ? _buildChildrenList(bloc)
             : _buildChildrenGrid(bloc);
       },
-    );
-  }
-
-  Widget _buildLoadingState() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 16),
-            height: 120,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildErrorState(String error) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
-          const SizedBox(height: 16),
-          Text(
-            "حدث خطأ",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            error,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.people_outline,
-            size: 80,
-            color: Colors.grey[400],
-          ),
-          const SizedBox(height: 16),
-         Text(
-           _currentFilter == "completed"?"لا يوجد فترة منتهية":"لا يوجد أطفال مسجلين بعد",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            _currentFilter == "completed"?"":  "اضغط على زر الإضافة لتسجيل طفل جديد",
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -313,7 +224,151 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
     );
   }
 
-  Widget _buildAnimatedFAB(BuildContext context,bool isOthers) {
+
+
+  void _navigateToDetails(BuildContext context, Child child) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChildDetailScreen(
+          child: child,
+          childName: child.name,
+          isOthers: _currentFilter=="Others",
+          birthDate:
+              "${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
+          goals: child.selectedGoals,
+          progress: "50%",
+        ),
+      ),
+    );
+  }
+}
+
+class ChildrenScreenLoadingState extends StatelessWidget {
+  const ChildrenScreenLoadingState({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 16),
+            height: 120,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class ChildrenScreenEmptyState extends StatelessWidget {
+  const ChildrenScreenEmptyState({
+    super.key,
+    required String currentFilter,
+  }) : _currentFilter = currentFilter;
+
+  final String _currentFilter;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.people_outline,
+            size: 80,
+            color: Colors.grey[400],
+          ),
+          const SizedBox(height: 16),
+         Text(
+           _currentFilter == "completed"?"لا يوجد فترة منتهية":"لا يوجد أطفال مسجلين بعد",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[800],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            _currentFilter == "completed"?"":  "اضغط على زر الإضافة لتسجيل طفل جديد",
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[600],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ChildrenScreenErrorState extends StatelessWidget {
+  const ChildrenScreenErrorState({
+    super.key,
+    required this.error,
+  });
+
+  final String error;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
+          const SizedBox(height: 16),
+          Text(
+            "حدث خطأ",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[800],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            error,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[600],
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AddChildButton extends StatelessWidget {
+  const AddChildButton({
+    super.key,
+    required AnimationController fabAnimationController,
+    required this.widget,
+    required this.context,
+    required this.isOthers,
+  }) : _fabAnimationController = fabAnimationController;
+
+  final AnimationController _fabAnimationController;
+  final AdminChildrenScreen widget;
+  final BuildContext context;
+  final bool isOthers;
+
+  @override
+  Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () {
         _fabAnimationController.forward(from: 0);
@@ -349,24 +404,6 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
         )
         .then()
         .shake(hz: 4, curve: Curves.easeOut);
-  }
-
-
-  void _navigateToDetails(BuildContext context, Child child) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ChildDetailScreen(
-          child: child,
-          childName: child.name,
-          isOthers: _currentFilter=="Others",
-          birthDate:
-              "${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
-          goals: child.selectedGoals,
-          progress: "50%",
-        ),
-      ),
-    );
   }
 }
 
@@ -485,6 +522,16 @@ class ChildCard extends StatelessWidget {
   }
 
   Widget _buildProgressIndicator() {
+    // Calculate progress percentage based on completed sessions
+    final int totalSessions = child.scheduleSesoins.length;
+    final  num completedSessions = child.completedSessions;
+    final double progressPercentage = totalSessions > 0
+        ? completedSessions / totalSessions
+        : 0.0;
+
+    // Format percentage for display
+    final String percentageText = "${(progressPercentage * 100).toStringAsFixed(0)}%";
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -493,18 +540,18 @@ class ChildCard extends StatelessWidget {
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: const LinearProgressIndicator(
-                  value: 0.5,
-                  backgroundColor: AppColors.primary,
+                child: LinearProgressIndicator(
+                  value: progressPercentage,
+                  backgroundColor: Colors.grey,
                   color: AppColors.primary,
                   minHeight: 8,
                 ),
               ),
             ),
             const SizedBox(width: 12),
-            const Text(
-              "50%",
-              style: TextStyle(
+            Text(
+              percentageText,
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: AppColors.text,
@@ -513,17 +560,29 @@ class ChildCard extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-        const Text(
-          "تقدم الأهداف",
-          style: TextStyle(
-            fontSize: 14,
-            color: AppColors.textSecondary,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "تقدم الأهداف",
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.textSecondary,
+              ),
+            ),
+            Text(
+              "$completedSessions من $totalSessions",
+              style: const TextStyle(
+                fontSize: 14,
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
-
   Widget _buildMoreButton(BuildContext context, String parentPhone) {
 
     return PullDownButton(
@@ -551,7 +610,7 @@ class ChildCard extends StatelessWidget {
                 try {
                   isOthers?FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("OthersChildren").doc(child.parentPhone).delete()
                       :FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("children").doc(child.parentPhone).delete();
-                  ScaffoldMessenger.of(context).showSnackBar( const SnackBar(content: Text("Deleted Scuccfluy")));
+                  ScaffoldMessenger.of(context).showSnackBar( const SnackBar(content: Text("Deleted Scuccfluy",),backgroundColor: CupertinoColors.activeGreen,));
 
                   Navigator.pop(context);
                 }catch(e){
@@ -706,127 +765,11 @@ class ChildGridCard extends StatelessWidget {
     );
   }
 }
-Future<dynamic> showCustomDialog(BuildContext context, {Child? child}) {
-  // Determine if we're handling an "Others" case or not
-  final bool isOthers = child == null;
-
-  // Initialize controllers with existing values if available
-  final TextEditingController doctorNameController = TextEditingController(
-  );
-
-  final TextEditingController doctorIdController = TextEditingController(
-  );
-
-  final TextEditingController childCodeController = TextEditingController();
-
-  // Form key for validation
-  final formKey = GlobalKey<FormState>();
-
-  return QuickAlert.show(
-    context: context,
-    type: QuickAlertType.custom,
-    barrierDismissible: true,
-    confirmBtnText: 'Save',
-    customAsset: 'assets/images/giphy.gif',
-    widget: Form(
-      key: formKey,
-      child: Column(
-        children: [
-          // Field for Doctor Name
-          if (!isOthers)
-            TextFormField(
-              controller: doctorNameController,
-              decoration: const InputDecoration(
-                alignLabelWithHint: true,
-                labelText: 'Doctor Name',
-                hintText: 'Enter Doctor Name',
-                prefixIcon: Icon(Icons.person_outline),
-              ),
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter doctor name';
-                }
-                return null;
-              },
-            ),
-
-          if (!isOthers) const SizedBox(height: 16),
-
-          // Field for Doctor ID
-          if (!isOthers)
-            TextFormField(
-              controller: doctorIdController,
-              decoration: const InputDecoration(
-                alignLabelWithHint: true,
-                labelText: 'Doctor ID',
-                hintText: 'Enter Doctor ID',
-                prefixIcon: Icon(Icons.numbers_outlined),
-              ),
-              textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter doctor ID';
-                }
-                return null;
-              },
-            ),
-
-          if (isOthers) const SizedBox(height: 16),
-
-          // Field for Child Code
-          if (isOthers)
-            TextFormField(
-              controller: childCodeController,
-              decoration: const InputDecoration(
-                alignLabelWithHint: true,
-                labelText: 'Child Code',
-                hintText: 'Enter Child Code',
-                prefixIcon: Icon(Icons.numbers_outlined),
-              ),
-              textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter child code';
-                }
-                return null;
-              },
-            ),
-        ],
-      ),
-    ),
-    onConfirmBtnTap: () async {
-      // Validate form
-      if (formKey.currentState?.validate() != true) {
-        return;
-      }
-
-      try {
-        if (isOthers) {
-          await _handleOthersCase(context, childCodeController.text);
-        } else {
-          await _handleDoctorAssignment(
-              context,
-              child,
-              doctorNameController.text,
-              doctorIdController.text
-          );
-        }
-      } catch (e) {
-        // Handle errors centrally
-        _showErrorMessage(context, e.toString());
-      }
-    },
-  );
-}
 
 // Handle the case where user is adding someone else's child
-Future<void> _handleOthersCase(BuildContext context, String childCode) async {
+Future<void> handleOthersCase(BuildContext context, String childCode) async {
   // Show loading indicator
-  _showLoadingDialog(context);
+  showLoadingDialog(context);
 
   try {
     final childSnap = await FirebaseFirestore.instance
@@ -838,7 +781,7 @@ Future<void> _handleOthersCase(BuildContext context, String childCode) async {
     Navigator.pop(context);
 
     if (!childSnap.exists || childSnap.data() == null || childSnap.data()!.isEmpty) {
-      _showErrorMessage(context, 'Child code not found');
+      showErrorMessage(context, 'Child code not found');
       return;
     }
 
@@ -854,23 +797,23 @@ Future<void> _handleOthersCase(BuildContext context, String childCode) async {
 
     // Close dialog and show success message
     Navigator.pop(context);
-    _showSuccessMessage(context, 'Child added successfully');
+    showSuccessMessage(context, 'Child added successfully');
 
   } catch (e) {
     Navigator.pop(context); // Close loading dialog if open
-    _showErrorMessage(context, e.toString());
+    showErrorMessage(context, e.toString());
   }
 }
 
 // Handle the case where a doctor is being assigned to a child
-Future<void> _handleDoctorAssignment(
+Future<void> handleDoctorAssignment(
     BuildContext context,
     Child child,
     String doctorName,
     String doctorId
     ) async {
   // Show loading indicator
-  _showLoadingDialog(context);
+  showLoadingDialog(context);
 
   try {
     final doctorSnap = await FirebaseFirestore.instance
@@ -882,7 +825,7 @@ Future<void> _handleDoctorAssignment(
     Navigator.pop(context);
 
     if (!doctorSnap.exists) {
-      _showErrorMessage(context, 'Doctor ID does not exist');
+      showErrorMessage(context, 'Doctor ID does not exist');
       return;
     }
 
@@ -914,39 +857,13 @@ Future<void> _handleDoctorAssignment(
 
     // Close dialog and show success message
     Navigator.pop(context);
-    _showSuccessMessage(
+    showSuccessMessage(
         context,
         "Child transferred to Dr. $doctorName successfully!"
     );
   } catch (e) {
     Navigator.pop(context); // Close loading dialog if open
-    _showErrorMessage(context, e.toString());
+    showErrorMessage(context, e.toString());
   }
 }
 
-// Helper methods to show dialog messages
-void _showLoadingDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) => const Center(
-      child: CircularProgressIndicator(),
-    ),
-  );
-}
-
-void _showSuccessMessage(BuildContext context, String message) {
-  QuickAlert.show(
-    context: context,
-    type: QuickAlertType.success,
-    text: message,
-  );
-}
-
-void _showErrorMessage(BuildContext context, String error) {
-  QuickAlert.show(
-    context: context,
-    type: QuickAlertType.error,
-    text: 'Error: $error',
-  );
-}

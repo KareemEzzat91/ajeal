@@ -387,13 +387,6 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
       child: SafeArea(
         child: Row(
           children: [
-            IconButton(
-              icon: const Icon(Icons.attach_file),
-              color: Colors.blue[700],
-              onPressed: () {
-                // Handle attachments
-              },
-            ),
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -407,7 +400,9 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                     hintText: 'Type your message...',
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(vertical: 12),
+
                   ),
+                  style: const TextStyle(color: Colors.grey),
                   maxLines: null,
                 ),
               ),

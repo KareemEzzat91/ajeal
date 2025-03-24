@@ -92,6 +92,7 @@ class Child extends Equatable {
   // Treatment Plan
   final List<Goal> selectedGoals;
   final List<Map<String, dynamic>> scheduleSesoins;
+  final num completedSessions;
 
   // Doctor Information
   String doctorId;
@@ -192,6 +193,7 @@ class Child extends Equatable {
     // Treatment Plan
     required this.selectedGoals,
     required this.scheduleSesoins,
+    required this.completedSessions,
 
     // Doctor Information
     required this.doctorId,
@@ -230,6 +232,7 @@ class Child extends Equatable {
       'parentsRelationship': parentsRelationship,
       'familyRelationship': familyRelationship,
       'motherNature': motherNature,
+      'completedSessions': completedSessions,
 
       // Developmental History - Pregnancy Phase
       'pregnancyNature': pregnancyNature,
@@ -403,7 +406,7 @@ class Child extends Equatable {
         school: json['school'] ?? '',
         residence: json['residence'] ?? '',
         gender: json['gender'] ?? '',
-
+        completedSessions: json['completedSessions']??0,
         // Family Information
         fatherOccupation: json['fatherOccupation'] ?? '',
         motherOccupation: json['motherOccupation'] ?? '',
@@ -505,6 +508,7 @@ class Child extends Equatable {
         notes: 'Error loading data: $e',
         school: '',
         residence: '',
+        completedSessions: 0,
         gender: '',
         fatherOccupation: '',
         motherOccupation: '',
@@ -614,6 +618,7 @@ class Child extends Equatable {
     String? teething,
     String? babbling,
     String? motherVoiceAttention,
+
     String? sittingAlone,
     String? crawling,
     String? walking,
@@ -644,6 +649,7 @@ class Child extends Equatable {
     String? doctorId,
     String? doctorName,
     String? doctorPhone,
+    int?completedSessions,
     List<Map<String, dynamic>>? dailyNotes,
   }) {
     return Child(
@@ -658,6 +664,7 @@ class Child extends Equatable {
       parentPhoneNumber: parentPhoneNumber ?? this.parentPhoneNumber,
       notes: notes ?? this.notes,
       school: school ?? this.school,
+      completedSessions: this.completedSessions,
       residence: residence ?? this.residence,
       gender: gender ?? this.gender,
       fatherOccupation: fatherOccupation ?? this.fatherOccupation,
@@ -812,5 +819,6 @@ class Child extends Equatable {
         doctorId,
         doctorName,
         doctorPhone,
+    completedSessions,
       ];
 }

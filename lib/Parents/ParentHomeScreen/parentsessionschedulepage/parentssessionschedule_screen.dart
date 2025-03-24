@@ -213,6 +213,8 @@ class SessionSchedulePage extends StatelessWidget {
                 notes: session['notes'] ?? 0,
                 rate: session['rate'] ?? 0.0,
                 tasks: List.from(session['tasks'] ?? []),
+                isCompleted: session['completed'] ?? 0,
+
               ),
             ),
           );
@@ -327,6 +329,8 @@ class SessionSchedulePage extends StatelessWidget {
                             notes: session['notes'] ?? '',
                             rate: session['rate'] ?? 0.0,
                             tasks: List.from(session['tasks'] ?? []),
+                            isCompleted: session['completed'] ?? 0,
+
                           ),
                         ),
                       );

@@ -253,12 +253,6 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
       actions: [
-        IconButton(
-          icon: const Icon(Icons.video_call),
-          onPressed: () {
-            // Implement video call functionality
-          },
-        ),
         PopupMenuButton<String>(
           onSelected: (value) {
             switch (value) {
@@ -500,6 +494,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     contentPadding: EdgeInsets.symmetric(vertical: 12),
                   ),
                   maxLines: null,
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ),
             ),
@@ -520,11 +515,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 ],
               ),
               child: IconButton(
-                icon: Icon(
-                  state.isTyping ? Icons.send : Icons.mic,
+                icon: const Icon(
+                   Icons.send ,
                   color: Colors.white,
                 ),
-                onPressed: state.isTyping ? _sendMessage : _handleVoiceMessage,
+                onPressed: state.isTyping ? _sendMessage : null,
               ),
             ),
           ],
@@ -533,9 +528,6 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Future<void> _handleVoiceMessage() async {
-    // Implement voice recording functionality
-  }
 
   @override
   void dispose() {

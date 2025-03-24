@@ -362,7 +362,6 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: color,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color, size: 28),
@@ -427,7 +426,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
                 ),
                 child: Icon(
                   _getActivityIcon(index),
-                  color: Colors.primaries[index % Colors.primaries.length],
+                  color: Colors.white,
                   size: 24,
                 ),
               ),

@@ -300,8 +300,6 @@ class _DailyNotesViewState extends State<DailyNotesView> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            filled: true,
-            fillColor: Colors.grey.shade50,
           ),
           maxLines: 3,
         ),

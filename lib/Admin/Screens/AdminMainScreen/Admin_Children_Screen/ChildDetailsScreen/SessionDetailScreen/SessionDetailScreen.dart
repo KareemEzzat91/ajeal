@@ -18,6 +18,10 @@ class SessionDetailScreen extends StatefulWidget {
   final List tasks;
   final bool isParent;
   final String childName ;
+  final bool ? isOthers ;
+  final String ?doctorId;
+  final int? completedSessions;
+  final bool isCompleted;
 
   const SessionDetailScreen({
     super.key,
@@ -30,6 +34,10 @@ class SessionDetailScreen extends StatefulWidget {
     required this.notes,
     required this.tasks,
     required this.isParent,
+    required this.isCompleted,
+     this.isOthers,
+     this.doctorId,
+     this.completedSessions,
   });
 
   @override
@@ -76,7 +84,16 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
     setState(() => _isSaving = true);
 
     try {
-      final uid = FirebaseAuth.instance.currentUser!.uid;
+      final String uid ;
+
+      if (widget.isOthers! &&widget.isOthers!=null){
+    final  doctorSnap = await FirebaseFirestore.instance.collection("Doctors").doc(widget.doctorId).get();
+    uid =doctorSnap["Doctor_id"];
+
+      }else {
+        uid = FirebaseAuth.instance.currentUser!.uid;
+      }
+
       final userRef = FirebaseFirestore.instance
           .collection('users')
           .doc(uid)
@@ -94,6 +111,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           .map((task) => task.toMap())
           .toList();
 
+
       final sessionData = {
         "session": widget.sessionName,
         "date": widget.date,
@@ -101,6 +119,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         'rate': _rating,
         'notes': _notesController.text,
         'tasks': tasksData,
+        "completed":true
       };
 
       final currentScheduleSesoins = List<Map<String, dynamic>>.from(
@@ -113,7 +132,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       }
 
       await userRef.update({'scheduleSesoins': currentScheduleSesoins});
-      await FirebaseFirestore.instance.collection("Children").doc(widget.childId).update({'scheduleSesoins': currentScheduleSesoins});
+      await FirebaseFirestore.instance.collection("Children").doc(widget.childId).update({'scheduleSesoins': currentScheduleSesoins,"completedSessions":widget.isCompleted?widget.completedSessions:widget.completedSessions!+1});
       _showSuccessDialog();
     } catch (e) {
       _showErrorDialog("حدث خطأ أثناء الحفظ: $e");

@@ -19,7 +19,6 @@ class _SessionTaskRateScreenState extends State<SessionTaskRateScreen> {
   @override
   void initState() {
     super.initState();
-    // تعيين القيم هنا بدلاً من build
     _notesController.text = widget.task.notes;
     _rating = widget.task.rate;
   }
