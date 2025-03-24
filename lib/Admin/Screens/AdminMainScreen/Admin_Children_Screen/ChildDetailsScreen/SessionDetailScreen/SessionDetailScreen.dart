@@ -255,7 +255,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
     
     return IconButton(
           icon: const Icon(Icons.add_task),
-          onPressed: () { context.read<AddChildCubit>().updateUserInfo(key: "taskAddedFor", value: widget.childName)   ;_addTasksToGoal(goalIndex);}
+          onPressed: () { context.read<AddChildCubit>().updateUserInfo(isOthers: widget.isOthers??false,key: "taskAddedFor", value: widget.childName)   ;_addTasksToGoal(goalIndex);}
         );
   },
 ),
@@ -463,7 +463,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                       left: 16,
                       right: 16,
                       child: ElevatedButton(
-                        onPressed: _isSaving ? null : (){_saveSessionDetails();bloc.updateUserInfo(key: "lastSessionWith", value:widget.childName); },
+                        onPressed: _isSaving ? null : (){_saveSessionDetails();bloc.updateUserInfo(isOthers: widget.isOthers??false ,key: "lastSessionWith", value:widget.childName); },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue[700],
                           padding: const EdgeInsets.symmetric(vertical: 16),

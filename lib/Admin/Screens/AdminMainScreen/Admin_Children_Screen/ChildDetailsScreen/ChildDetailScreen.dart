@@ -63,6 +63,7 @@ class ChildDetailScreen extends StatelessWidget {
                       .read<AddChildCubit>()
                       .lastChattedWith = childName;
                   context.read<AddChildCubit>().updateUserInfo(
+                    isOthers: isOthers,
                       key: "lastChattedWith", value: childName);
                   Navigator.push(
                     context,
@@ -273,7 +274,7 @@ class ChildDetailScreen extends StatelessWidget {
 
           return InkWell(
             onTap: () {
-              context.read<AddChildCubit>().updateUserInfo(key: "", value: "");
+              context.read<AddChildCubit>().updateUserInfo(isOthers: isOthers,key: "lastSessionWith", value: childName);
               _navigateToSessionDetail(context, session);
             },
             borderRadius: BorderRadius.circular(12),
@@ -621,13 +622,14 @@ class ChildDetailScreen extends StatelessWidget {
 
       // Format data for Gemini API
       final String prompt = """
-    Analyze the following therapy sessions data and provide insights:
-    1. Progress patterns across sessions
-    2. Goal achievement analysis
-    3. Areas of improvement
-    4. Recommendations for future sessions
-    
-    Session Data:
+    قم بتحليل بيانات الجلسات العلاجية التالية واستخرج النتائج النهائية للفترة بالكامل، مع تقديم توصيات للآباء حول كيفية تحسين دعم الطفل في المستقبل. يشمل التحليل:
+    1. الأنماط العامة للتقدم خلال الفترة
+    2. تحقيق الأهداف وتقييم مستوى الإنجاز
+    3. نقاط القوة التي يجب تعزيزها
+    4. المجالات التي تحتاج إلى تحسين والتركيز عليها
+    5. توصيات مخصصة للآباء لمساعدة الطفل في المرحلة القادمة
+
+    بيانات الجلسات:
     ${jsonEncode(sessionsData)}
     """;
 
@@ -669,7 +671,7 @@ class ChildDetailScreen extends StatelessWidget {
     while (retryCount < maxRetries) {
       try {
         // Make API request with timeout
-        final response = await gemini.text(prompt).timeout(
+        final response = await gemini.prompt(parts: [Part.text(prompt)]).timeout(
           const Duration(seconds: 130),
           onTimeout: () =>
           throw TimeoutException('Gemini API request timed out'),

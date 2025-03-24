@@ -1,8 +1,10 @@
 import 'package:ajeal/Parents/ParentHomeScreen/ParentHomeScreen.dart';
 import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class ChildAppBar extends StatelessWidget {
   const ChildAppBar({
@@ -31,7 +33,7 @@ class ChildAppBar extends StatelessWidget {
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
-        ),
+        ).animate().fadeIn(duration: 800.ms, delay: 200.ms),
         background: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -48,11 +50,15 @@ class ChildAppBar extends StatelessWidget {
               Positioned(
                 right: -50,
                 top: -50,
-                child: CircleAvatar(
-                  radius: 100,
-                  backgroundColor: isDarkMode
-                      ? Colors.black12
-                      : Colors.teal.shade700 ,
+                child: FadeInLeft(
+                  duration: 1210.ms,
+                    child: CircleAvatar(
+                      radius: 100,
+                      backgroundColor: isDarkMode
+                          ? Colors.black12
+                          : Colors.teal.shade700,
+                    ),
+
                 ),
               ),
             ],
@@ -63,16 +69,32 @@ class ChildAppBar extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Setting buttons
+            // Setting buttons with SlideInUp animation
             Row(
               children: [
-                BuildIconButton(context: context, icon: Icons.language, tooltip: S.of(context).changeLanguage, onPressed: () {
-                  themeCubit.changeLang();
-                }),
+                SlideInUp(
+                  duration: 500.ms,
+                  child: BuildIconButton(
+                    context: context,
+                    icon: Icons.language,
+                    tooltip: S.of(context).changeLanguage,
+                    onPressed: () {
+                      themeCubit.changeLang();
+                    },
+                  ),
+                ),
                 const SizedBox(width: 8),
-                BuildIconButton(context: context, icon: isDarkMode ? Icons.light_mode : Icons.dark_mode, tooltip: S.of(context).changeTheme, onPressed: () {
-                  themeCubit.toggleTheme(!isDarkMode);
-                }),
+                SlideInUp(
+                  duration: 700.ms,
+                  child: BuildIconButton(
+                    context: context,
+                    icon: isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                    tooltip: S.of(context).changeTheme,
+                    onPressed: () {
+                      themeCubit.toggleTheme(!isDarkMode);
+                    },
+                  ),
+                ),
               ],
             ),
           ],

@@ -56,7 +56,8 @@ class _AdminmainScreenState extends State<AdminmainScreen> {
         create: (context) => AddChildCubit(),
         child: Scaffold(
           backgroundColor: Theme.of(context).primaryColor,
-          body: Screens[_selectedIndex],
+          body: AnimatedSwitcher(duration:const  Duration(milliseconds: 540),
+          child: Screens[_selectedIndex]),
           bottomNavigationBar: FlashyTabBar(
             backgroundColor: Theme.of(context).primaryColor,
             animationDuration: const Duration(milliseconds: 540),

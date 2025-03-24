@@ -149,8 +149,7 @@ class AdminProfileScreen extends StatelessWidget {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
+             ),
           ),
         ),
         ...children,
@@ -174,7 +173,7 @@ class AdminProfileScreen extends StatelessWidget {
             color: Colors.blue,
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, color: Colors.blue),
+          child: Icon(icon,  ),
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
         subtitle: Text(value, style: const TextStyle(color: Colors.blue)),

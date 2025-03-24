@@ -73,7 +73,8 @@ class AddChildCubit extends Cubit<AddChildState> {
   }
 
   // Update user info with a specific key-value pair
-  Future<void> updateUserInfo({required String key, required String value}) async {
+  Future<void> updateUserInfo({required String key, required String value,required bool isOthers}) async {
+    if (isOthers){return ;}
     final uid = _currentUserId;
     if (uid == null) {
       throw Exception("User not authenticated");
