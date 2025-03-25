@@ -229,13 +229,11 @@ class AllDetailsScreen extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 36,
-                  backgroundColor: Theme.of(context).primaryColor,
                   child: Text(
                     child.name.isNotEmpty ? child.name[0] : "?",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 ),
@@ -292,7 +290,7 @@ class AllDetailsScreen extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-          Icon(icon, color: Theme.of(context).primaryColor),
+          Icon(icon),
           const SizedBox(height: 4),
           Text(
             label,
@@ -358,7 +356,6 @@ class AllDetailsScreen extends StatelessWidget {
             child: Text(
               title,
               style: const TextStyle(
-                color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),

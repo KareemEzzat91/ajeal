@@ -130,9 +130,11 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       } else {
         currentScheduleSesoins.add(sessionData);
       }
-
-      await userRef.update({'scheduleSesoins': currentScheduleSesoins});
-      await FirebaseFirestore.instance.collection("Children").doc(widget.childId).update({'scheduleSesoins': currentScheduleSesoins,"completedSessions":widget.isCompleted?widget.completedSessions:widget.completedSessions!+1});
+      print(widget.completedSessions);
+       final cmp= widget.isCompleted?widget.completedSessions:widget.completedSessions!+1;
+      print(cmp);
+      await userRef.update({'scheduleSesoins': currentScheduleSesoins,"completedSessions":cmp});
+      await FirebaseFirestore.instance.collection("Children").doc(widget.childId).update({'scheduleSesoins': currentScheduleSesoins,"completedSessions":cmp});
       _showSuccessDialog();
     } catch (e) {
       _showErrorDialog("حدث خطأ أثناء الحفظ: $e");

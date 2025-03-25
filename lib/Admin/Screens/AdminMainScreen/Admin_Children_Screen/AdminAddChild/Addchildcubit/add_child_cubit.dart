@@ -142,7 +142,7 @@ class AddChildCubit extends Cubit<AddChildState> {
         for (var childDoc in childrenSnapshot.docs) {
           final child = Child.fromJson(childDoc.data());
           children.add({childDoc.id: child});
-        }
+         }
 
         return children;
       }
@@ -205,6 +205,7 @@ class AddChildCubit extends Cubit<AddChildState> {
       Map<String, Child> mainChildrenMap = {};
       for (var snapshot in snapshots) {
         for (var doc in snapshot.docs) {
+
            mainChildrenMap[doc.id] = Child.fromJson(doc.data()as Map<String,dynamic>);
         }
       }
@@ -219,6 +220,7 @@ class AddChildCubit extends Cubit<AddChildState> {
         if (mainChildrenMap.containsKey(parentPhone)) {
           // استبدال البيانات إذا كان الطفل موجودًا في المجموعة الرئيسية
           final updatedChild = mainChildrenMap[parentPhone]!;
+
           othersChildren.add({parentPhone: updatedChild});
 
           batch.set(

@@ -9,141 +9,160 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'sign_state.dart';
 
 class SignCubit extends Cubit<SignState> {
-  FirebaseAuth instance = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   SignCubit() : super(SignInitial());
-  void Login(
-    BuildContext context,
-    GlobalKey<FormState> key,
-    TextEditingController emailController,
-    TextEditingController passwordController,
-  ) async {
+
+  Future<void> login(
+      BuildContext context,
+      GlobalKey<FormState> formKey,
+      TextEditingController emailController,
+      TextEditingController passwordController,
+      ) async {
     emit(SignLoadingState());
+
+    if (!formKey.currentState!.validate()) {
+      emit(SignFaliureState("Validation error"));
+      return;
+    }
+
     try {
-      // التحقق من صحة النموذج
-      if (key.currentState!.validate()) {
-        // محاولة تسجيل الدخول باستخدام FirebaseAuth
-        final UserCredential response =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
+      final UserCredential response = await _auth.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
 
-        User? user = response.user;
-
-        if (user != null) {
-          if (user.emailVerified) {
-            final doctorIdsnap = await FirebaseFirestore.instance
-                .collection("users")
-                .doc(user.uid)
-                .get();
-            final doctorId = doctorIdsnap['Doctor_id'];
-            final doctorName = doctorIdsnap['Doctor_Name'];
-            final doctorPhone = doctorIdsnap['Doctor_phone'];
-
-            FirebaseFirestore.instance
-                .collection("Doctors")
-                .doc(doctorId)
-                .update({"Doctor_id": user.uid});
-            saveToken(doctorId, doctorName,doctorPhone);
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AdminmainScreen(
-                      doctorPhone: doctorPhone,
-                        doctorId: doctorId, doctorName: doctorName)),
-                (Route<dynamic> route) => false);
-          } else {
-            user.sendEmailVerification();
-            emit(SignFaliureState("please verfiy your account check mail"));
-          }
-
-          emit(SignSuccesState());
-        } else {
-          emit(SignFaliureState("Login failed"));
-        }
-      } else {
-        // إذا فشلت عملية التحقق من صحة النموذج
-        emit(SignFaliureState("Validation error"));
+      final User? user = response.user;
+      if (user == null) {
+        emit(SignFaliureState("Login failed"));
+        return;
       }
+
+      if (!user.emailVerified) {
+        await user.sendEmailVerification();
+        emit(SignFaliureState("Please verify your account. Check your email."));
+        return;
+      }
+
+      final doctorSnapshot =
+      await _firestore.collection("users").doc(user.uid).get();
+
+      if (!doctorSnapshot.exists) {
+        emit(SignFaliureState("User data not found"));
+        return;
+      }
+
+      final String doctorId = doctorSnapshot['Doctor_id'];
+      final String doctorName = doctorSnapshot['Doctor_Name'];
+      final String doctorPhone = doctorSnapshot['Doctor_phone'];
+
+      await _firestore.collection("Doctors").doc(doctorId).update({
+        "Doctor_id": user.uid,
+      });
+
+      await saveToken(doctorId, doctorName, doctorPhone);
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AdminmainScreen(
+            doctorId: doctorId,
+            doctorName: doctorName,
+            doctorPhone: doctorPhone,
+          ),
+        ),
+            (Route<dynamic> route) => false,
+      );
+
+      emit(SignSuccesState());
     } catch (e) {
-      // إذا حدث خطأ في عملية تسجيل الدخول
       emit(SignFaliureState(e.toString()));
     }
   }
 
-  void saveToken(String doctorId, String doctorName,String doctorPhone) async {
+  Future<void> saveToken(String doctorId, String doctorName, String doctorPhone) async {
     try {
-      final pref = await SharedPreferences.getInstance();
-      pref.setBool("AdminLogin", true);
-      pref.setString("adminDoctorId", doctorId);
-      pref.setString("adminDoctorName", doctorName);
-      pref.setString("adminDoctorPhone", doctorName);
-    } catch (e) {}
+      final SharedPreferences pref = await SharedPreferences.getInstance();
+      await pref.setBool("AdminLogin", true);
+      await pref.setString("adminDoctorId", doctorId);
+      await pref.setString("adminDoctorName", doctorName);
+      await pref.setString("adminDoctorPhone", doctorPhone);
+    } catch (e) {
+      debugPrint("Error saving token: $e");
+    }
   }
 
-  void logout(context) async {
-    await FirebaseAuth.instance.signOut();
-    final pref = await SharedPreferences.getInstance();
-    pref.setBool("AdminLogin", false);
-    pref.remove("doctorId");
-    pref.remove("doctorName");
-    pref.remove("adminDoctorPhone");
-    Navigator.pushAndRemoveUntil(
+  Future<void> logout(BuildContext context) async {
+    try {
+      await _auth.signOut();
+      final SharedPreferences pref = await SharedPreferences.getInstance();
+      await pref.setBool("AdminLogin", false);
+      await pref.remove("adminDoctorId");
+      await pref.remove("adminDoctorName");
+      await pref.remove("adminDoctorPhone");
+
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const AdminOrParentsScreen()),
-        (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false,
+      );
+    } catch (e) {
+      debugPrint("Logout error: $e");
+    }
   }
 
-  void SignUp(
-    BuildContext context,
-    GlobalKey<FormState> key,
-    TextEditingController EmailController,
-    TextEditingController nameController,
-    TextEditingController passwordController,
-    TextEditingController MobileController,
-  ) async {
+  Future<void> signUp(
+      BuildContext context,
+      GlobalKey<FormState> formKey,
+      TextEditingController emailController,
+      TextEditingController nameController,
+      TextEditingController passwordController,
+      TextEditingController mobileController,
+      ) async {
     emit(SignLoadingState());
 
+    if (!formKey.currentState!.validate()) {
+      emit(SignFaliureState("Validation error"));
+      return;
+    }
+
     try {
-      if (key.currentState!.validate()) {
-        final UserCredential response =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: EmailController.text,
-          password: passwordController.text,
-        );
+      final UserCredential response = await _auth.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
 
-        User? user = response.user;
-        final doctorId = nameController.text + MobileController.text;
-
-        if (user != null) {
-          user.sendEmailVerification();
-          emit(SignFaliureState(
-              "your account done please verfiy your account check mail"));
-          FirebaseFirestore.instance.collection("users").doc(user.uid).set({
-            'Doctor_Name': nameController.text,
-            'Doctor_id': doctorId, //name+phone number
-            "Doctor_phone": MobileController.text,
-            "lastChildId": 0,
-             "lastChattedWith":"",
-            "lastChildName":"",
-            "lastSessionWith":"",
-            "taskAddedFor":""
-          });
-          // Doctor_id
-          FirebaseFirestore.instance
-              .collection("Doctors")
-              .doc(doctorId)
-              .set({"Doctor_id": user.uid});
-          saveToken(doctorId, nameController.text,MobileController.text);
-          emit(SignSuccesState());
-        } else {
-          emit(SignFaliureState("User creation failed"));
-        }
-      } else {
-        emit(SignFaliureState("Validation error"));
+      final User? user = response.user;
+      if (user == null) {
+        emit(SignFaliureState("User creation failed"));
+        return;
       }
+
+      final String doctorId = "${nameController.text.trim()}${mobileController.text.trim()}";
+
+      await user.sendEmailVerification();
+      emit(SignFaliureState("Your account is created. Please verify your email."));
+
+      await _firestore.collection("users").doc(user.uid).set({
+        'Doctor_Name': nameController.text.trim(),
+        'Doctor_id': doctorId,
+        'Doctor_phone': mobileController.text.trim(),
+        'lastChildId': 0,
+        'lastChattedWith': "",
+        'lastChildName': "",
+        'lastSessionWith': "",
+        'taskAddedFor': "",
+      });
+
+      await _firestore.collection("Doctors").doc(doctorId).set({
+        "Doctor_id": user.uid,
+      });
+
+      await saveToken(doctorId, nameController.text.trim(), mobileController.text.trim());
+
+      emit(SignSuccesState());
     } catch (e) {
-      // إرسال حالة الفشل مع رسالة الخطأ
       emit(SignFaliureState(e.toString()));
     }
   }

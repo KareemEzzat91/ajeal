@@ -258,7 +258,7 @@ class ChildDetailScreen extends StatelessWidget {
               isCompleted:session['completed']??false,
               isOthers: isOthers,
               doctorId: child.doctorId,
-              completedSessions: completedSessions,
+              completedSessions: child.completedSessions.toInt(),
 
 
             ),

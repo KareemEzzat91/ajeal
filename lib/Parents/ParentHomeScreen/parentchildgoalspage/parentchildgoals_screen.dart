@@ -25,15 +25,6 @@ class ChildGoalsPage extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // Add functionality to track new goal
-          _showAddGoalDialog(context);
-        },
-        icon: const Icon(Icons.add),
-        label: const Text("Track New Goal"),
-        backgroundColor: Colors.teal,
-      ),
     );
   }
 
@@ -266,47 +257,4 @@ class ChildGoalsPage extends StatelessWidget {
     );
   }
 
-  void _showAddGoalDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Track New Goal"),
-        content: const Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                labelText: "Goal Name",
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              decoration: InputDecoration(
-                labelText: "Description",
-                border: OutlineInputBorder(),
-              ),
-              maxLines: 3,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Add goal tracking logic
-              Navigator.pop(context);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.teal,
-            ),
-            child: const Text("Add Goal"),
-          ),
-        ],
-      ),
-    );
-  }
 }

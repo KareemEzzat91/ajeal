@@ -206,7 +206,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       : () {
                                           // Handle form submission
                                           FocusScope.of(context).unfocus();
-                                          context.read<SignCubit>().SignUp(
+                                          context.read<SignCubit>().signUp(
                                                 context,
                                                 _formKey,
                                                 _emailController,

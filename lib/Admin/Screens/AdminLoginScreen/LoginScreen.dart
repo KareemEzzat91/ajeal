@@ -6,12 +6,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-class AdminLoginScreen extends StatelessWidget {
-  AdminLoginScreen({super.key});
+class AdminLoginScreen extends StatefulWidget {
+  const AdminLoginScreen({super.key});
 
+  @override
+  State<AdminLoginScreen> createState() => _AdminLoginScreenState();
+}
+
+class _AdminLoginScreenState extends State<AdminLoginScreen> {
   final _formKey = GlobalKey<FormState>();
+
   final _emailController = TextEditingController();
+
   final _passwordController = TextEditingController();
+
+  final FocusNode _emailFocus = FocusNode();
+
+  final FocusNode _passwordFocus = FocusNode();
+
+  @override
+  void dispose() {
+    // Clean up controllers and focus nodes
+    _emailController.dispose();
+    _passwordController.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +126,10 @@ class AdminLoginScreen extends StatelessWidget {
                               child: Column(
                                 children: [
                                   _buildTextField(
+                                    focusNode: _emailFocus,
                                     controller: _emailController,
                                     label: "Email",
+                                    nextFocus: _passwordFocus,
                                     icon: Icons.email_outlined,
                                     validator: (val) {
                                       if (val == null || !val.isEmail) {
@@ -117,6 +140,7 @@ class AdminLoginScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 16),
                                   _buildTextField(
+                                    focusNode: _passwordFocus,
                                     controller: _passwordController,
                                     label: "Password",
                                     icon: Icons.lock_outline,
@@ -151,7 +175,7 @@ class AdminLoginScreen extends StatelessWidget {
                                   ElevatedButton(
                                     onPressed: state is SignLoadingState
                                         ? null
-                                        : () => context.read<SignCubit>().Login(
+                                        : () => context.read<SignCubit>().login(
                                               context,
                                               _formKey,
                                               _emailController,
@@ -227,6 +251,9 @@ class AdminLoginScreen extends StatelessWidget {
     required TextEditingController controller,
     required String label,
     required IconData icon,
+    required FocusNode focusNode,
+    FocusNode? nextFocus,
+
     bool isPassword = false,
     String? Function(String?)? validator,
   }) {
@@ -235,8 +262,23 @@ class AdminLoginScreen extends StatelessWidget {
       controller: controller,
       obscureText: isPassword,
       validator: validator,
-      autofocus: true,
+      focusNode: focusNode,
       style: const TextStyle(color: Colors.grey),
+      onFieldSubmitted: (_) {
+        if (nextFocus != null) {
+          FocusScope.of(context).requestFocus(nextFocus);
+        } else {
+          FocusScope.of(context).unfocus();
+        }
+      },
+
+      onEditingComplete: () {
+        // This prevents the flickering issue in some cases
+        if (nextFocus != null) {
+          FocusScope.of(context).requestFocus(nextFocus);
+        }
+      },
+
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: Icon(icon, color: const Color(0xff0186c7)),

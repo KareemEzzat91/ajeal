@@ -337,31 +337,9 @@ class ChildGridCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 12),
+                _buildProgressIndicator(),
+
                 // Progress
-                Row(
-                  children: [
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: const LinearProgressIndicator(
-                          value: 0.5,
-                          backgroundColor: AppColors.primary,
-                          color: AppColors.primary,
-                          minHeight: 8,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      "50%",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.text,
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
@@ -369,6 +347,69 @@ class ChildGridCard extends StatelessWidget {
       ),
     );
   }
+  Widget _buildProgressIndicator() {
+    // Calculate progress percentage based on completed sessions
+    final int totalSessions = child.scheduleSesoins.length;
+    final  num completedSessions = child.completedSessions;
+    final double progressPercentage = totalSessions > 0
+        ? completedSessions / totalSessions
+        : 0.0;
+
+    // Format percentage for display
+    final String percentageText = "${(progressPercentage * 100).toStringAsFixed(0)}%";
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: LinearProgressIndicator(
+                  value: progressPercentage,
+                  backgroundColor: Colors.grey,
+                  color: AppColors.primary,
+                  minHeight: 8,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              percentageText,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppColors.text,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "تقدم الأهداف",
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.textSecondary,
+              ),
+            ),
+            Text(
+              "$completedSessions من $totalSessions",
+              style: const TextStyle(
+                fontSize: 14,
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
 }
 // Handle the case where user is adding someone else's child
 Future<void> handleOthersCase(BuildContext context, String childCode) async {
