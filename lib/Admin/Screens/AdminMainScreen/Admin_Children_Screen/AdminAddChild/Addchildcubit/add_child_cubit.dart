@@ -437,7 +437,9 @@ class AddChildCubit extends Cubit<AddChildState> {
         pharynx: pharynx,
         throat: throat,
         diagnosis: diagnosis,
-        completedSessions: 0
+        completedSessions: 0,
+        analysis: ""
+
       );
 
       // Save child to Firestore

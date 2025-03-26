@@ -111,7 +111,7 @@ class ChildDetailScreen extends StatelessWidget {
               ChildInfoSection(theme: theme, context: context, birthDate: birthDate, child: child),
               _buildSessionsSection(context,child),
               _buildGoalsSection(context),
-              ProgressSection(child: child,theme:theme.primaryColor,),
+              ProgressSection(child: child,theme:theme.primaryColor,isOthers: isOthers,isAnalysisEmpty: child.analysis.isEmpty,),
             ],
           ),
         ),

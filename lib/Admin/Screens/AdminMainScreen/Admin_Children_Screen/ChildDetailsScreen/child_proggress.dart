@@ -4,17 +4,23 @@ import 'dart:math';
 
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/ai_result_screen.dart';
 import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 
 class ProgressSection extends StatelessWidget {
   final Color theme;
   final Child child;
+  final bool isOthers ;
+  final bool isAnalysisEmpty;
 
   const ProgressSection({
     super.key,
     required this.theme,
     required this.child,
+    required this.isOthers,
+    required this.isAnalysisEmpty,
   });
 
   @override
@@ -118,7 +124,24 @@ class ProgressSection extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: (){
-                showAIResults(context ,child );
+                isAnalysisEmpty? showAIResults(context ,child ): Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AIResultsScreen(
+                      childName: child.name,
+                      analysis: child.analysis,
+                      sessionsData:  child.scheduleSesoins.where((session) => session['completed'] == true).map((session) => {
+                      "session": session["session"],
+                      "date": session["date"],
+                      "goals": session["goals"],
+                      "rate": session["rate"],
+                      "notes": session["notes"],
+                      "tasks": session["tasks"],
+                    }).toList(),
+                    ),
+                  ),
+                );;
+                
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
@@ -183,6 +206,28 @@ class ProgressSection extends StatelessWidget {
 
       // Call Gemini API (implementation depends on your Gemini integration)
       final String aiAnalysis = await callGeminiAPI(prompt);
+      final batch = FirebaseFirestore.instance.batch();
+
+      DocumentReference childDoc = FirebaseFirestore.instance.collection("Children").doc(child.parentPhone);
+      batch.update(childDoc, {
+        "analysis": aiAnalysis
+      });
+
+      if (!isOthers) {
+        DocumentReference userChildDoc = FirebaseFirestore.instance
+            .collection("users")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection("children")
+            .doc(child.parentPhone);
+
+        batch.update(userChildDoc, {
+          "analysis": aiAnalysis
+        });
+      }
+
+// تنفيذ كل العمليات دفعة واحدة
+      await batch.commit();
+
 
       // Close loading dialog
       Navigator.pop(context);
@@ -192,6 +237,7 @@ class ProgressSection extends StatelessWidget {
         context,
         MaterialPageRoute(
           builder: (context) => AIResultsScreen(
+            childName: child.name,
             analysis: aiAnalysis,
             sessionsData: sessionsData,
           ),

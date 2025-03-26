@@ -93,6 +93,7 @@ class Child extends Equatable {
   final List<Goal> selectedGoals;
   final List<Map<String, dynamic>> scheduleSesoins;
   final num completedSessions;
+  final String analysis;
 
   // Doctor Information
   String doctorId;
@@ -199,6 +200,7 @@ class Child extends Equatable {
     required this.doctorId,
     required this.doctorName,
     required this.doctorPhone,
+    required this.analysis,
 
     // Progress Tracking
     required this.dailyNotes,
@@ -303,6 +305,7 @@ class Child extends Equatable {
       'doctorId': doctorId,
       'doctorName': doctorName,
       "doctorPhone": doctorPhone,
+      "analysis": analysis,
 
       // Progress Tracking
       'dailyNotes': dailyNotes,
@@ -489,7 +492,8 @@ class Child extends Equatable {
         // Doctor Information
         doctorId: json['doctorId'] ?? '',
         doctorName: json['doctorName'] ?? '',
-        doctorPhone: json["doctorPhone"],
+        doctorPhone: json["doctorPhone"]??"",
+        analysis: json["analysis"]??"",
 
         // Progress Tracking
         dailyNotes: _parseDailyNotes(json['dailyNotes']),
@@ -523,6 +527,7 @@ class Child extends Equatable {
         doctorName: '',
         doctorPhone: '',
         dailyNotes: const [],
+        analysis: ""
       );
     }
   }
@@ -649,6 +654,7 @@ class Child extends Equatable {
     String? doctorId,
     String? doctorName,
     String? doctorPhone,
+    String? analysis,
     int?completedSessions,
     List<Map<String, dynamic>>? dailyNotes,
   }) {
@@ -728,6 +734,7 @@ class Child extends Equatable {
       doctorName: doctorName ?? this.doctorName,
       doctorPhone: doctorPhone ?? this.doctorPhone,
       dailyNotes: dailyNotes ?? this.dailyNotes,
+      analysis: analysis??this.analysis
     );
   }
 
@@ -820,5 +827,6 @@ class Child extends Equatable {
         doctorName,
         doctorPhone,
     completedSessions,
+    analysis,
       ];
 }
