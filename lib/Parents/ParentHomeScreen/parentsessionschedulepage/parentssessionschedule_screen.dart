@@ -1,8 +1,11 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/SessionDetailScreen.dart';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/child_proggress.dart';
+import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
 import 'package:flutter/material.dart';
 
 class SessionSchedulePage extends StatelessWidget {
   final String childId;
+  final Child child;
   final List<Map<String, dynamic>> scheduleSesoins;
   final bool isParent;
   final String name ;
@@ -11,6 +14,7 @@ class SessionSchedulePage extends StatelessWidget {
   const SessionSchedulePage({
     super.key,
     required this.childId,
+    required this.child,
     required this.scheduleSesoins,
     required this.isParent,
     required this.name ,
@@ -21,6 +25,8 @@ class SessionSchedulePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -34,7 +40,9 @@ class SessionSchedulePage extends StatelessWidget {
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: _buildSessionsList(),
+
           ),
+          SliverPadding(padding: const EdgeInsets.symmetric(horizontal: 16), sliver: SliverToBoxAdapter(child: ProgressSection(child: child,theme:theme.primaryColor,isOthers: false,isAnalysisEmpty: child.analysis.isEmpty,))),
         ],
       ),
     );
@@ -81,7 +89,7 @@ class SessionSchedulePage extends StatelessWidget {
       return _buildEmptyState();
     }
 
-    final nextSession = scheduleSesoins[ completedSesions==scheduleSesoins.length?completedSesions:completedSesions+1];
+    final nextSession = scheduleSesoins[ completedSesions==scheduleSesoins.length?completedSesions-1:completedSesions+1];
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(

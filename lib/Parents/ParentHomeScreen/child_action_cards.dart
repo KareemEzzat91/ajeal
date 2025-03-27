@@ -44,6 +44,7 @@ class ChildActionCards extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => SessionSchedulePage(
+child: child,
               completedSesions:child.completedSessions.toInt(),
               name :child.name,
               isParent: true,

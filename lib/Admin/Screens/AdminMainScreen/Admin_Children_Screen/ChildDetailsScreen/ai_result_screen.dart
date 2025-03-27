@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,69 +20,86 @@ class AIResultsScreen extends StatelessWidget {
 
   Future<void> generatePdf() async {
     final pdf = pw.Document();
+
+    // تحميل خط عربي
     final fontData = await rootBundle.load("assets/fonts/NotoSansArabic-Regular.ttf");
     final ttf = pw.Font.ttf(fontData);
-    String formattedText = utf8.decode(utf8.encode(analysis));
 
+    // إزالة التنسيقات الغير مرغوبة مثل النجوم *
+    String cleanText(String text) {
+      return text.replaceAll(RegExp(r'\*+|#+'), '').trim();
+    }
 
-    print(formattedText);
+    // تقسيم النص إلى فقرات
+    final paragraphs = analysis.split('\n\n').map(cleanText).toList();
 
     pdf.addPage(
-      pw.Page(
+      pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
         margin: const pw.EdgeInsets.all(32),
-        build: (pw.Context context) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              pw.Header(
-                level: 0,
-                child: pw.Text(" تحليل نتائج  $childName",
-                    style: pw.TextStyle(
-                      font: ttf,
-                      fontSize: 24,
-                      fontWeight: pw.FontWeight.bold,
-                    ),
-                    textDirection: pw.TextDirection.rtl),
-              ),
-              pw.SizedBox(height: 20),
-              pw.Text("تم تحليل ${sessionsData.length} جلسات مكتملة",
-                  style: pw.TextStyle(
-                    font: ttf,
-                    fontSize: 14,
-                  ),
-                  textDirection: pw.TextDirection.rtl),
-              pw.SizedBox(height: 20),
-              pw.Text("نتائج التحليل",
-                  style: pw.TextStyle(
-                    font: ttf,
-                    fontSize: 18,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
-                  textDirection: pw.TextDirection.rtl),
-              pw.SizedBox(height: 10),
-              pw.Text( formattedText ,
+        textDirection: pw.TextDirection.rtl,
+        theme: pw.ThemeData.withFont(base: ttf),
+        build: (pw.Context context) => [
+          // العنوان الرئيسي
+          pw.Header(
+            level: 0,
+            child: pw.Text(
+              "تحليل نتائج $childName",
+              style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+              textDirection: pw.TextDirection.rtl,
+            ),
+          ),
+          pw.SizedBox(height: 10),
 
-                  style: pw.TextStyle(
-                    font: ttf,
-                    fontSize: 14,
+          // عدد الجلسات
+          pw.Text(
+            "تم تحليل ${sessionsData.length} جلسات مكتملة",
+            style: pw.TextStyle(fontSize: 14),
+            textDirection: pw.TextDirection.rtl,
+          ),
+          pw.SizedBox(height: 20),
+
+          // عنوان القسم
+          pw.Text(
+            "نتائج التحليل",
+            style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold),
+            textDirection: pw.TextDirection.rtl,
+          ),
+          pw.SizedBox(height: 10),
+
+          // النصوص مقسمة بشكل جيد
+          pw.ListView(
+            children: paragraphs.map((paragraph) =>
+                pw.Padding(
+                  padding: const pw.EdgeInsets.only(bottom: 8),
+                  child: pw.Text(
+                    paragraph,
+                    style: pw.TextStyle(fontSize: 14),
+                    textDirection: pw.TextDirection.rtl,
                   ),
-                  textDirection: pw.TextDirection.rtl),
-            ],
-          );
-        },
+                ),
+            ).toList(),
+          ),
+        ],
+
+        // ترقيم الصفحات في الأسفل
+        footer: (context) => pw.Align(
+          alignment: pw.Alignment.centerRight,
+          child: pw.Text(
+            'صفحة ${context.pageNumber} من ${context.pagesCount}',
+            style: pw.TextStyle(fontSize: 12),
+            textDirection: pw.TextDirection.rtl,
+          ),
+        ),
       ),
     );
 
-
-    // Show print dialog
+    // عرض نافذة الطباعة أو الحفظ كـ PDF
     await Printing.layoutPdf(
       onLayout: (PdfPageFormat format) async => pdf.save(),
       name: '${childName}_${DateTime.now().toString().split(' ')[0]}',
     );
-
   }
-
 
   @override
   Widget build(BuildContext context) {
