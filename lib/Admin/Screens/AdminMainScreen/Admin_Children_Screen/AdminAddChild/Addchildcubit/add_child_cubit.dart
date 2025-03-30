@@ -474,7 +474,7 @@ class AddChildCubit extends Cubit<AddChildState> {
       // Save all data to Firestore
       await saveToFirestore();
 
-        sendWhatsAppMessage(parentPhoneNumber, doctorId, name);
+        sendWhatsAppMessage(parentPhone, doctorId, name);
 
       // Send WhatsApp verification message
 
