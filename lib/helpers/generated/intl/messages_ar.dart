@@ -99,7 +99,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "direct_communication": MessageLookupByLibrary.simpleMessage(
       "قناة تواصل مباشرة",
     ),
-    "doctorCode": MessageLookupByLibrary.simpleMessage(" Code"),
+    "doctorCode": MessageLookupByLibrary.simpleMessage(" الكود"),
     "doctorInformation": MessageLookupByLibrary.simpleMessage("معلومات الطبيب"),
     "doctorName": MessageLookupByLibrary.simpleMessage("اسم الطبيب"),
     "doctorPhone": MessageLookupByLibrary.simpleMessage("رقم هاتف الطبيب"),

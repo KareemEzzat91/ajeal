@@ -97,7 +97,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "direct_communication": MessageLookupByLibrary.simpleMessage(
       "Direct communication channel",
     ),
-    "doctorCode": MessageLookupByLibrary.simpleMessage(" الكود "),
+    "doctorCode": MessageLookupByLibrary.simpleMessage(" Code "),
     "doctorInformation": MessageLookupByLibrary.simpleMessage(
       "Doctor Information",
     ),

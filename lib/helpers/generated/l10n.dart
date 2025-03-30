@@ -1405,9 +1405,9 @@ class S {
     );
   }
 
-  /// ` الكود `
+  /// ` Code `
   String get doctorCode {
-    return Intl.message(' الكود ', name: 'doctorCode', desc: '', args: []);
+    return Intl.message(' Code ', name: 'doctorCode', desc: '', args: []);
   }
 
   /// `Child Details`
