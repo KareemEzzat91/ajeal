@@ -335,6 +335,7 @@ class AddChildCubit extends Cubit<AddChildState> {
     emit(AddLoadingState());
 
     try {
+      parentPhone=parentPhone.trim();
       final uid = _currentUserId;
       if (uid == null) {
         throw Exception("User not authenticated");

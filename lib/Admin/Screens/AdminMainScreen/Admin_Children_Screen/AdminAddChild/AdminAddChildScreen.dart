@@ -977,7 +977,7 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
       startDate: startDate ?? DateTime.now(),
       endDate: endDate ?? DateTime.now(),
       period: periodController.text,
-      parentPhone: parentPhoneController.text+nameController.text, // Fixed parameter name//number+ name Likecode
+      parentPhone: parentPhoneController.text.trim()+nameController.text.trim(), // Fixed parameter name//number+ name Likecode
       parentPhoneNumber:parentPhoneController.text,//Only Number
       notes: notesController.text,
       school: schoolController.text,

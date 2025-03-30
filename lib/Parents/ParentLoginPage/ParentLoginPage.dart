@@ -23,22 +23,28 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
 
     setState(() => _isLoading = true);
 
+
     try {
       final parentCode = _parentCodeController.text.trim();
-      if (parentCode.isEmpty) return;
 
+      if (parentCode.isEmpty) return;
       final childSnapshot = await FirebaseFirestore.instance
           .collection("Children")
           .doc(parentCode)
           .get();
 
       if (!childSnapshot.exists) {
+        
         _showErrorSnackBar(S.of(context).invalid_parent_code);
+
+
+
         return;
       }
 
       final Child child = Child.fromJson(childSnapshot.data()!);
       final adminID = child.doctorId;
+
 
       final doctorSnapshot = await FirebaseFirestore.instance
           .collection("Doctors")
@@ -69,8 +75,10 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
         ),
       );
     } catch (e) {
+
       _showErrorSnackBar("An error occurred. Please try again later.");
     } finally {
+
       setState(() => _isLoading = false);
     }
   }
@@ -112,7 +120,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
                 const SizedBox(height: 40),
                 _buildHeader(),
                 const SizedBox(height: 40),
-                _buildLoginForm(),
+                _buildLoginForm( ),
                 const SizedBox(height: 24),
                 _buildLoginButton(),
                 const SizedBox(height: 24),
@@ -155,13 +163,15 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
   }
 
   Widget _buildLoginForm() {
+
     return TextFormField(
-      controller: _parentCodeController,
+      controller:_parentCodeController,
       decoration: InputDecoration(
         labelText: S.of(context).parent_code,
         hintText: S.of(context).enter_parent_code,
         prefixIcon: const Icon(Icons.person_outline, color: Colors.teal),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade300),
@@ -171,7 +181,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
           borderSide: const BorderSide(color: Colors.teal),
         ),
       ),
-      validator: (value) => value == null || value.isEmpty ? 'Please enter your parent code' : null,
+       validator: (value) => value == null || value.isEmpty   ? 'Please enter your parent code' : null,
     );
   }
 

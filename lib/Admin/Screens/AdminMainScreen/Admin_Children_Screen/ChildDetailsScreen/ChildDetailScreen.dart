@@ -5,12 +5,17 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildD
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/child_header.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/child_info.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/child_proggress.dart';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/colors.dart';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/dialogs.dart';
 import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
 import 'package:ajeal/Admin/models/goals_model/Goals.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/ParentAdminchat/ParentAdminchatscreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class ChildDetailScreen extends StatelessWidget {
   final Child child;
@@ -98,6 +103,7 @@ class ChildDetailScreen extends StatelessWidget {
                 );
               },
             ),
+
           ],
           centerTitle: true,
           backgroundColor: Colors.blue[700],
@@ -112,6 +118,78 @@ class ChildDetailScreen extends StatelessWidget {
               _buildSessionsSection(context,child),
               _buildGoalsSection(context),
               ProgressSection(child: child,theme:theme.primaryColor,isOthers: isOthers,isAnalysisEmpty: child.analysis.isEmpty,),
+              DropdownButton<String>(
+                alignment: Alignment.center,
+
+                icon: const Icon(
+                  Icons.change_circle_outlined,
+                  color: AppColors.primary,
+                ),
+                underline: const SizedBox(), // Remove underline
+                onChanged: (value) {
+                  if (value == 'Transfer') {
+                    showCustomDialog(context, child: child);
+                  } else if (value == 'Remove') {
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.confirm,
+                      text: 'Do you want to Remove ${child.name}?',
+                      confirmBtnText: 'Yes',
+                      cancelBtnText: 'No',
+                      confirmBtnColor: Colors.green,
+                      onConfirmBtnTap: () {
+                        try {
+                          final collection = isOthers
+                              ? "OthersChildren"
+                              : "children";
+                          FirebaseFirestore.instance
+                              .collection("users")
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .collection(collection)
+                              .doc(child.parentPhone)
+                              .delete();
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Deleted Successfully"),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                          Navigator.pop(context);
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(e.toString())),
+                          );
+                           Navigator.pop(context);
+                        }
+                      },
+                    );
+                  }
+                },
+                items: const [
+                  DropdownMenuItem(
+                    value: 'Transfer',
+                    child: Row(
+                      children: [
+                        Icon(Icons.change_circle_outlined, color: Colors.black),
+                        SizedBox(width: 8),
+                        Text('Transfer'),
+                      ],
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: 'Remove',
+                    child: Row(
+                      children: [
+                        Icon(Icons.delete_forever, color: AppColors.error),
+                        SizedBox(width: 8),
+                        Text('Remove'),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+
             ],
           ),
         ),
