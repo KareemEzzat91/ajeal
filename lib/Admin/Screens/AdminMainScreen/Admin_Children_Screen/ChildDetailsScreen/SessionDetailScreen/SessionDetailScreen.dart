@@ -3,6 +3,7 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildD
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/sessiontaskrate_screen/sessiontaskrate_screen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/goal_lists/goal_lists.dart';
 import 'package:ajeal/Admin/models/goals_model/Goals.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -213,7 +214,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                 const Icon(Icons.event, color: Colors.blue),
                 const SizedBox(width: 10),
                 Text(
-                  "جلسة ${widget.sessionName}",
+                  "${S.of(context).session} ${widget.sessionName}",
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -307,7 +308,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "التقييم: ${task.rate}",
+              "${S.of(context).successRate}: ${task.rate}",
               style: TextStyle(
                 color: Colors.blue[700],
                 fontWeight: FontWeight.bold,
@@ -361,9 +362,9 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "تقييم الطفل",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+             Text(
+              S.of(context).childRate,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             Row(
@@ -403,9 +404,9 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "ملاحظات الجلسة",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+             Text(
+              S.of(context).sessionNote,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             TextField(
@@ -434,7 +435,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       return Scaffold(
           appBar: AppBar(
             title: Text(
-              "تفاصيل الجلسة ${widget.sessionName}",
+              "${S.of(context).details } ${S.of(context).session} ${widget.sessionName}",
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             centerTitle: true,
@@ -475,9 +476,9 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                         ),
                         child: _isSaving
                             ? const CircularProgressIndicator(color: Colors.white)
-                            : const Text(
-                                "حفظ التفاصيل",
-                                style: TextStyle(
+                            :  Text(
+                                S.of(context).saveChildInformation,
+                                style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),

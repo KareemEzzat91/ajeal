@@ -23,6 +23,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "activeGoals": MessageLookupByLibrary.simpleMessage("Active Goals"),
+    "addNewChild": MessageLookupByLibrary.simpleMessage("Add New Child"),
+    "addNewChildOthers": MessageLookupByLibrary.simpleMessage("Add By Code"),
     "additionalInformation": MessageLookupByLibrary.simpleMessage(
       "Additional Information",
     ),
@@ -61,12 +63,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "chat_teacher": MessageLookupByLibrary.simpleMessage("Chat with Teacher"),
     "childDetails": MessageLookupByLibrary.simpleMessage("Child Details"),
     "childName": MessageLookupByLibrary.simpleMessage("Child\'s Name"),
+    "childRate": MessageLookupByLibrary.simpleMessage("Child Rate "),
     "children": MessageLookupByLibrary.simpleMessage("Children"),
     "childrenList": MessageLookupByLibrary.simpleMessage("Children List "),
     "childrenPage": MessageLookupByLibrary.simpleMessage("Children"),
     "chooseFromGallery": MessageLookupByLibrary.simpleMessage(
       "Choose from Gallery",
     ),
+    "chooseTask": MessageLookupByLibrary.simpleMessage("Choose Task"),
     "circulatory": MessageLookupByLibrary.simpleMessage("Circulatory System"),
     "communicationPage": MessageLookupByLibrary.simpleMessage("Communication"),
     "completed": MessageLookupByLibrary.simpleMessage("Completed"),
@@ -81,6 +85,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "daily_notes": MessageLookupByLibrary.simpleMessage("Daily Notes"),
     "dateOfBirth": MessageLookupByLibrary.simpleMessage("Date of Birth"),
     "detailedReports": MessageLookupByLibrary.simpleMessage("Detailed Reports"),
+    "details": MessageLookupByLibrary.simpleMessage("Details"),
     "developmentalHistoryPregnancy": MessageLookupByLibrary.simpleMessage(
       "Developmental History - Pregnancy",
     ),
@@ -250,6 +255,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "pregnancyPhase": MessageLookupByLibrary.simpleMessage(
       "Developmental History - Pregnancy Phase",
     ),
+    "press": MessageLookupByLibrary.simpleMessage("press here"),
     "printReport": MessageLookupByLibrary.simpleMessage("Print Report"),
     "profilePage": MessageLookupByLibrary.simpleMessage("Profile"),
     "progress": MessageLookupByLibrary.simpleMessage("Progress"),
@@ -283,10 +289,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectRole": MessageLookupByLibrary.simpleMessage(
       "Select your role to continue",
     ),
+    "session": MessageLookupByLibrary.simpleMessage("Session"),
     "sessionAnalysis": MessageLookupByLibrary.simpleMessage("Session Analysis"),
     "sessionCompleted": MessageLookupByLibrary.simpleMessage(
       "Session completed with  ",
     ),
+    "sessionNote": MessageLookupByLibrary.simpleMessage("Session Notes"),
     "sessions": MessageLookupByLibrary.simpleMessage("Sessions"),
     "settings": MessageLookupByLibrary.simpleMessage("Settings"),
     "siblingCloseness": MessageLookupByLibrary.simpleMessage(

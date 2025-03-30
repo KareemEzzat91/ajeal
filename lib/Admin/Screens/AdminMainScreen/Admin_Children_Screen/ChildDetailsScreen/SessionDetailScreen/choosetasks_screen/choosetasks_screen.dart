@@ -1,4 +1,5 @@
 import 'package:ajeal/Admin/models/goals_model/Goals.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ChooseTasksScreen extends StatefulWidget {
@@ -34,7 +35,7 @@ class _ChooseTasksScreenState extends State<ChooseTasksScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "اختر المهام: ${widget.selectedGoal.goalName}",
+          "${S.of(context).chooseTask}: ${widget.selectedGoal.goalName}",
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.blueAccent,
@@ -97,9 +98,9 @@ class _ChooseTasksScreenState extends State<ChooseTasksScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text(
-                "حفظ المهام المختارة",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              child:  Text(
+               S.of(context).save,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ],

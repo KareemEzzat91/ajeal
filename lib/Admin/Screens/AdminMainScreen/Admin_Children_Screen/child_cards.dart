@@ -1,6 +1,7 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/colors.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/dialogs.dart';
 import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,12 +54,12 @@ class ChildCard extends StatelessWidget {
                   children: [
                     _buildAvatar(),
                     const SizedBox(width: 16),
-                    Expanded(child: _buildChildInfo()),
+                    Expanded(child: _buildChildInfo(context)),
                     _buildMoreButton(context,child.parentPhone),
                   ],
                 ),
                 const SizedBox(height: 20),
-                _buildProgressIndicator(),
+                _buildProgressIndicator(context),
               ],
             ),
           ),
@@ -102,7 +103,7 @@ class ChildCard extends StatelessWidget {
     );
   }
 
-  Widget _buildChildInfo() {
+  Widget _buildChildInfo(BuildContext context ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -116,7 +117,7 @@ class ChildCard extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          "تاريخ الميلاد: ${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
+          "${S.of(context).dateOfBirth}: ${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
           style: const TextStyle(
             fontSize: 14,
             color: AppColors.textSecondary,
@@ -126,7 +127,7 @@ class ChildCard extends StatelessWidget {
     );
   }
 
-  Widget _buildProgressIndicator() {
+  Widget _buildProgressIndicator(BuildContext context ) {
     // Calculate progress percentage based on completed sessions
     final int totalSessions = child.scheduleSesoins.length;
     final  num completedSessions = child.completedSessions;
@@ -168,9 +169,9 @@ class ChildCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              "تقدم الأهداف",
-              style: TextStyle(
+             Text(
+              S.of(context).goalProgress,
+              style: const TextStyle(
                 fontSize: 14,
                 color: AppColors.textSecondary,
               ),
@@ -246,30 +247,37 @@ class ChildCard extends StatelessWidget {
 class ChildGridCard extends StatelessWidget {
   final Child child;
   final VoidCallback onTap;
+  final bool useHeroAnimation;
 
   const ChildGridCard({
     super.key,
     required this.child,
     required this.onTap,
+    this.useHeroAnimation = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.sizeOf(context).height;
+    final theme = Theme.of(context);
+    final height = MediaQuery.of(context).size.height;
+    // Extract avatar URL logic to separate method
+    final avatarUrl = _getAvatarUrl();
+
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
+        color: theme.primaryColor,
         borderRadius: BorderRadius.circular(24),
         boxShadow: const [
           BoxShadow(
-            color: Colors.black ,
+            color: Colors.black,
             blurRadius: 16,
             offset: Offset(0, 4),
           ),
         ],
       ),
       child: Material(
-        color: Theme.of(context).primaryColor,
+        color: theme.primaryColor,
+        borderRadius: BorderRadius.circular(24),
         child: InkWell(
           borderRadius: BorderRadius.circular(24),
           onTap: onTap,
@@ -280,45 +288,13 @@ class ChildGridCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Avatar
-                Hero(
-                  tag: 'child_avatar_${child.id}${child.name}',
-                  child: Container(
-                    width: double.infinity,
-                    height: height / 6.3,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: AppColors.primary,
-                        width: 2,
-                      ),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: CachedNetworkImage(
-                        imageUrl: child.gender == "Male"
-                            ? "https://img.freepik.com/premium-photo/professional-portrait-studio-photograph-adorable-mixedrace-child-generative-ai_895561-2847.jpg"
-                            : "https://avatarfiles.alphacoders.com/143/143832.jpg",
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Shimmer.fromColors(
-                          baseColor: Colors.grey[200]!,
-                          highlightColor: Colors.grey[100]!,
-                          child: Container(color: Colors.white),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          color: Colors.grey[100],
-                          child: Icon(Icons.person,
-                              size: 32, color: Colors.grey[400]),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildAvatar(context, avatarUrl, height),
                 const SizedBox(height: 12),
+
                 // Name
                 Text(
                   child.name,
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColors.text,
                   ),
@@ -326,20 +302,20 @@ class ChildGridCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
+
                 // Birthdate
                 Text(
-                  "تاريخ الميلاد: ${child.dateOfBirth.day}/${child.dateOfBirth.month}/${child.dateOfBirth.year}",
-                  style: const TextStyle(
-                    fontSize: 12,
+                    "${S.of(context).dateOfBirth} :${_formatDate( child.dateOfBirth)}" ,
+                  style: theme.textTheme.bodySmall?.copyWith(
                     color: AppColors.textSecondary,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 12),
-                _buildProgressIndicator(),
 
                 // Progress
+                _buildProgressIndicator(context),
               ],
             ),
           ),
@@ -347,16 +323,60 @@ class ChildGridCard extends StatelessWidget {
       ),
     );
   }
-  Widget _buildProgressIndicator() {
+
+  Widget _buildAvatar(BuildContext context, String imageUrl, double height) {
+    final avatarContent = Container(
+      width: double.infinity,
+      height: height / 6.3,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppColors.primary,
+          width: 2,
+        ),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(14), // Adjusted to account for border
+        child: CachedNetworkImage(
+          imageUrl: imageUrl,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => Shimmer.fromColors(
+            baseColor: Colors.grey[200]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(color: Colors.white),
+          ),
+          errorWidget: (context, url, error) => Container(
+            color: Colors.grey[100],
+            child: const Icon(Icons.person, size: 32, color: Colors.grey),
+          ),
+          memCacheHeight: (height / 6.3 * MediaQuery.of(context).devicePixelRatio).round(),
+        ),
+      ),
+    );
+
+    return useHeroAnimation
+        ? Hero(
+      tag: 'child_avatar_${child.id}${child.name}',
+      child: avatarContent,
+    )
+        : avatarContent;
+  }
+
+  Widget _buildProgressIndicator(BuildContext context) {
+    final theme = Theme.of(context);
+    final localizations = S.of(context);
+
     // Calculate progress percentage based on completed sessions
     final int totalSessions = child.scheduleSesoins.length;
-    final  num completedSessions = child.completedSessions;
+    final num completedSessions = child.completedSessions;
     final double progressPercentage = totalSessions > 0
-        ? completedSessions / totalSessions
+        ? (completedSessions / totalSessions).clamp(0.0, 1.0)
         : 0.0;
 
     // Format percentage for display
     final String percentageText = "${(progressPercentage * 100).toStringAsFixed(0)}%";
+    final String progressLabel = localizations.goalProgress ;
+    final String progressText = "$completedSessions من $totalSessions";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -377,11 +397,11 @@ class ChildGridCard extends StatelessWidget {
             const SizedBox(width: 12),
             Text(
               percentageText,
-              style: const TextStyle(
-                fontSize: 16,
+              style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppColors.text,
               ),
+              semanticsLabel:  "نسبة الإكمال $percentageText",
             ),
           ],
         ),
@@ -389,20 +409,19 @@ class ChildGridCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              "تقدم الأهداف",
-              style: TextStyle(
-                fontSize: 14,
+            Text(
+              progressLabel,
+              style: theme.textTheme.bodyMedium?.copyWith(
                 color: AppColors.textSecondary,
               ),
             ),
             Text(
-              "$completedSessions من $totalSessions",
-              style: const TextStyle(
-                fontSize: 14,
+              progressText,
+              style: theme.textTheme.bodyMedium?.copyWith(
                 color: AppColors.textSecondary,
                 fontWeight: FontWeight.w500,
               ),
+              semanticsLabel: "$completedSessions جلسات مكتملة من أصل $totalSessions",
             ),
           ],
         ),
@@ -410,8 +429,16 @@ class ChildGridCard extends StatelessWidget {
     );
   }
 
-}
-// Handle the case where user is adding someone else's child
+  String _getAvatarUrl() {
+    return child.gender == "Male"
+        ? "https://img.freepik.com/premium-photo/professional-portrait-studio-photograph-adorable-mixedrace-child-generative-ai_895561-2847.jpg"
+        : "https://avatarfiles.alphacoders.com/143/143832.jpg";
+  }
+  String _formatDate(DateTime date) {
+    return "${date.day}/${date.month}/${date.year}";
+  }
+
+}// Handle the case where user is adding someone else's child
 Future<void> handleOthersCase(BuildContext context, String childCode) async {
   // Show loading indicator
   showLoadingDialog(context);

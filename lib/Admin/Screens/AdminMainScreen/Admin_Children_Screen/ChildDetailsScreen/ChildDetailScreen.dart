@@ -10,6 +10,7 @@ import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/dialog
 import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
 import 'package:ajeal/Admin/models/goals_model/Goals.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/ParentAdminchat/ParentAdminchatscreen.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,7 +48,7 @@ class ChildDetailScreen extends StatelessWidget {
         backgroundColor: theme.primaryColor,
         appBar: AppBar(
           title: Text(
-            "تفاصيل $childName",
+            "${S.of(context).details} $childName",
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
@@ -118,74 +119,53 @@ class ChildDetailScreen extends StatelessWidget {
               _buildSessionsSection(context,child),
               _buildGoalsSection(context),
               ProgressSection(child: child,theme:theme.primaryColor,isOthers: isOthers,isAnalysisEmpty: child.analysis.isEmpty,),
-              DropdownButton<String>(
-                alignment: Alignment.center,
-
-                icon: const Icon(
-                  Icons.change_circle_outlined,
-                  color: AppColors.primary,
-                ),
-                underline: const SizedBox(), // Remove underline
-                onChanged: (value) {
-                  if (value == 'Transfer') {
-                    showCustomDialog(context, child: child);
-                  } else if (value == 'Remove') {
-                    QuickAlert.show(
-                      context: context,
-                      type: QuickAlertType.confirm,
-                      text: 'Do you want to Remove ${child.name}?',
-                      confirmBtnText: 'Yes',
-                      cancelBtnText: 'No',
-                      confirmBtnColor: Colors.green,
-                      onConfirmBtnTap: () {
-                        try {
-                          final collection = isOthers
-                              ? "OthersChildren"
-                              : "children";
-                          FirebaseFirestore.instance
-                              .collection("users")
-                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                              .collection(collection)
-                              .doc(child.parentPhone)
-                              .delete();
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Deleted Successfully"),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                          Navigator.pop(context);
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(e.toString())),
-                          );
-                           Navigator.pop(context);
-                        }
-                      },
-                    );
-                  }
-                },
-                items: const [
-                  DropdownMenuItem(
-                    value: 'Transfer',
-                    child: Row(
-                      children: [
-                        Icon(Icons.change_circle_outlined, color: Colors.black),
-                        SizedBox(width: 8),
-                        Text('Transfer'),
-                      ],
-                    ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextButton.icon(
+                    onPressed: () {
+                      showCustomDialog(context, child: child);
+                    },
+                    icon: const Icon(Icons.change_circle_outlined, color: Colors.blueAccent),
+                    label: const Text('Transfer'),
                   ),
-                  DropdownMenuItem(
-                    value: 'Remove',
-                    child: Row(
-                      children: [
-                        Icon(Icons.delete_forever, color: AppColors.error),
-                        SizedBox(width: 8),
-                        Text('Remove'),
-                      ],
-                    ),
+                  TextButton.icon(
+                    onPressed: () {
+                      QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.confirm,
+                        text: 'Do you want to Remove ${child.name}?',
+                        confirmBtnText: 'Yes',
+                        cancelBtnText: 'No',
+                        confirmBtnColor: Colors.green,
+                        onConfirmBtnTap: () {
+                          try {
+                            final collection = isOthers ? "OthersChildren" : "children";
+                            FirebaseFirestore.instance
+                                .collection("users")
+                                .doc(FirebaseAuth.instance.currentUser!.uid)
+                                .collection(collection)
+                                .doc(child.parentPhone)
+                                .delete();
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Deleted Successfully"),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                            Navigator.pop(context);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(e.toString())),
+                            );
+                            Navigator.pop(context);
+                          }
+                        },
+                      );
+                    },
+                    icon: const Icon(Icons.delete_forever, color: AppColors.error),
+                    label: const Text('Remove'),
                   ),
                 ],
               )
@@ -202,11 +182,11 @@ class ChildDetailScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.all(16.0),
+         Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Text(
-            "الجلسات",
-            style: TextStyle(
+            S.of(context).sessions,
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -267,20 +247,20 @@ class ChildDetailScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'جلسة: ${session['session']}',
+                              '${S.of(context).session}: ${session['session']}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
                             ),
                             Text(
-                              'التاريخ: ${session['date']}',
+                              '${S.of(context).startDate}: ${session['date']}',
                               style: TextStyle(color: Colors.grey[600]),
                             ),
                             // Added completion status text
                             if (isCompleted)
                               Text(
-                                'مكتمل',
+                                S.of(context).completed,
                                 style: TextStyle(
                                   color: Colors.green[700],
                                   fontWeight: FontWeight.w500,
@@ -348,11 +328,11 @@ class ChildDetailScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.all(16.0),
+         Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Text(
-            "الأهداف",
-            style: TextStyle(
+           S.of(context).goals,
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),

@@ -280,7 +280,7 @@ class AddChildButton extends StatelessWidget {
       ),
       icon: const Icon(Icons.add, color: Colors.white),
       label:  Text(
-        isOthers? "اضافة طفل من دكتور اخر ": 'إضافة طفل جديد',
+        isOthers? S.of(context).addNewChildOthers: S.of(context).addNewChild,
         style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w600,

@@ -23,6 +23,10 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "activeGoals": MessageLookupByLibrary.simpleMessage("الأهداف النشطة"),
+    "addNewChild": MessageLookupByLibrary.simpleMessage("إضافة طفل جديد"),
+    "addNewChildOthers": MessageLookupByLibrary.simpleMessage(
+      "اضافة طفل من دكتور اخر",
+    ),
     "additionalInformation": MessageLookupByLibrary.simpleMessage(
       "معلومات إضافية",
     ),
@@ -57,12 +61,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "chat_teacher": MessageLookupByLibrary.simpleMessage("الدردشة مع المعلم"),
     "childDetails": MessageLookupByLibrary.simpleMessage("تفاصيل الطفل"),
     "childName": MessageLookupByLibrary.simpleMessage("اسم الطفل"),
+    "childRate": MessageLookupByLibrary.simpleMessage("تقييم الطفل "),
     "children": MessageLookupByLibrary.simpleMessage("الأطفال"),
     "childrenList": MessageLookupByLibrary.simpleMessage("قائمة الأطفال"),
     "childrenPage": MessageLookupByLibrary.simpleMessage("الأطفال"),
     "chooseFromGallery": MessageLookupByLibrary.simpleMessage(
       "اختيار من المعرض",
     ),
+    "chooseTask": MessageLookupByLibrary.simpleMessage("اختر المهام"),
     "circulatory": MessageLookupByLibrary.simpleMessage("الدورة الدموية"),
     "communicationPage": MessageLookupByLibrary.simpleMessage("التواصل"),
     "completed": MessageLookupByLibrary.simpleMessage("مكتمل"),
@@ -83,6 +89,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "detailedReports": MessageLookupByLibrary.simpleMessage(
       "التقارير التفصيلية",
     ),
+    "details": MessageLookupByLibrary.simpleMessage("تفاصيل"),
     "developmentalHistoryPregnancy": MessageLookupByLibrary.simpleMessage(
       "تاريخ النمو - الحمل",
     ),
@@ -232,6 +239,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "pregnancyPhase": MessageLookupByLibrary.simpleMessage(
       "تاريخ النمو - مرحلة الحمل",
     ),
+    "press": MessageLookupByLibrary.simpleMessage("اضغط هنا"),
     "printReport": MessageLookupByLibrary.simpleMessage("طباعة التقرير"),
     "profilePage": MessageLookupByLibrary.simpleMessage("الملف الشخصي"),
     "progress": MessageLookupByLibrary.simpleMessage("التقدم"),
@@ -259,8 +267,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "schoolCollege": MessageLookupByLibrary.simpleMessage("المدرسة/الكلية"),
     "selectGoals": MessageLookupByLibrary.simpleMessage("اختيار الأهداف"),
     "selectRole": MessageLookupByLibrary.simpleMessage("اختر من الاسفل للتقدم"),
+    "session": MessageLookupByLibrary.simpleMessage("جلسة"),
     "sessionAnalysis": MessageLookupByLibrary.simpleMessage("تحليل الجلسات"),
     "sessionCompleted": MessageLookupByLibrary.simpleMessage("تمت جلسة مع "),
+    "sessionNote": MessageLookupByLibrary.simpleMessage("ملاحظات الجلسة"),
     "sessions": MessageLookupByLibrary.simpleMessage("الجلسات"),
     "settings": MessageLookupByLibrary.simpleMessage("الإعدادات"),
     "siblingCloseness": MessageLookupByLibrary.simpleMessage("قرب الأشقاء"),

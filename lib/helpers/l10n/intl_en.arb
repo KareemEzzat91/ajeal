@@ -212,6 +212,17 @@
   "selectRole": "Select your role to continue",
   "hello": "hello",
   "loginAsParent": "Login as a parent to monitor your child's progress",
-  "loginAsAdmin": "Login as admin to manage the system"
+  "loginAsAdmin": "Login as admin to manage the system",
+  "addNewChild": "Add New Child",
+  "addNewChildOthers": "Add By Code",
+  "details": "Details",
+  "session": "Session",
+  "press": "press here",
+  "childRate" : "Child Rate ",
+  "sessionNote": "Session Notes",
+  "chooseTask": "Choose Task"
+
+
+
 
 }

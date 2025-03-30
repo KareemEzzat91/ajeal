@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/ai_result_screen.dart';
 import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -55,8 +56,7 @@ class ProgressSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "التقدم الحالي",
+              Text(S.of(context).progress ,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

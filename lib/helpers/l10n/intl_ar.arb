@@ -205,6 +205,13 @@
   "selectRole": "اختر من الاسفل للتقدم",
   "hello": "اهلا",
   "loginAsParent": "سجل دخولك ك والد لمتابعة تقدم طفلك",
-  "loginAsAdmin": "سجل دخولك ك اخصائي لادارة "
-
+  "loginAsAdmin": "سجل دخولك ك اخصائي لادارة ",
+  "addNewChild": "إضافة طفل جديد",
+  "addNewChildOthers": "اضافة طفل من دكتور اخر",
+  "details": "تفاصيل",
+  "session": "جلسة",
+  "press": "اضغط هنا",
+  "childRate": "تقييم الطفل ",
+  "sessionNote": "ملاحظات الجلسة",
+  "chooseTask": "اختر المهام"
 }

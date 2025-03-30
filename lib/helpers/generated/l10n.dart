@@ -1599,6 +1599,61 @@ class S {
       args: [],
     );
   }
+
+  /// `Add New Child`
+  String get addNewChild {
+    return Intl.message(
+      'Add New Child',
+      name: 'addNewChild',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add By Code`
+  String get addNewChildOthers {
+    return Intl.message(
+      'Add By Code',
+      name: 'addNewChildOthers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Details`
+  String get details {
+    return Intl.message('Details', name: 'details', desc: '', args: []);
+  }
+
+  /// `Session`
+  String get session {
+    return Intl.message('Session', name: 'session', desc: '', args: []);
+  }
+
+  /// `press here`
+  String get press {
+    return Intl.message('press here', name: 'press', desc: '', args: []);
+  }
+
+  /// `Child Rate `
+  String get childRate {
+    return Intl.message('Child Rate ', name: 'childRate', desc: '', args: []);
+  }
+
+  /// `Session Notes`
+  String get sessionNote {
+    return Intl.message(
+      'Session Notes',
+      name: 'sessionNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose Task`
+  String get chooseTask {
+    return Intl.message('Choose Task', name: 'chooseTask', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

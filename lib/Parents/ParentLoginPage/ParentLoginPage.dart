@@ -26,7 +26,6 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
 
     try {
       final parentCode = _parentCodeController.text.trim();
-
       if (parentCode.isEmpty) return;
       final childSnapshot = await FirebaseFirestore.instance
           .collection("Children")

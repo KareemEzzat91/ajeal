@@ -146,7 +146,7 @@ class SignCubit extends Cubit<SignState> {
 
       await _firestore.collection("users").doc(user.uid).set({
         'Doctor_Name': nameController.text.trim(),
-        'Doctor_id': doctorId,
+        'Doctor_id': doctorId.trim(),
         'Doctor_phone': mobileController.text.trim(),
         'lastChildId': 0,
         'lastChattedWith': "",

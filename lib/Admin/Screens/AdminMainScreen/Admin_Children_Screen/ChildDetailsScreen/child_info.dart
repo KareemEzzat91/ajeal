@@ -1,5 +1,6 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/AllDetailsScreen.dart';
 import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ChildInfoSection extends StatelessWidget {
@@ -35,21 +36,21 @@ class ChildInfoSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ChildInforRow(icon: Icons.person, label: "اسم الطفل", value: child.name),
+          ChildInforRow(icon: Icons.person, label: S.of(context).name, value: child.name),
           const Divider(height: 24),
-          ChildInforRow(icon: Icons.cake, label: "تاريخ الميلاد", value: birthDate),
+          ChildInforRow(icon: Icons.cake, label: S.of(context).dateOfBirth, value: birthDate),
           const Divider(height: 24),
-          ChildInforRow(icon: Icons.calendar_today, label: "تاريخ البداية", value: "${child.startDate.year}-${child.startDate.month}-${child.startDate
+          ChildInforRow(icon: Icons.calendar_today, label: S.of(context).startDate, value: "${child.startDate.year}-${child.startDate.month}-${child.startDate
               .day}"),
           const Divider(height: 24),
-          ChildInforRow(icon: Icons.event, label: "تاريخ النهاية", value: "${child.endDate.year}-${child.endDate.month}-${child.endDate.day}"),
+          ChildInforRow(icon: Icons.event, label:S.of(context).endDate, value: "${child.endDate.year}-${child.endDate.month}-${child.endDate.day}"),
           const Divider(height: 24),
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                   builder: (context) => AllDetailsScreen(child)));
             },
-            child: const ChildInforRow(icon: Icons.align_horizontal_left, label: "باقي التفاصيل ", value: "اضغط هنا "),
+            child:  ChildInforRow(icon: Icons.align_horizontal_left, label:S.of(context).detailedReports, value: S.of(context).press),
           ),
 
         ],

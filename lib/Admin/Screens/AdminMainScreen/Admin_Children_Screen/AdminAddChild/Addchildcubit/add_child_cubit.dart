@@ -8,7 +8,6 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 part 'add_child_state.dart';
 
 class AddChildCubit extends Cubit<AddChildState> {
