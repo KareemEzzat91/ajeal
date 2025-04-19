@@ -63,7 +63,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
 
       await saveToken(parentCode, doctorKey);
 
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (context) => ParentHomePage(
@@ -72,6 +72,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
             adminId: doctorKey,
           ),
         ),
+              (Route<dynamic> route) => false
       );
     } catch (e) {
 
