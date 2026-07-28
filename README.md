@@ -85,9 +85,9 @@ are located in `assets/design/screens/` and are already referenced below.
 ![Session detail](assets/design/screens/Untitled design (6).png)
 ![Parent dashboard](assets/design/screens/Untitled design (7).png)
 ![Chat sample](assets/design/screens/Untitled design (8).png)
-![Reports](assets/design/screens/Untitled design (9).png)
-![Mockup 1](assets/design/screens/Untitled design (10).png)
-![Mockup 2](assets/design/screens/Untitled design (11).png)
+![Reports]https://github.com/KareemEzzat91/ajeal/blob/master/assets/design/screens/Untitled%20design%20(9).png
+![Mockup 1]https://github.com/KareemEzzat91/ajeal/blob/master/assets/design/screens/Untitled%20design%20(10).png
+![Mockup 2]https://github.com/KareemEzzat91/ajeal/blob/master/assets/design/screens/Untitled%20design%20(11).png
 
 ---
 
