@@ -1,0 +1,2 @@
+C:/Users/KIMO/StudioProjects/Ajeal/android/app/.cxx/RelWithDebInfo/5d2u6kw4/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/KIMO/StudioProjects/Ajeal/android/app/.cxx/RelWithDebInfo/5d2u6kw4/armeabi-v7a/CMakeFiles/rebuild_cache.dir

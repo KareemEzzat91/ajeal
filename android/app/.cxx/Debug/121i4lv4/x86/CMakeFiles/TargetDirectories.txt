@@ -1,0 +1,2 @@
+C:/Users/KIMO/StudioProjects/Ajeal/android/app/.cxx/Debug/121i4lv4/x86/CMakeFiles/edit_cache.dir
+C:/Users/KIMO/StudioProjects/Ajeal/android/app/.cxx/Debug/121i4lv4/x86/CMakeFiles/rebuild_cache.dir
