@@ -45,7 +45,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
           ],
         ),
         body: FutureBuilder<Doctor?>(
-            future: sl<DoctorRepository>()
+            future: getIt<DoctorRepository>()
                 .getDoctorInfo(FirebaseAuth.instance.currentUser?.uid ?? ''),
             builder: (context, snap) {
               final Doctor? data;

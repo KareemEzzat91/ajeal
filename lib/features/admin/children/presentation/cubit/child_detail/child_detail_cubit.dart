@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../../core/di/service_locator.dart';
 import '../../../data/child_repository.dart';
 import 'child_detail_state.dart';
 
 class ChildDetailCubit extends Cubit<ChildDetailState> {
   ChildDetailCubit({ChildRepository? repository, FirebaseAuth? auth})
-      : _repository = repository ?? sl<ChildRepository>(),
+      : _repository = repository ?? getIt<ChildRepository>(),
         _auth = auth ?? FirebaseAuth.instance,
         super(ChildDetailInitial());
 

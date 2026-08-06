@@ -24,8 +24,8 @@ class AddChildCubit extends Cubit<AddChildState> {
     ChildRepository? childRepository,
     DoctorRepository? doctorRepository,
     FirebaseAuth? auth,
-  })  : _childRepo = childRepository ?? sl<ChildRepository>(),
-        _doctorRepo = doctorRepository ?? sl<DoctorRepository>(),
+  })  : _childRepo = childRepository ?? getIt<ChildRepository>(),
+        _doctorRepo = doctorRepository ?? getIt<DoctorRepository>(),
         _auth = auth ?? FirebaseAuth.instance,
         super(AddChildInitial());
 

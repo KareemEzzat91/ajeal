@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../../core/di/service_locator.dart';
 import '../../../data/doctor_repository.dart';
 import 'doctor_meta_state.dart';
 
@@ -8,7 +9,7 @@ import 'doctor_meta_state.dart';
 /// Replaces the updateUserInfo / getUserInfo responsibilities previously in AddChildCubit.
 class DoctorMetaCubit extends Cubit<DoctorMetaState> {
   DoctorMetaCubit({DoctorRepository? repository, FirebaseAuth? auth})
-      : _repository = repository ?? sl<DoctorRepository>(),
+      : _repository = repository ?? getIt<DoctorRepository>(),
         _auth = auth ?? FirebaseAuth.instance,
         super(DoctorMetaInitial());
 
