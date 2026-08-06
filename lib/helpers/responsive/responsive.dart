@@ -52,7 +52,7 @@ class Responsive extends StatelessWidget {
         375; // Define your criteria for extra small devices
   }
 
-  static double TextSize(context,
+  static double textSize(context,
       {required double isExtraSmallSize,
       required double isMobileSize,
       required double isMobileLarge,
@@ -91,19 +91,19 @@ class Responsive extends StatelessWidget {
 }
 
 enum DeviceType {
-  Mobile,
-  Tablet, // Corrected typo
-  Desktop,
+  mobile,
+  tablet, // Corrected typo
+  desktop,
 }
 
 DeviceType getDeviceType(MediaQueryData mediaQueryData) {
   double width = mediaQueryData.size.width;
 
   if (width >= 950) {
-    return DeviceType.Desktop;
+    return DeviceType.desktop;
   } else if (width >= 600) {
-    return DeviceType.Tablet;
+    return DeviceType.tablet;
   } else {
-    return DeviceType.Mobile;
+    return DeviceType.mobile;
   }
 }

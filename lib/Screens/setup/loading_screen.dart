@@ -92,7 +92,7 @@ class LoadingAnimatedText extends StatefulWidget {
   const LoadingAnimatedText(this.text, {super.key});
 
   @override
-  _LoadingAnimatedTextState createState() => _LoadingAnimatedTextState();
+  State<LoadingAnimatedText> createState() => _LoadingAnimatedTextState();
 }
 
 class _LoadingAnimatedTextState extends State<LoadingAnimatedText>
