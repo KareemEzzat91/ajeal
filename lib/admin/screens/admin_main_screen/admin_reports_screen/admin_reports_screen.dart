@@ -1,6 +1,10 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/add_child_cubit.dart';
-import 'package:ajeal/admin/models/doctor_model/doctor_model.dart';
+import 'package:ajeal/core/di/service_locator.dart';
+import 'package:ajeal/core/models/doctor_model/doctor_model.dart';
+import 'package:ajeal/features/admin/children/data/doctor_repository.dart';
+import 'package:ajeal/features/admin/children/presentation/cubit/doctor_meta/doctor_meta_cubit.dart';
+import 'package:ajeal/features/admin/children/presentation/cubit/doctor_meta/doctor_meta_state.dart';
 import 'package:ajeal/helpers/generated/l10n.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,7 +26,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-  create: (context) => AddChildCubit(),
+  create: (context) => DoctorMetaCubit(),
   child: Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
@@ -41,7 +45,8 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
         ],
       ),
       body: FutureBuilder<Doctor?>(
-        future: context.read<AddChildCubit>().getUserInfo(),
+        future: sl<DoctorRepository>().getDoctorInfo(
+            FirebaseAuth.instance.currentUser?.uid ?? ''),
         builder: (context,snap) {
           final Doctor? data  ;
           if (snap.connectionState==ConnectionState.waiting){return const Center(child: CircularProgressIndicator());}
@@ -171,7 +176,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
   Widget _buildQuickStats(String totalChildren) {
     return Row(
       children: [
-        BlocBuilder<AddChildCubit, AddChildState>(
+        BlocBuilder<DoctorMetaCubit, DoctorMetaState>(
   builder: (context, state) {
 
     return _buildStatCard(

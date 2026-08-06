@@ -1,8 +1,8 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:ajeal/admin/models/goals_model/goals.dart';
+import 'package:ajeal/core/models/goals_model/goals.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 
 class ScheduleGeneratorService {

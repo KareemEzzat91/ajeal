@@ -1,14 +1,16 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/add_child_cubit.dart';
+import 'package:ajeal/features/admin/children/presentation/cubit/child_detail/child_detail_cubit.dart';
+import 'package:ajeal/features/admin/children/presentation/cubit/doctor_meta/doctor_meta_cubit.dart';
+import 'package:ajeal/features/admin/children/presentation/cubit/doctor_meta/doctor_meta_state.dart';
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_children_select_goals/goal_detail_screen.dart';
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/daily_notes_screen.dart';
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/session_detail_screen/session_detail_screen.dart';
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_header.dart';
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_info.dart';
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_progress.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/colors.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/dialogs.dart';
-import 'package:ajeal/admin/models/child_model/child_model.dart';
-import 'package:ajeal/admin/models/goals_model/goals.dart';
+import 'package:ajeal/core/constants/app_colors.dart';
+import 'package:ajeal/core/widgets/dialogs.dart';
+import 'package:ajeal/core/models/child_model/child_model.dart';
+import 'package:ajeal/core/models/goals_model/goals.dart';
 import 'package:ajeal/parents/parent_home_screen/parent_chat/parent_admin_chat/parent_admin_chat_screen.dart';
 import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -41,8 +43,11 @@ class ChildDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final String? adminId = FirebaseAuth.instance.currentUser?.uid;
     final theme = Theme.of(context);
-    return BlocProvider(
-      create: (context) => AddChildCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => DoctorMetaCubit()),
+        BlocProvider(create: (context) => ChildDetailCubit()),
+      ],
       child: Scaffold(
         backgroundColor: theme.primaryColor,
         appBar: AppBar(
@@ -54,13 +59,13 @@ class ChildDetailScreen extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          leading: BlocBuilder<AddChildCubit, AddChildState>(
+          leading: BlocBuilder<DoctorMetaCubit, DoctorMetaState>(
             builder: (context, state) {
               return IconButton(
                 icon: const Icon(
                     Icons.chat_bubble_outline, color: Colors.white),
                 onPressed: () {
-                  context.read<AddChildCubit>().updateUserInfo(
+                  context.read<DoctorMetaCubit>().updateField(
                     isOthers: isOthers,
                       key: "lastChattedWith", value: childName);
                   Navigator.push(
@@ -135,15 +140,7 @@ class ChildDetailScreen extends StatelessWidget {
                         cancelBtnText: 'No',
                         confirmBtnColor: Colors.green,
                         onConfirmBtnTap: () {
-                          try {
-                            final collection = isOthers ? "OthersChildren" : "children";
-                            FirebaseFirestore.instance
-                                .collection("users")
-                                .doc(FirebaseAuth.instance.currentUser!.uid)
-                                .collection(collection)
-                                .doc(child.parentPhone)
-                                .delete();
-
+                          context.read<ChildDetailCubit>().deleteChild(child.parentPhone, isOthers).then((_) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text("Deleted Successfully"),
@@ -151,12 +148,13 @@ class ChildDetailScreen extends StatelessWidget {
                               ),
                             );
                             Navigator.pop(context);
-                          } catch (e) {
+                            Navigator.pop(context); // Pop back to list
+                          }).catchError((e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(e.toString())),
                             );
                             Navigator.pop(context);
-                          }
+                          });
                         },
                       );
                     },
@@ -210,14 +208,14 @@ class ChildDetailScreen extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: BlocBuilder<AddChildCubit, AddChildState>(
+      child: BlocBuilder<DoctorMetaCubit, DoctorMetaState>(
         builder: (context, state) {
           // Fixed the incomplete conditional expression
           final bool isCompleted = session["completed"] ?? false;
 
           return InkWell(
             onTap: () {
-              context.read<AddChildCubit>().updateUserInfo(isOthers: isOthers,key: "lastSessionWith", value: childName);
+              context.read<DoctorMetaCubit>().updateField(isOthers: isOthers, key: "lastSessionWith", value: childName);
               _navigateToSessionDetail(context, session);
             },
             borderRadius: BorderRadius.circular(12),

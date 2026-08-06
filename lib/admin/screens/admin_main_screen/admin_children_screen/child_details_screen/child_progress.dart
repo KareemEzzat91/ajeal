@@ -1,9 +1,9 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/ai_result_screen.dart';
-import 'package:ajeal/admin/models/child_model/child_model.dart';
+import 'package:ajeal/core/models/child_model/child_model.dart';
 import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -1,6 +1,6 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/session_detail_screen/session_detail_screen.dart';
+﻿import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/session_detail_screen/session_detail_screen.dart';
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_progress.dart';
-import 'package:ajeal/admin/models/child_model/child_model.dart';
+import 'package:ajeal/core/models/child_model/child_model.dart';
 import 'package:flutter/material.dart';
 
 class SessionSchedulePage extends StatelessWidget {

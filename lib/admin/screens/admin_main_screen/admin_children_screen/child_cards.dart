@@ -1,6 +1,6 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/colors.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/dialogs.dart';
-import 'package:ajeal/admin/models/child_model/child_model.dart';
+﻿import 'package:ajeal/core/constants/app_colors.dart';
+import 'package:ajeal/core/widgets/dialogs.dart';
+import 'package:ajeal/core/models/child_model/child_model.dart';
 import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

@@ -1,5 +1,5 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_main_screen/admin_main_screen.dart';
-import 'package:ajeal/admin/models/child_model/child_model.dart';
+﻿import 'package:ajeal/admin/screens/admin_main_screen/admin_main_screen/admin_main_screen.dart';
+import 'package:ajeal/core/models/child_model/child_model.dart';
 import 'package:ajeal/parents/parent_home_screen/parent_home_screen.dart';
 import 'package:ajeal/screens/admin_or_parents/admin_or_parents_screen.dart';
 import 'package:flutter/cupertino.dart';

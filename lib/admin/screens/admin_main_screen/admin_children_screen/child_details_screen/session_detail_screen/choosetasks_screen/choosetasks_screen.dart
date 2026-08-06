@@ -1,4 +1,4 @@
-import 'package:ajeal/admin/models/goals_model/goals.dart';
+﻿import 'package:ajeal/core/models/goals_model/goals.dart';
 import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
 

@@ -1,11 +1,11 @@
-import 'package:ajeal/admin/models/child_model/child_model.dart';
+﻿import 'package:ajeal/core/models/child_model/child_model.dart';
 import 'package:ajeal/parents/parent_home_screen/emergency_contact_dialog.dart';
 import 'package:ajeal/parents/parent_home_screen/child_app_bar.dart';
 import 'package:ajeal/parents/parent_home_screen/child_action_cards.dart';
 import 'package:ajeal/parents/parent_home_screen/child_profile_section_name_age.dart';
 import 'package:ajeal/parents/parent_home_screen/child_progress.dart';
 import 'package:ajeal/parents/parent_home_screen/child_quickstats.dart';
-import 'package:ajeal/helpers/theme/dark_theme/theme_cubit/themes_cubit.dart';
+import 'package:ajeal/core/theme/dark_theme/theme_cubit/themes_cubit.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';

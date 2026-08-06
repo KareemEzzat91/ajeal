@@ -1,4 +1,4 @@
-import 'package:ajeal/admin/models/child_model/child_model.dart';
+﻿import 'package:ajeal/core/models/child_model/child_model.dart';
 import 'package:flutter/material.dart';
 
 class ChildProfileHeader extends StatelessWidget {

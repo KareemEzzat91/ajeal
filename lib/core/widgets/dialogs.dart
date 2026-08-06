@@ -1,6 +1,6 @@
-// Helper methods to show dialog messages
+﻿// Helper methods to show dialog messages
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_cards.dart';
-import 'package:ajeal/admin/models/child_model/child_model.dart';
+import 'package:ajeal/core/models/child_model/child_model.dart';
 import 'package:flutter/material.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';

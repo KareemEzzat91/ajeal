@@ -1,6 +1,6 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/all_details_screen.dart';
+﻿import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/all_details_screen.dart';
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/daily_notes_screen.dart';
-import 'package:ajeal/admin/models/child_model/child_model.dart';
+import 'package:ajeal/core/models/child_model/child_model.dart';
 import 'package:ajeal/parents/parent_home_screen/parent_chat/all_parents_chats/global_chat_screen.dart';
 import 'package:ajeal/parents/parent_home_screen/parent_chat/parent_admin_chat/parent_admin_chat_screen.dart';
 import 'package:ajeal/parents/parent_home_screen/parent_child_goals_page/parentchildgoals_screen.dart';

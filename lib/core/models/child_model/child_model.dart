@@ -1,4 +1,4 @@
-import 'package:ajeal/admin/models/goals_model/goals.dart';
+﻿import 'package:ajeal/core/models/goals_model/goals.dart';
 import 'package:equatable/equatable.dart';
 
 // ignore: must_be_immutable

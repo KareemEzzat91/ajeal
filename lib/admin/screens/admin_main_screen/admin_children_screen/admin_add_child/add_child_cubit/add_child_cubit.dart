@@ -1,361 +1,159 @@
 import 'dart:async';
+
+import 'package:ajeal/core/di/service_locator.dart';
+import 'package:ajeal/core/models/child_model/child_model.dart';
+import 'package:ajeal/core/models/goals_model/goals.dart';
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/generate.dart';
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/send_verification_message.dart';
-import 'package:ajeal/admin/models/child_model/child_model.dart';
-import 'package:ajeal/admin/models/doctor_model/doctor_model.dart';
-import 'package:ajeal/admin/models/goals_model/goals.dart';
+import 'package:ajeal/features/admin/children/data/child_repository.dart';
+import 'package:ajeal/features/admin/children/data/doctor_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 part 'add_child_state.dart';
 
+/// Cubit responsible ONLY for the add-child form submission
+/// and goal selection tracking.
+///
+/// List loading is handled by ChildrenListCubit.
+/// Doctor metadata updates are handled by DoctorMetaCubit.
 class AddChildCubit extends Cubit<AddChildState> {
-  AddChildCubit() : super(AddChildInitial());
+  AddChildCubit({
+    ChildRepository? childRepository,
+    DoctorRepository? doctorRepository,
+    FirebaseAuth? auth,
+  })  : _childRepo = childRepository ?? sl<ChildRepository>(),
+        _doctorRepo = doctorRepository ?? sl<DoctorRepository>(),
+        _auth = auth ?? FirebaseAuth.instance,
+        super(AddChildInitial());
 
-  // Firebase instances
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final ChildRepository _childRepo;
+  final DoctorRepository _doctorRepo;
+  final FirebaseAuth _auth;
 
-  // Persistent data
-  static int id = 0;
-  final Map<String, List<Goal>> selectedGoals = {}; // Used to store selected goals by parentPhone
-  List<Map<String, Child>> children = []; // List of children with parentPhone as key
-  List<Map<String, Child>> othersChildren = []; // List of children with parentPhone as key
+  // Goal selection – keyed by parentPhone (child identifier)
+  final Map<String, List<Goal>> selectedGoals = {};
+
+  // Schedule sessions generated during saveChild
   List<Map<String, dynamic>> scheduleSessions = [];
 
-  // Tracking data
-  String lastChildName = "Ahmed";
+  String? get _userId => _auth.currentUser?.uid;
 
-  // Get current user ID with null safety
-  String? get _currentUserId => _auth.currentUser?.uid;
+  // ─── Save Child ────────────────────────────────────────────────────────────
 
-  // Get user document reference
-  DocumentReference get _userDocRef => _firestore.collection("users").doc(_currentUserId);
-
-  // Save children data to Firestore
-  Future<void> saveToFirestore() async {
-    emit(AddLoadingState());
-
-    final userId = _currentUserId;
-    if (userId == null) {
-      emit(AddFailureState("User not authenticated"));
-      return;
-    }
-
-    try {
-      final userDoc = _userDocRef;
-      var userData = await userDoc.get();
-      id = userData["lastChildId"];
-
-      // Save each child to Firestore
-      for (var childMap in children) {
-        await Future.forEach(
-            childMap.entries, (MapEntry<String, Child> childEntry) async {
-              await userDoc
-                  .collection("children")
-                  .doc(childEntry.key)
-                  .set(childEntry.value.toMap());
-            }
-        );
-      }
-
-      // Update the last child ID
-      await userDoc.set({"lastChildId": id}, SetOptions(merge: true));
-      emit(AddSuccessState());
-    } catch (e) {
-      emit(AddFailureState(e.toString()));
-    }
-  }
-
-  // Update user info with a specific key-value pair
-  Future<void> updateUserInfo({required String key, required String value,required bool isOthers}) async {
-    if (isOthers){return ;}
-    final uid = _currentUserId;
-    if (uid == null) {
-      throw Exception("User not authenticated");
-    }
-
-    await _firestore.collection("users").doc(uid).update({
-      key: value
-    });
-  }
-
-  // Get doctor user information
-  Future<Doctor?> getUserInfo() async {
-    final uid = _currentUserId;
-    if (uid == null) {
-      return null;
-    }
-
-    try {
-      final snapshot = await _firestore.collection("users").doc(uid).get();
-
-      if (snapshot.exists) {
-        return Doctor.fromJson(snapshot.data() ?? _getDefaultDoctorData());
-      }
-
-      return Doctor.fromJson(_getDefaultDoctorData());
-    } catch (e) {
-      return Doctor.fromJson(_getDefaultDoctorData());
-    }
-  }
-
-  // Default doctor data
-  Map<String, dynamic> _getDefaultDoctorData() {
-    return {
-      "Doctor_Name": "",
-      "Doctor_id": "",
-      "Doctor_phone": "",
-      "lastChildId": 0,
-      "lastChildName": "",
-      "lastSessionWith": "",
-      "taskAddedFor": "",
-      "lastChattedWith": "",
-    };
-  }
-
-  // Get all children data from Firestore
-  Future<List<Map<String, Child>>> getAllDataFromFirestore() async {
-    children = [];
-
-    final userId = _currentUserId;
-    if (userId == null) {
-      return [];
-    }
-
-    try {
-      final userDoc = await _firestore.collection("users").doc(userId).get();
-
-      if (userDoc.exists) {
-        // Get all documents in the children collection
-        final childrenSnapshot = await _firestore
-            .collection("users")
-            .doc(userId)
-            .collection("children")
-            .get();
-
-        for (var childDoc in childrenSnapshot.docs) {
-          final child = Child.fromJson(childDoc.data());
-          children.add({childDoc.id: child});
-         }
-
-        return children;
-      }
-
-      return [];
-    } catch (e) {
-      return [];
-    }
-  }
-  Future<List<Map<String, Child>>> getAllChildrenFromOtherDoctors() async {
-    othersChildren = [];
-    final userId = _currentUserId;
-
-    if (userId == null) {
-      return [];
-    }
-
-    try {
-      final userDoc = await _firestore.collection("users").doc(userId).get();
-      if (!userDoc.exists) {
-        return [];
-      }
-
-      // جلب كل الوثائق من OthersChildren
-      final othersChildrenSnapshot = await _firestore
-          .collection("users")
-          .doc(userId)
-          .collection("OthersChildren")
-          .get();
-
-      if (othersChildrenSnapshot.docs.isEmpty) {
-        return [];
-      }
-
-      // استخراج أرقام هواتف الآباء مباشرة من doc.id
-      List<String> parentPhones = othersChildrenSnapshot.docs.map((doc) => doc.id).toList();
-
-      // تقسيم القائمة إلى مجموعات لا تزيد عن 10 عناصر لكل استعلام
-      List<Future<QuerySnapshot>> futures = [];
-      for (int i = 0; i < parentPhones.length; i += 10) {
-        int end = (i + 10 < parentPhones.length) ? i + 10 : parentPhones.length;
-        List<String> chunk = parentPhones.sublist(i, end);
-
-        // استخدام FieldPath.documentId للبحث عن المستندات مباشرةً عبر معرّفها (parentPhone)
-        futures.add(
-          _firestore.collection("Children").where(FieldPath.documentId, whereIn: chunk).get(),
-        );
-
-    }
-
-
-      // تنفيذ كل الاستعلامات بالتوازي
-      List<QuerySnapshot> snapshots = await Future.wait(futures);
-
-      // تخزين البيانات المسترجعة في خريطة
-      Map<String, Child> mainChildrenMap = {};
-      for (var snapshot in snapshots) {
-        for (var doc in snapshot.docs) {
-
-           mainChildrenMap[doc.id] = Child.fromJson(doc.data()as Map<String,dynamic>);
-        }
-      }
-
-      // إنشاء Batch للكتابة بكفاءة عالية
-      WriteBatch batch = _firestore.batch();
-
-      // تحديث البيانات داخل OthersChildren
-      for (var childDoc in othersChildrenSnapshot.docs) {
-        final String parentPhone = childDoc.id;
-
-        if (mainChildrenMap.containsKey(parentPhone)) {
-          // استبدال البيانات إذا كان الطفل موجودًا في المجموعة الرئيسية
-          final updatedChild = mainChildrenMap[parentPhone]!;
-
-          othersChildren.add({parentPhone: updatedChild});
-
-          batch.set(
-            _firestore.collection("users").doc(userId).collection("OthersChildren").doc(parentPhone),
-            updatedChild.toMap(),
-          );
-        } else {
-          // الاحتفاظ بالبيانات القديمة إذا لم يتم العثور على الطفل
-          final existingChild = Child.fromJson(childDoc.data());
-          othersChildren.add({parentPhone: existingChild});
-        }
-      }
-
-      // تنفيذ جميع التحديثات دفعة واحدة
-      await batch.commit();
-
-      return othersChildren;
-    } catch (e) {
-      return [];
-    }
-  }
-
-  // Save a new child
-  Future<void> saveChild(
-      BuildContext context, {
-        required String name,
-        required String age,
-        required DateTime dateOfBirth,
-        required DateTime startDate,
-        required DateTime endDate,
-        required String period,
-        required String parentPhone,
-        required String parentPhoneNumber,
-        required String notes,
-        required String school,
-        required String residence,
-        required String gender,
-        required List<Goal> selectedGoals,
-        // Family Information
-        required String fatherOccupation,
-        required String motherOccupation,
-        required String familyMembers,
-        required String siblingsInfluence,
-        required String siblingCloseness,
-        required String motherAge,
-        required String parentsRelationship,
-        required String familyRelationship,
-        required String motherNature,
-        // Developmental History - Pregnancy Phase
-        required String pregnancyNature,
-        required String motherDiseasesDuringPregnancy,
-        required String pregnancyComplications,
-        required String motherStressDuringPregnancy,
-        // Birth Phase
-        required String birthType,
-        required String birthComplications,
-        required String birthTiming,
-        // Post-Birth
-        required String incubator,
-        required String incubatorPeriod,
-        required String jaundice,
-        required String jaundiceRate,
-        // Health History
-        required String vaccinations,
-        required String measles,
-        required String smallpox,
-        required String medications,
-        // First Year Growth
-        required String teething,
-        required String babbling,
-        required String motherVoiceAttention,
-        required String sittingAlone,
-        required String crawling,
-        required String walking,
-        required String handPointing,
-        // Psychological History
-        required String familyDisabilities,
-        // Social History
-        required String socialInteraction,
-        required String parentAbsence,
-        // Medical Examinations
-        required String hearing,
-        required String vision,
-        required String respiratory,
-        required String digestive,
-        required String neurology,
-        required String circulatory,
-        required String vocal,
-        required String head,
-        required String speech,
-        required String lips,
-        required String teeth,
-        required String palate,
-        required String tongue,
-        required String upperJaw,
-        required String lowerJaw,
-        required String pharynx,
-        required String throat,
-        // Diagnosis
-        required String diagnosis,
-      }) async {
+  /// Saves a new child to Firestore.
+  /// Emits [AddLoadingState], then [AddSuccessState] or [AddFailureState].
+  /// Does NOT accept BuildContext – call Navigator.pop in the screen on success.
+  Future<void> saveChild({
+    required String name,
+    required String age,
+    required DateTime dateOfBirth,
+    required DateTime startDate,
+    required DateTime endDate,
+    required String period,
+    required String parentPhone,
+    required String parentPhoneNumber,
+    required String notes,
+    required String school,
+    required String residence,
+    required String gender,
+    required List<Goal> selectedGoals,
+    // Family Information
+    required String fatherOccupation,
+    required String motherOccupation,
+    required String familyMembers,
+    required String siblingsInfluence,
+    required String siblingCloseness,
+    required String motherAge,
+    required String parentsRelationship,
+    required String familyRelationship,
+    required String motherNature,
+    // Developmental History - Pregnancy Phase
+    required String pregnancyNature,
+    required String motherDiseasesDuringPregnancy,
+    required String pregnancyComplications,
+    required String motherStressDuringPregnancy,
+    // Birth Phase
+    required String birthType,
+    required String birthComplications,
+    required String birthTiming,
+    // Post-Birth
+    required String incubator,
+    required String incubatorPeriod,
+    required String jaundice,
+    required String jaundiceRate,
+    // Health History
+    required String vaccinations,
+    required String measles,
+    required String smallpox,
+    required String medications,
+    // First Year Growth
+    required String teething,
+    required String babbling,
+    required String motherVoiceAttention,
+    required String sittingAlone,
+    required String crawling,
+    required String walking,
+    required String handPointing,
+    // Psychological History
+    required String familyDisabilities,
+    // Social History
+    required String socialInteraction,
+    required String parentAbsence,
+    // Medical Examinations
+    required String hearing,
+    required String vision,
+    required String respiratory,
+    required String digestive,
+    required String neurology,
+    required String circulatory,
+    required String vocal,
+    required String head,
+    required String speech,
+    required String lips,
+    required String teeth,
+    required String palate,
+    required String tongue,
+    required String upperJaw,
+    required String lowerJaw,
+    required String pharynx,
+    required String throat,
+    // Diagnosis
+    required String diagnosis,
+  }) async {
     emit(AddLoadingState());
 
     try {
-      parentPhone=parentPhone.trim();
-      final uid = _currentUserId;
-      if (uid == null) {
-        throw Exception("User not authenticated");
-      }
+      final trimmedPhone = parentPhone.trim();
+      final userId = _userId;
+      if (userId == null) throw Exception('User not authenticated');
 
+      // Generate AI schedule
       final scheduleGenerator = ScheduleGeneratorService();
-
-      // Generate schedule sessions
       scheduleSessions = await scheduleGenerator.generateScheduleWithFallback(
-          startDate: startDate,
-          endDate: endDate,
-          duration: period,
-          childName: name,
-          goalsList: selectedGoals
+        startDate: startDate,
+        endDate: endDate,
+        duration: period,
+        childName: name,
+        goalsList: selectedGoals,
       );
 
-      // Get doctor information
-      final doctorDoc = await _firestore.collection("users").doc(uid).get();
-      final doctorData = doctorDoc.data() ?? {};
+      // Fetch doctor metadata
+      final doctorData = await _doctorRepo.getDoctorData(userId);
+      final doctorId = doctorData['Doctor_id'] as String? ?? '';
+      final doctorName = doctorData['Doctor_Name'] as String? ?? '';
+      final doctorPhone = doctorData['Doctor_phone'] as String? ?? '';
+      final lastId = (doctorData['lastChildId'] as int? ?? 0) + 1;
 
-      final doctorId = doctorData['Doctor_id'] ?? '';
-      final doctorName = doctorData['Doctor_Name'] ?? '';
-      final doctorPhone = doctorData['Doctor_phone'] ?? '';
-      id = doctorData['lastChildId'] ?? 0;
-
-      // Increment child ID
-      id++;
-
-      // Create new child object
       final newChild = Child(
-        id: id,
+        id: lastId,
         name: name,
         age: age,
         dateOfBirth: dateOfBirth,
         startDate: startDate,
         endDate: endDate,
         period: period,
-        parentPhone: parentPhone,
+        parentPhone: trimmedPhone,
         parentPhoneNumber: parentPhoneNumber,
         notes: notes,
         school: school,
@@ -374,7 +172,6 @@ class AddChildCubit extends Cubit<AddChildState> {
         doctorName: doctorName,
         doctorPhone: doctorPhone,
         dailyNotes: const [{}],
-        // Additional fields
         siblingsInfluence: siblingsInfluence,
         siblingCloseness: siblingCloseness,
         motherAge: motherAge,
@@ -421,65 +218,30 @@ class AddChildCubit extends Cubit<AddChildState> {
         throat: throat,
         diagnosis: diagnosis,
         completedSessions: 0,
-        analysis: ""
-
+        analysis: '',
       );
 
-      // Save child to Firestore
-      await _firestore
-          .collection("users")
-          .doc(uid)
-          .collection("children")
-          .doc(parentPhone)
-          .set(newChild.toMap());
-      // Save child to Firestore in Children Collection
-      await _firestore
-          .collection("Children")
-          .doc(parentPhone)
-          .set(newChild.toMap());
+      await _childRepo.saveChild(userId, trimmedPhone, newChild);
+      await _childRepo.updateLastChildMeta(userId, lastId, name);
+      sendWhatsAppMessage(trimmedPhone, doctorId, name);
 
-      // Initialize daily notes collection
-      await _firestore
-          .collection("DailyNotes")
-          .doc(parentPhone)
-          .set({"notes": []});
-
-      // Update doctor information
-      lastChildName = name;
-      await _firestore
-          .collection("users")
-          .doc(uid)
-          .update({
-        'lastChildId': id,
-        "lastChildName": lastChildName
-      });
-      
-      // Save all data to Firestore
-      await saveToFirestore();
-
-        sendWhatsAppMessage(parentPhone, doctorId, name);
-
-      // Send WhatsApp verification message
-
-      if (!context.mounted) return;
-      Navigator.pop(context);
       emit(AddSuccessState());
     } catch (e) {
       emit(AddFailureState(e.toString()));
-      if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.toString())));
-      }
     }
   }
 
-  // Add a goal for a specific child
+  // ─── Goal Selection ────────────────────────────────────────────────────────
+
+  /// Adds a [goal] for [childId], capped at 7 goals.
+  /// Emits [NumberOfItemsPlusState] to rebuild the badge counter.
   void addGoal(Goal goal, String childId, BuildContext context) {
     emit(NumberOfItemsPlusState());
 
     if (selectedGoals.containsKey(childId)) {
-      if (selectedGoals[childId]!.length < 7 && !_containsGoal(selectedGoals[childId]!, goal)) {
-        selectedGoals[childId]!.add(goal);
+      final list = selectedGoals[childId]!;
+      if (list.length < 7 && !_containsGoal(list, goal)) {
+        list.add(goal);
       } else {
         _showMaxGoalsMessage(context);
       }
@@ -488,21 +250,14 @@ class AddChildCubit extends Cubit<AddChildState> {
     }
   }
 
-  // Check if a goal already exists in the list
-  bool _containsGoal(List<Goal> goals, Goal goal) {
-    return goals.any((g) => g.goalName == goal.goalName);
-  }
+  bool _containsGoal(List<Goal> goals, Goal goal) =>
+      goals.any((g) => g.goalName == goal.goalName);
 
-  // Show max goals message
   void _showMaxGoalsMessage(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'You have reached the max limit of 7 goals for this child.',
-          style: TextStyle(color: Colors.blue[400]),
-        ),
+      const SnackBar(
+        content: Text('You have reached the maximum limit of 7 goals for this child.'),
       ),
     );
   }
 }
-

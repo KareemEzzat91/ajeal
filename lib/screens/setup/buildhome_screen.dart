@@ -1,15 +1,15 @@
 
-import 'package:ajeal/admin/models/child_model/child_model.dart';
-import 'package:ajeal/screens/setup/preference_keys.dart';
-import 'package:ajeal/screens/setup/home_screenbuilder.dart';
+import 'package:ajeal/core/models/child_model/child_model.dart';
+import 'package:ajeal/core/constants/preference_keys.dart';
+
 import 'package:ajeal/screens/setup/loading_screen.dart';
 import 'package:ajeal/helpers/generated/l10n.dart';
-import 'package:ajeal/helpers/theme/dark_theme/theme_cubit/themes_cubit.dart';
+import 'package:ajeal/core/theme/dark_theme/theme_cubit/themes_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ajeal/core/routing/app_router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyApp extends StatefulWidget {
@@ -90,7 +90,14 @@ class _MyAppState extends State<MyApp> {
       create: (context) => ThemesCubit(),
       child: BlocBuilder<ThemesCubit, ThemeState>(
         builder: (context, state) {
-          return GetMaterialApp(
+          if (_isLoading) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: LoadingScreen(context: context),
+            );
+          }
+
+          return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             locale: state.loc, // Ensure locale updates
             theme: state.themeData,
@@ -104,7 +111,16 @@ class _MyAppState extends State<MyApp> {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            home: _isLoading ? LoadingScreen(context: context) : HomeScreenBuilder(isAdminLogin: _isAdminLogin, adminDoctorId: _adminDoctorId, adminDoctorName: _adminDoctorName, adminDoctorPhone: _adminDoctorPhone, isParentLogin: _isParentLogin, child: _child, parentCode: _parentCode, parentDoctorKey: _parentDoctorKey),
+            routerConfig: AppRouter.getRouter(
+              isAdminLogin: _isAdminLogin,
+              adminDoctorId: _adminDoctorId,
+              adminDoctorName: _adminDoctorName,
+              adminDoctorPhone: _adminDoctorPhone,
+              isParentLogin: _isParentLogin,
+              child: _child,
+              parentCode: _parentCode,
+              parentDoctorKey: _parentDoctorKey,
+            ),
           );
         },
       ),

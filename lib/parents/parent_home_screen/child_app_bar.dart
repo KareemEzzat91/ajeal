@@ -1,6 +1,6 @@
-import 'package:ajeal/parents/parent_home_screen/parent_home_screen.dart';
+﻿import 'package:ajeal/parents/parent_home_screen/parent_home_screen.dart';
 import 'package:ajeal/helpers/generated/l10n.dart';
-import 'package:ajeal/helpers/theme/dark_theme/theme_cubit/themes_cubit.dart';
+import 'package:ajeal/core/theme/dark_theme/theme_cubit/themes_cubit.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';

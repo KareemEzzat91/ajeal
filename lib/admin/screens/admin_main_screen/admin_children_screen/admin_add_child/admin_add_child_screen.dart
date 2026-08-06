@@ -1,6 +1,8 @@
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/add_child_cubit.dart';
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_children_select_goals/admin_select_goals_screen.dart';
-import 'package:ajeal/admin/models/goals_model/goals.dart';
+import 'package:ajeal/core/models/goals_model/goals.dart';
+import 'package:ajeal/features/admin/children/presentation/cubit/children_list/children_list_cubit.dart'
+    as ajeal_children_list_cubit;
 import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,103 +22,222 @@ class AdminAddChildScreen extends StatefulWidget {
 class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
   // Form key
   final _formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers
+    _initializeControllers();
+  }
+
+  void _initializeControllers() {
+    nameController = TextEditingController();
+    ageController = TextEditingController();
+    parentPhoneController = TextEditingController();
+    schoolController = TextEditingController();
+    residenceController = TextEditingController();
+    notesController = TextEditingController();
+    periodController = TextEditingController();
+    fatherOccupationController = TextEditingController();
+    motherOccupationController = TextEditingController();
+    familyMembersController = TextEditingController();
+    siblingsInfluenceController = TextEditingController();
+    siblingClosenessController = TextEditingController();
+    motherAgeController = TextEditingController();
+    parentsRelationshipController = TextEditingController();
+    familyRelationshipController = TextEditingController();
+    motherNatureController = TextEditingController();
+    pregnancyNatureController = TextEditingController();
+    motherDiseasesDuringPregnancyController = TextEditingController();
+    pregnancyComplicationsController = TextEditingController();
+    motherStressDuringPregnancyController = TextEditingController();
+    birthTypeController = TextEditingController();
+    birthComplicationsController = TextEditingController();
+    birthTimingController = TextEditingController();
+    incubatorController = TextEditingController();
+    incubatorPeriodController = TextEditingController();
+    jaundiceController = TextEditingController();
+    jaundiceRateController = TextEditingController();
+    vaccinationsController = TextEditingController();
+    measlesController = TextEditingController();
+    smallpoxController = TextEditingController();
+    medicationsController = TextEditingController();
+    teethingController = TextEditingController();
+    babblingController = TextEditingController();
+    motherVoiceAttentionController = TextEditingController();
+    sittingAloneController = TextEditingController();
+    crawlingController = TextEditingController();
+    walkingController = TextEditingController();
+    handPointingController = TextEditingController();
+    familyDisabilitiesController = TextEditingController();
+    socialInteractionController = TextEditingController();
+    parentAbsenceController = TextEditingController();
+    hearingController = TextEditingController();
+    visionController = TextEditingController();
+    respiratoryController = TextEditingController();
+    digestiveController = TextEditingController();
+    neurologyController = TextEditingController();
+    circulatoryController = TextEditingController();
+    vocalController = TextEditingController();
+    headController = TextEditingController();
+    speechController = TextEditingController();
+    lipsController = TextEditingController();
+    teethController = TextEditingController();
+    palateController = TextEditingController();
+    tongueController = TextEditingController();
+    upperJawController = TextEditingController();
+    lowerJawController = TextEditingController();
+    pharynxController = TextEditingController();
+    throatController = TextEditingController();
+    diagnosisController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    ageController.dispose();
+    parentPhoneController.dispose();
+    schoolController.dispose();
+    residenceController.dispose();
+    notesController.dispose();
+    periodController.dispose();
+    fatherOccupationController.dispose();
+    motherOccupationController.dispose();
+    familyMembersController.dispose();
+    siblingsInfluenceController.dispose();
+    siblingClosenessController.dispose();
+    motherAgeController.dispose();
+    parentsRelationshipController.dispose();
+    familyRelationshipController.dispose();
+    motherNatureController.dispose();
+    pregnancyNatureController.dispose();
+    motherDiseasesDuringPregnancyController.dispose();
+    pregnancyComplicationsController.dispose();
+    motherStressDuringPregnancyController.dispose();
+    birthTypeController.dispose();
+    birthComplicationsController.dispose();
+    birthTimingController.dispose();
+    incubatorController.dispose();
+    incubatorPeriodController.dispose();
+    jaundiceController.dispose();
+    jaundiceRateController.dispose();
+    vaccinationsController.dispose();
+    measlesController.dispose();
+    smallpoxController.dispose();
+    medicationsController.dispose();
+    teethingController.dispose();
+    babblingController.dispose();
+    motherVoiceAttentionController.dispose();
+    sittingAloneController.dispose();
+    crawlingController.dispose();
+    walkingController.dispose();
+    handPointingController.dispose();
+    familyDisabilitiesController.dispose();
+    socialInteractionController.dispose();
+    parentAbsenceController.dispose();
+    hearingController.dispose();
+    visionController.dispose();
+    respiratoryController.dispose();
+    digestiveController.dispose();
+    neurologyController.dispose();
+    circulatoryController.dispose();
+    vocalController.dispose();
+    headController.dispose();
+    speechController.dispose();
+    lipsController.dispose();
+    teethController.dispose();
+    palateController.dispose();
+    tongueController.dispose();
+    upperJawController.dispose();
+    lowerJawController.dispose();
+    pharynxController.dispose();
+    throatController.dispose();
+    diagnosisController.dispose();
+    super.dispose();
+  }
 
   // Basic Information Controllers
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController ageController = TextEditingController();
-  final TextEditingController parentPhoneController = TextEditingController();
-  final TextEditingController schoolController = TextEditingController();
-  final TextEditingController residenceController = TextEditingController();
-  final TextEditingController notesController = TextEditingController();
-  final TextEditingController periodController = TextEditingController();
+  late TextEditingController nameController;
+  late TextEditingController ageController;
+  late TextEditingController parentPhoneController;
+  late TextEditingController schoolController;
+  late TextEditingController residenceController;
+  late TextEditingController notesController;
+  late TextEditingController periodController;
 
   // Family Information Controllers
-  final TextEditingController fatherOccupationController =
-      TextEditingController();
-  final TextEditingController motherOccupationController =
-      TextEditingController();
-  final TextEditingController familyMembersController = TextEditingController();
-  final TextEditingController siblingsInfluenceController =
-      TextEditingController();
-  final TextEditingController siblingClosenessController =
-      TextEditingController();
-  final TextEditingController motherAgeController = TextEditingController();
-  final TextEditingController parentsRelationshipController =
-      TextEditingController();
-  final TextEditingController familyRelationshipController =
-      TextEditingController();
-  final TextEditingController motherNatureController = TextEditingController();
+  late TextEditingController fatherOccupationController;
+  late TextEditingController motherOccupationController;
+  late TextEditingController familyMembersController;
+  late TextEditingController siblingsInfluenceController;
+  late TextEditingController siblingClosenessController;
+  late TextEditingController motherAgeController;
+  late TextEditingController parentsRelationshipController;
+  late TextEditingController familyRelationshipController;
+  late TextEditingController motherNatureController;
 
   // Developmental History Controllers
   // Pregnancy Phase
-  final TextEditingController pregnancyNatureController =
-      TextEditingController();
-  final TextEditingController motherDiseasesDuringPregnancyController =
-      TextEditingController();
-  final TextEditingController pregnancyComplicationsController =
-      TextEditingController();
-  final TextEditingController motherStressDuringPregnancyController =
-      TextEditingController();
+  late TextEditingController pregnancyNatureController;
+  late TextEditingController motherDiseasesDuringPregnancyController;
+  late TextEditingController pregnancyComplicationsController;
+  late TextEditingController motherStressDuringPregnancyController;
 
   // Birth Phase
-  final TextEditingController birthTypeController = TextEditingController();
-  final TextEditingController birthComplicationsController =
-      TextEditingController();
-  final TextEditingController birthTimingController = TextEditingController();
+  late TextEditingController birthTypeController;
+  late TextEditingController birthComplicationsController;
+  late TextEditingController birthTimingController;
 
   // Post-Birth
-  final TextEditingController incubatorController = TextEditingController();
-  final TextEditingController incubatorPeriodController =
-      TextEditingController();
-  final TextEditingController jaundiceController = TextEditingController();
-  final TextEditingController jaundiceRateController = TextEditingController();
+  late TextEditingController incubatorController;
+  late TextEditingController incubatorPeriodController;
+
+  late TextEditingController jaundiceController;
+  late TextEditingController jaundiceRateController;
 
   // Health History
-  final TextEditingController vaccinationsController = TextEditingController();
-  final TextEditingController measlesController = TextEditingController();
-  final TextEditingController smallpoxController = TextEditingController();
-  final TextEditingController medicationsController = TextEditingController();
+  late TextEditingController vaccinationsController;
+  late TextEditingController measlesController;
+  late TextEditingController smallpoxController;
+  late TextEditingController medicationsController;
 
   // First Year Growth
-  final TextEditingController teethingController = TextEditingController();
-  final TextEditingController babblingController = TextEditingController();
-  final TextEditingController motherVoiceAttentionController =
-      TextEditingController();
-  final TextEditingController sittingAloneController = TextEditingController();
-  final TextEditingController crawlingController = TextEditingController();
-  final TextEditingController walkingController = TextEditingController();
-  final TextEditingController handPointingController = TextEditingController();
+  late TextEditingController teethingController;
+  late TextEditingController babblingController;
+  late TextEditingController motherVoiceAttentionController;
+  late TextEditingController sittingAloneController;
+  late TextEditingController crawlingController;
+  late TextEditingController walkingController;
+  late TextEditingController handPointingController;
 
   // Psychological History
-  final TextEditingController familyDisabilitiesController =
-      TextEditingController();
+  late TextEditingController familyDisabilitiesController;
 
   // Social History
-  final TextEditingController socialInteractionController =
-      TextEditingController();
-  final TextEditingController parentAbsenceController = TextEditingController();
+  late TextEditingController socialInteractionController;
+
+  late TextEditingController parentAbsenceController;
 
   // Medical Examinations
-  final TextEditingController hearingController = TextEditingController();
-  final TextEditingController visionController = TextEditingController();
-  final TextEditingController respiratoryController = TextEditingController();
-  final TextEditingController digestiveController = TextEditingController();
-  final TextEditingController neurologyController = TextEditingController();
-  final TextEditingController circulatoryController = TextEditingController();
-  final TextEditingController vocalController = TextEditingController();
-  final TextEditingController headController = TextEditingController();
-  final TextEditingController speechController = TextEditingController();
-  final TextEditingController lipsController = TextEditingController();
-  final TextEditingController teethController = TextEditingController();
-  final TextEditingController palateController = TextEditingController();
-  final TextEditingController tongueController = TextEditingController();
-  final TextEditingController upperJawController = TextEditingController();
-  final TextEditingController lowerJawController = TextEditingController();
-  final TextEditingController pharynxController = TextEditingController();
-  final TextEditingController throatController = TextEditingController();
+  late TextEditingController hearingController;
+  late TextEditingController visionController;
+  late TextEditingController respiratoryController;
+  late TextEditingController digestiveController;
+  late TextEditingController neurologyController;
+  late TextEditingController circulatoryController;
+  late TextEditingController vocalController;
+  late TextEditingController headController;
+  late TextEditingController speechController;
+  late TextEditingController lipsController;
+  late TextEditingController teethController;
+  late TextEditingController palateController;
+  late TextEditingController tongueController;
+  late TextEditingController upperJawController;
+  late TextEditingController lowerJawController;
+  late TextEditingController pharynxController;
+  late TextEditingController throatController;
 
   // Diagnosis
-  final TextEditingController diagnosisController = TextEditingController();
+  late TextEditingController diagnosisController;
 
   DateTime? selectedDate;
   DateTime? startDate;
@@ -214,13 +335,18 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                 },
               );
             } else if (state is AddSuccessState) {
-              Navigator.pop(context);
+              Navigator.pop(context); // Dismiss loading dialog
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Child added successfully!'),
                   backgroundColor: Colors.green,
                 ),
               );
+              // Refresh the list and pop the screen
+              context
+                  .read<ajeal_children_list_cubit.ChildrenListCubit>()
+                  .loadChildren();
+              Navigator.pop(context); // Dismiss Add Child screen
             } else if (state is AddFailureState) {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
@@ -943,23 +1069,20 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
     );
   }
 
-  void _handleSave(AddChildCubit bloc, BuildContext context) async{
+  void _handleSave(AddChildCubit bloc, BuildContext context) async {
     if (!_formKey.currentState!.validate()) return;
-    if (! await checkNumber(parentPhoneController.text)){
+    if (!await checkNumber(parentPhoneController.text)) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('The Parent Phone number already exist Please Change The name '),
+          content: Text(
+              'The Parent Phone number already exist Please Change The name '),
           backgroundColor: Colors.orange,
         ),
       );
       return;
-
-
-
-
     }
-    
+
     if (!context.mounted) return;
 
     if (selectedItems.isEmpty) {
@@ -973,7 +1096,6 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
     }
 
     bloc.saveChild(
-      context,
       name: nameController.text,
       age: ageController.text,
       selectedGoals: selectedItems,
@@ -981,8 +1103,10 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
       startDate: startDate ?? DateTime.now(),
       endDate: endDate ?? DateTime.now(),
       period: periodController.text,
-      parentPhone: parentPhoneController.text.trim()+nameController.text.trim(), // Fixed parameter name//number+ name Likecode
-      parentPhoneNumber:parentPhoneController.text,//Only Number
+      parentPhone: parentPhoneController.text.trim() +
+          nameController.text
+              .trim(), // Fixed parameter name//number+ name Likecode
+      parentPhoneNumber: parentPhoneController.text, //Only Number
       notes: notesController.text,
       school: schoolController.text,
       residence: residenceController.text,
@@ -1053,6 +1177,7 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
       diagnosis: diagnosisController.text,
     );
   }
+
   Future<bool> checkNumber(String phoneNumber) async {
     try {
       // Get current user ID
@@ -1076,4 +1201,5 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
       // In case of error, assume number might be in use for safety
       return false;
     }
-  }}
+  }
+}

@@ -1,5 +1,5 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_children_select_goals/goal_detail_screen.dart';
-import 'package:ajeal/admin/models/goals_model/goals.dart';
+﻿import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_children_select_goals/goal_detail_screen.dart';
+import 'package:ajeal/core/models/goals_model/goals.dart';
 import 'package:flutter/material.dart';
 
 class ChildGoalsPage extends StatelessWidget {
