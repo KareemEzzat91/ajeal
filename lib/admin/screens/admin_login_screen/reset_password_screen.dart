@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -39,7 +40,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       // Navigate back after short delay
       Future.delayed(const Duration(seconds: 2), () {
         if (!mounted) return;
-        Navigator.pop(context);
+        context.pop();
       });
     } on FirebaseAuthException catch (e) {
       Get.snackbar(
@@ -94,7 +95,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   // Back Button
                   IconButton(
                     icon: const Icon(Icons.arrow_back_ios),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => context.pop(),
                     padding: EdgeInsets.zero,
                     alignment: Alignment.centerLeft,
                   ),

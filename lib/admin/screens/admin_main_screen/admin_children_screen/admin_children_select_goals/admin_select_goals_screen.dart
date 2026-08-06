@@ -1,9 +1,10 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/add_child_cubit.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_children_select_goals/goal_detail_screen.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/goal_lists/goal_lists.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/add_child_cubit.dart';
+import '../../../../../admin/screens/admin_main_screen/admin_children_screen/goal_lists/goal_lists.dart';
 
 class AdminSelectGoals extends StatelessWidget {
   final String phone;
@@ -54,9 +55,9 @@ class AdminSelectGoals extends StatelessWidget {
 
               if (context.mounted &&
                   addChildCubit.selectedGoals[phone] != null) {
-                Navigator.pop(context, addChildCubit.selectedGoals[phone]);
+                context.pop(addChildCubit.selectedGoals[phone]);
               } else {
-                Navigator.pop(context, []);
+                context.pop([]);
               }
             },
             child: Padding(
@@ -169,12 +170,8 @@ class AdminSelectGoals extends StatelessWidget {
                   ),
                   ElevatedButton.icon(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => GoalDetailScreen(goal: goal),
-                        ),
-                      );
+                      context.push('/admin/children/add/goals/detail',
+                          extra: {'goal': goal});
                     },
                     icon: const Icon(Icons.info_outline),
                     label: const Text("التفاصيل"),

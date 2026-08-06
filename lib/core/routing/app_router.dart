@@ -1,15 +1,31 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_add_child/admin_add_child_screen.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_children_screen.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_detail_screen.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/session_detail_screen/session_detail_screen.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_main_screen/admin_main_screen.dart';
-import 'package:ajeal/core/models/child_model/child_model.dart';
-import 'package:ajeal/parents/parent_home_screen/parent_home_screen.dart';
-import 'package:ajeal/screens/admin_or_parents/admin_or_parents_screen.dart';
-import 'package:ajeal/screens/setup/buildhome_screen.dart';
-import 'package:ajeal/screens/setup/home_screenbuilder.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../admin/screens/admin_login_screen/login_screen.dart';
+import '../../admin/screens/admin_login_screen/reset_password_screen.dart';
+import '../../admin/screens/admin_login_screen/sign_up_screen.dart';
+import '../../admin/screens/admin_login_screen/verification_screen.dart';
+import '../../admin/screens/admin_main_screen/admin_children_screen/admin_add_child/admin_add_child_screen.dart';
+import '../../admin/screens/admin_main_screen/admin_children_screen/admin_children_select_goals/admin_select_goals_screen.dart';
+import '../../admin/screens/admin_main_screen/admin_children_screen/admin_children_select_goals/goal_detail_screen.dart';
+import '../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/ai_result_screen.dart';
+import '../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/all_details_screen.dart';
+import '../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_detail_screen.dart';
+import '../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_info.dart';
+import '../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/daily_notes_screen.dart';
+import '../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/session_detail_screen/choosetasks_screen/choosetasks_screen.dart';
+import '../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/session_detail_screen/session_detail_screen.dart';
+import '../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/session_detail_screen/sessiontaskrate_screen/sessiontaskrate_screen.dart';
+import '../../admin/screens/admin_main_screen/admin_main_screen/admin_main_screen.dart';
+import '../../parents/parent_home_screen/parent_chat/all_parents_chats/global_chat_screen.dart';
+import '../../parents/parent_home_screen/parent_chat/parent_admin_chat/parent_admin_chat_screen.dart';
+import '../../parents/parent_home_screen/parent_child_goals_page/parentchildgoals_screen.dart';
+import '../../parents/parent_home_screen/parent_home_screen.dart';
+import '../../parents/parent_home_screen/parent_session_schedule_page/parent_session_schedule_screen.dart';
+import '../../parents/parent_login_page/parent_login_page.dart';
+import '../../screens/admin_or_parents/admin_or_parents_screen.dart';
+import '../../screens/setup/home_screenbuilder.dart';
+import '../models/child_model/child_model.dart';
 
 class AppRouter {
   static GoRouter getRouter({
@@ -108,6 +124,159 @@ class AppRouter {
               isOthers: extra?['isOthers'],
               doctorId: extra?['doctorId'],
               completedSessions: extra?['completedSessions'],
+            );
+          },
+        ),
+        GoRoute(
+          path: '/admin/login',
+          builder: (context, state) => const AdminLoginScreen(),
+        ),
+        GoRoute(
+          path: '/admin/reset_password',
+          builder: (context, state) => const ResetPasswordScreen(),
+        ),
+        GoRoute(
+          path: '/admin/signup',
+          builder: (context, state) => const SignupScreen(),
+        ),
+        GoRoute(
+          path: '/admin/verification',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>? ?? {};
+            return VerificationScreen(user: extra['user']);
+          },
+        ),
+        GoRoute(
+          path: '/parent/login',
+          builder: (context, state) => const ParentLoginPage(),
+        ),
+        GoRoute(
+          path: '/admin/children/add/goals',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>? ?? {};
+            return AdminSelectGoals(
+              phone: extra['phone'] ?? '',
+            );
+          },
+        ),
+        GoRoute(
+          path: '/admin/children/details/info',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            return ChildInfoSection(
+              child: extra?['child'],
+              birthDate: extra?['birthDate'] ?? '',
+              context: context,
+              theme: Theme.of(context),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/admin/children/details/ai_results',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            return AIResultsScreen(
+              childName: extra?['childName'] ?? '',
+              analysis: extra?['analysis'] ?? '',
+              sessionsData: extra?['sessionsData'] ?? [],
+            );
+          },
+        ),
+        GoRoute(
+          path: '/admin/children/details/daily_notes',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>? ?? {};
+            return DailyNotesScreen(
+              childID: extra['childID'] ?? extra['childId'] ?? '',
+              userType: extra['userType'] ?? 'Admin',
+              isOthers: extra['isOthers'] ?? false,
+              otherDoctorId: extra['otherDoctorId'],
+            );
+          },
+        ),
+        GoRoute(
+          path: '/admin/children/sessions/choose_tasks',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>? ?? {};
+            return ChooseTasksScreen(
+              selectedGoal: extra['selectedGoal'],
+            );
+          },
+        ),
+        GoRoute(
+          path: '/admin/children/sessions/rate_task',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            return SessionTaskRateScreen(
+              task: extra?['task'],
+              isParent: extra?['isParent'] ?? false,
+            );
+          },
+        ),
+        GoRoute(
+          path: '/parent/global_chat',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>? ?? {};
+            return GlobalChatScreen(
+              childName: extra['childName'] ?? '',
+              doctorId: extra['doctorId'] ?? '',
+              parentId: extra['parentId'] ?? '',
+              isParent: extra['isParent'] ?? true,
+            );
+          },
+        ),
+        GoRoute(
+          path: '/parent/child_goals',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            return ChildGoalsPage(
+              goals: extra?['child']?.selectedGoals ?? [],
+            );
+          },
+        ),
+        GoRoute(
+          path: '/parent/session_schedule',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            return SessionSchedulePage(
+              child: extra?['child'],
+              completedSesions: extra?['child']?.completedSessions.toInt() ?? 0,
+              name: extra?['child']?.name ?? '',
+              isParent: extra?['isParent'] ?? true,
+              childId: extra?['child']?.parentPhone ?? '',
+              scheduleSessions: extra?['child']?.scheduleSessions ?? [],
+            );
+          },
+        ),
+        GoRoute(
+          path: '/admin/children/details/all',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            return AllDetailsScreen(
+              extra?['child'],
+            );
+          },
+        ),
+        GoRoute(
+          path: '/parent/chat',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>? ?? {};
+            return ChatScreen(
+              doctorId: extra['doctorId'] ?? '',
+              isParent: extra['isParent'] ?? false,
+              parentId: extra['parentId'] ?? '',
+              isOthers: extra['isOthers'] ?? false,
+              doctorOthersId: extra['doctorOthersId'],
+              role: extra['role'] ?? '',
+            );
+          },
+        ),
+        GoRoute(
+          path: '/admin/children/add/goals/detail',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            return GoalDetailScreen(
+              goal: extra?['goal'],
             );
           },
         ),

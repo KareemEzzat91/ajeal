@@ -1,6 +1,7 @@
-import 'package:ajeal/parents/parent_home_screen/parent_chat/parent_admin_chat/chat_message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'chat_message.dart';
 
 class ChatRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -9,11 +10,9 @@ class ChatRepository {
   User? get currentUser => _auth.currentUser;
 
   // Initialize chat document
-  Future<void> initializeChatDocument(String chatId, String doctorId, String parentId) async {
-    await _firestore
-        .collection('Chats')
-        .doc(chatId)
-        .set({
+  Future<void> initializeChatDocument(
+      String chatId, String doctorId, String parentId) async {
+    await _firestore.collection('Chats').doc(chatId).set({
       'doctor_id': doctorId,
       'parent_id': parentId,
       'participants': [doctorId, parentId],
@@ -31,16 +30,13 @@ class ChatRepository {
         .orderBy('timestamp', descending: false)
         .snapshots()
         .map((snapshot) => snapshot.docs
-        .map((doc) => ChatMessage.fromMap(doc.data()))
-        .toList());
+            .map((doc) => ChatMessage.fromMap(doc.data()))
+            .toList());
   }
 
   // Get user online status stream
   Stream<DocumentSnapshot> getUserStatusStream(String userId) {
-    return _firestore
-        .collection('UserStatus')
-        .doc(userId)
-        .snapshots();
+    return _firestore.collection('UserStatus').doc(userId).snapshots();
   }
 
   // Send a message
@@ -51,20 +47,15 @@ class ChatRepository {
         .collection('Messages')
         .add(message.toMap());
 
-    await _firestore
-        .collection('Chats')
-        .doc(chatId)
-        .update({
+    await _firestore.collection('Chats').doc(chatId).update({
       'updated_at': FieldValue.serverTimestamp(),
     });
   }
 
   // Update typing status
-  Future<void> updateTypingStatus(String chatId, String role, bool isTyping) async {
-    await _firestore
-        .collection('Chats')
-        .doc(chatId)
-        .update({
+  Future<void> updateTypingStatus(
+      String chatId, String role, bool isTyping) async {
+    await _firestore.collection('Chats').doc(chatId).update({
       '${role}_typing': isTyping,
       'updated_at': FieldValue.serverTimestamp(),
     });
@@ -87,7 +78,8 @@ class ChatRepository {
   }
 
   // Submit a report
-  Future<void> submitReport(String chatId, String reporterId, String reporterRole, String reportText) async {
+  Future<void> submitReport(String chatId, String reporterId,
+      String reporterRole, String reportText) async {
     await _firestore.collection('Reports').add({
       'chat_id': chatId,
       'reporter_id': reporterId,

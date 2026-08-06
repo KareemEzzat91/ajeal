@@ -1,9 +1,10 @@
-import 'package:ajeal/screens/admin_or_parents/admin_or_parents_screen.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
-import 'package:ajeal/helpers/url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../helpers/generated/l10n.dart';
+import '../../helpers/url_launcher/url_launcher.dart';
 
 void showEmergencyContactDialog(BuildContext context, String doctorPhone) {
   showDialog(
@@ -41,7 +42,7 @@ void showEmergencyContactDialog(BuildContext context, String doctorPhone) {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
           child: const Text("Close"),
         ),
       ],
@@ -54,10 +55,6 @@ Future<void> logout(BuildContext context) async {
   final pref = await SharedPreferences.getInstance();
   await pref.setBool("ParentLogin", false);
   if (context.mounted) {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const AdminOrParentsScreen()),
-      (route) => false,
-    );
+    context.go('/choice');
   }
 }

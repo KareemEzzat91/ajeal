@@ -1,8 +1,8 @@
-import 'package:ajeal/core/di/service_locator.dart';
-import 'package:ajeal/features/admin/children/data/child_repository.dart';
-import 'package:ajeal/features/admin/children/presentation/cubit/child_detail/child_detail_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../data/child_repository.dart';
+import 'child_detail_state.dart';
 
 class ChildDetailCubit extends Cubit<ChildDetailState> {
   ChildDetailCubit({ChildRepository? repository, FirebaseAuth? auth})
@@ -36,9 +36,11 @@ class ChildDetailCubit extends Cubit<ChildDetailState> {
   }) async {
     emit(ChildDetailLoading());
     try {
-      final uid = isOthers && otherDoctorId != null ? otherDoctorId : _auth.currentUser?.uid;
+      final uid = isOthers && otherDoctorId != null
+          ? otherDoctorId
+          : _auth.currentUser?.uid;
       if (uid == null) throw Exception('Doctor ID not found');
-      
+
       await _repository.updateSession(
         doctorId: uid,
         childId: childId,

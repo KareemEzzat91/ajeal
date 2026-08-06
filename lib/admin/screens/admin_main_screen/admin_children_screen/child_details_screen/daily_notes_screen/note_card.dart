@@ -1,6 +1,7 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/note_model.dart';
 
 class NoteCard extends StatelessWidget {
   final Note note;

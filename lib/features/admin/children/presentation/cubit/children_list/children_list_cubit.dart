@@ -1,8 +1,8 @@
-import 'package:ajeal/core/di/service_locator.dart';
-import 'package:ajeal/features/admin/children/data/child_repository.dart';
-import 'package:ajeal/features/admin/children/presentation/cubit/children_list/children_list_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../data/child_repository.dart';
+import 'children_list_state.dart';
 
 /// Cubit responsible for loading and filtering the children list.
 /// Replaces the list-management responsibilities previously in AddChildCubit.
@@ -28,9 +28,8 @@ class ChildrenListCubit extends Cubit<ChildrenListState> {
     emit(ChildrenListLoading());
     try {
       final children = await _repository.fetchChildren(userId);
-      final current = state is ChildrenListLoaded
-          ? (state as ChildrenListLoaded)
-          : null;
+      final current =
+          state is ChildrenListLoaded ? (state as ChildrenListLoaded) : null;
       emit(ChildrenListLoaded(
         children: children,
         othersChildren: current?.othersChildren ?? [],
@@ -52,9 +51,8 @@ class ChildrenListCubit extends Cubit<ChildrenListState> {
     emit(ChildrenListLoading());
     try {
       final othersChildren = await _repository.fetchOthersChildren(userId);
-      final current = state is ChildrenListLoaded
-          ? (state as ChildrenListLoaded)
-          : null;
+      final current =
+          state is ChildrenListLoaded ? (state as ChildrenListLoaded) : null;
       emit(ChildrenListLoaded(
         children: current?.children ?? [],
         othersChildren: othersChildren,

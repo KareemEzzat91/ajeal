@@ -1,7 +1,8 @@
-﻿import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/all_details_screen.dart';
-import 'package:ajeal/core/models/child_model/child_model.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../core/models/child_model/child_model.dart';
+import '../../../../../helpers/generated/l10n.dart';
 
 class ChildInfoSection extends StatelessWidget {
   const ChildInfoSection({
@@ -36,23 +37,36 @@ class ChildInfoSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ChildInforRow(icon: Icons.person, label: S.of(context).name, value: child.name),
+          ChildInforRow(
+              icon: Icons.person, label: S.of(context).name, value: child.name),
           const Divider(height: 24),
-          ChildInforRow(icon: Icons.cake, label: S.of(context).dateOfBirth, value: birthDate),
+          ChildInforRow(
+              icon: Icons.cake,
+              label: S.of(context).dateOfBirth,
+              value: birthDate),
           const Divider(height: 24),
-          ChildInforRow(icon: Icons.calendar_today, label: S.of(context).startDate, value: "${child.startDate.year}-${child.startDate.month}-${child.startDate
-              .day}"),
+          ChildInforRow(
+              icon: Icons.calendar_today,
+              label: S.of(context).startDate,
+              value:
+                  "${child.startDate.year}-${child.startDate.month}-${child.startDate.day}"),
           const Divider(height: 24),
-          ChildInforRow(icon: Icons.event, label:S.of(context).endDate, value: "${child.endDate.year}-${child.endDate.month}-${child.endDate.day}"),
+          ChildInforRow(
+              icon: Icons.event,
+              label: S.of(context).endDate,
+              value:
+                  "${child.endDate.year}-${child.endDate.month}-${child.endDate.day}"),
           const Divider(height: 24),
           GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => AllDetailsScreen(child)));
+              context
+                  .push('/admin/children/details/all', extra: {'child': child});
             },
-            child:  ChildInforRow(icon: Icons.align_horizontal_left, label:S.of(context).detailedReports, value: S.of(context).press),
+            child: ChildInforRow(
+                icon: Icons.align_horizontal_left,
+                label: S.of(context).detailedReports,
+                value: S.of(context).press),
           ),
-
         ],
       ),
     );

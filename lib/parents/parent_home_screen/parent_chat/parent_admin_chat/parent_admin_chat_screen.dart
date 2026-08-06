@@ -1,10 +1,11 @@
-import 'package:ajeal/parents/parent_home_screen/parent_chat/parent_admin_chat/chat_message.dart';
-import 'package:ajeal/parents/parent_home_screen/parent_chat/parent_admin_chat/chat_repository.dart';
-import 'package:ajeal/parents/parent_home_screen/parent_chat/parent_admin_chat/cubit/chat_cubit.dart';
-import 'package:ajeal/parents/parent_home_screen/parent_chat/parent_admin_chat/cubit/chat_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+
+import 'chat_message.dart';
+import 'chat_repository.dart';
+import 'cubit/chat_cubit.dart';
+import 'cubit/chat_state.dart';
 
 class ChatScreen extends StatefulWidget {
   final String role; // 'doctor' or 'parent'
@@ -14,15 +15,14 @@ class ChatScreen extends StatefulWidget {
   final bool isOthers; // Whether current user is others
   final String? doctorOthersId; // DoctorName + DoctorPhone
 
-  const ChatScreen({
-    super.key,
-    required this.role,
-    required this.doctorId,
-    required this.parentId,
-    required this.isParent,
-    required this.isOthers,
-    this.doctorOthersId
-  });
+  const ChatScreen(
+      {super.key,
+      required this.role,
+      required this.doctorId,
+      required this.parentId,
+      required this.isParent,
+      required this.isOthers,
+      this.doctorOthersId});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -186,7 +186,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       mini: true,
                       backgroundColor: Colors.blue[700],
                       onPressed: _scrollToBottom,
-                      child: const Icon(Icons.arrow_downward, color: Colors.white),
+                      child:
+                          const Icon(Icons.arrow_downward, color: Colors.white),
                     ),
                   ),
               ],
@@ -214,8 +215,11 @@ class _ChatScreenState extends State<ChatScreen> {
             child: CircleAvatar(
               radius: 18,
               backgroundImage: isDoctor
-                  ? const NetworkImage("https://img.freepik.com/premium-vector/parents-with-kids-avatars-characters_24877-24085.jpg")
-                  : const AssetImage("assets/images/man-teacher-with-chalkboard-on-blue-background-vector-33671420.jpg") as ImageProvider,
+                  ? const NetworkImage(
+                      "https://img.freepik.com/premium-vector/parents-with-kids-avatars-characters_24877-24085.jpg")
+                  : const AssetImage(
+                          "assets/images/man-teacher-with-chalkboard-on-blue-background-vector-33671420.jpg")
+                      as ImageProvider,
             ),
           ),
           const SizedBox(width: 12),
@@ -235,7 +239,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     width: 8,
                     height: 8,
                     decoration: BoxDecoration(
-                      color: state.isOtherUserOnline ? Colors.green : Colors.grey,
+                      color:
+                          state.isOtherUserOnline ? Colors.green : Colors.grey,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -286,52 +291,54 @@ class _ChatScreenState extends State<ChatScreen> {
     return Expanded(
       child: messages.isEmpty
           ? Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.chat_bubble_outline,
-                size: 48, color: Colors.grey[400]),
-            const SizedBox(height: 16),
-            Text(
-              'No messages yet.\nStart the conversation!',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[600],
-                height: 1.5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.chat_bubble_outline,
+                      size: 48, color: Colors.grey[400]),
+                  const SizedBox(height: 16),
+                  Text(
+                    'No messages yet.\nStart the conversation!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[600],
+                      height: 1.5,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      )
+            )
           : ListView.builder(
-        controller: _scrollController,
-        padding: const EdgeInsets.all(16),
-        itemCount: messages.length,
-        itemBuilder: (context, index) {
-          final message = messages[index];
-          final timestamp = message.timestamp;
-          final currentDate = timestamp != null
-              ? DateFormat('MMMM d, y').format(timestamp.toDate())
-              : null;
+              controller: _scrollController,
+              padding: const EdgeInsets.all(16),
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                final message = messages[index];
+                final timestamp = message.timestamp;
+                final currentDate = timestamp != null
+                    ? DateFormat('MMMM d, y').format(timestamp.toDate())
+                    : null;
 
-          final previousDate = index > 0 && messages[index - 1].timestamp != null
-              ? DateFormat('MMMM d, y').format(messages[index - 1].timestamp!.toDate())
-              : null;
+                final previousDate =
+                    index > 0 && messages[index - 1].timestamp != null
+                        ? DateFormat('MMMM d, y')
+                            .format(messages[index - 1].timestamp!.toDate())
+                        : null;
 
-          Widget? dateDivider;
-          if (currentDate != null && currentDate != previousDate) {
-            dateDivider = _buildDateDivider(currentDate);
-          }
+                Widget? dateDivider;
+                if (currentDate != null && currentDate != previousDate) {
+                  dateDivider = _buildDateDivider(currentDate);
+                }
 
-          return Column(
-            children: [
-              if (dateDivider != null) dateDivider,
-              _buildMessageBubble(message, state.currentUserId),
-            ],
-          );
-        },
-      ),
+                return Column(
+                  children: [
+                    if (dateDivider != null) dateDivider,
+                    _buildMessageBubble(message, state.currentUserId),
+                  ],
+                );
+              },
+            ),
     );
   }
 
@@ -385,9 +392,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 color: isCurrentUserMessage ? Colors.blue[700] : Colors.white,
                 borderRadius: BorderRadius.circular(20).copyWith(
                   bottomLeft:
-                  !isCurrentUserMessage ? const Radius.circular(0) : null,
+                      !isCurrentUserMessage ? const Radius.circular(0) : null,
                   bottomRight:
-                  isCurrentUserMessage ? const Radius.circular(0) : null,
+                      isCurrentUserMessage ? const Radius.circular(0) : null,
                 ),
                 boxShadow: const [
                   BoxShadow(
@@ -407,7 +414,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     message.text,
                     style: TextStyle(
                       color:
-                      isCurrentUserMessage ? Colors.white : Colors.black87,
+                          isCurrentUserMessage ? Colors.white : Colors.black87,
                       fontSize: 15,
                     ),
                   ),
@@ -454,8 +461,11 @@ class _ChatScreenState extends State<ChatScreen> {
       child: CircleAvatar(
         radius: 16,
         backgroundImage: isDoctor
-            ? const AssetImage("assets/images/man-teacher-with-chalkboard-on-blue-background-vector-33671420.jpg") as ImageProvider
-            : const NetworkImage("https://img.freepik.com/premium-vector/parents-with-kids-avatars-characters_24877-24085.jpg"),
+            ? const AssetImage(
+                    "assets/images/man-teacher-with-chalkboard-on-blue-background-vector-33671420.jpg")
+                as ImageProvider
+            : const NetworkImage(
+                "https://img.freepik.com/premium-vector/parents-with-kids-avatars-characters_24877-24085.jpg"),
       ),
     );
   }
@@ -517,7 +527,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               child: IconButton(
                 icon: const Icon(
-                   Icons.send ,
+                  Icons.send,
                   color: Colors.white,
                 ),
                 onPressed: state.isTyping ? _sendMessage : null,
@@ -528,7 +538,6 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-
 
   @override
   void dispose() {

@@ -1,10 +1,11 @@
-﻿import 'package:ajeal/core/models/child_model/child_model.dart';
-import 'package:ajeal/parents/parent_home_screen/parent_home_screen.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
-import 'package:ajeal/helpers/url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../core/models/child_model/child_model.dart';
+import '../../helpers/generated/l10n.dart';
+import '../../helpers/url_launcher/url_launcher.dart';
 
 class ParentLoginPage extends StatefulWidget {
   const ParentLoginPage({super.key});
@@ -23,7 +24,6 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
 
     setState(() => _isLoading = true);
 
-
     try {
       final parentCode = _parentCodeController.text.trim();
       if (parentCode.isEmpty) return;
@@ -33,12 +33,9 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
           .get();
 
       if (!childSnapshot.exists) {
-        
         if (mounted) {
           _showErrorSnackBar(S.of(context).invalid_parent_code);
         }
-
-
 
         return;
       }
@@ -46,14 +43,14 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
       final Child child = Child.fromJson(childSnapshot.data()!);
       final adminID = child.doctorId;
 
-
       final doctorSnapshot = await FirebaseFirestore.instance
           .collection("Doctors")
           .doc(adminID)
           .get();
 
       if (!doctorSnapshot.exists || doctorSnapshot.data() == null) {
-        if (mounted) _showErrorSnackBar("Invalid admin code. Please try again.");
+        if (mounted)
+          _showErrorSnackBar("Invalid admin code. Please try again.");
         return;
       }
 
@@ -66,22 +63,14 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
       await saveToken(parentCode, doctorKey);
 
       if (!mounted) return;
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ParentHomePage(
-            parentCode: parentCode,
-            child: child,
-            adminId: doctorKey,
-          ),
-        ),
-              (Route<dynamic> route) => false
-      );
+      context.go('/parent/main', extra: {
+        'parentCode': parentCode,
+        'child': child,
+        'adminId': doctorKey
+      });
     } catch (e) {
-
       _showErrorSnackBar("An error occurred. Please try again later.");
     } finally {
-
       setState(() => _isLoading = false);
     }
   }
@@ -123,7 +112,7 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
                 const SizedBox(height: 40),
                 _buildHeader(),
                 const SizedBox(height: 40),
-                _buildLoginForm( ),
+                _buildLoginForm(),
                 const SizedBox(height: 24),
                 _buildLoginButton(),
                 const SizedBox(height: 24),
@@ -146,35 +135,37 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
             color: Colors.teal.shade50,
             shape: BoxShape.circle,
           ),
-          child: const Icon(Icons.family_restroom, size: 50, color: Colors.teal),
+          child:
+              const Icon(Icons.family_restroom, size: 50, color: Colors.teal),
         ),
         const SizedBox(height: 24),
         Text(
           S.of(context).welcome_back,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Colors.teal,
-          ),
+                fontWeight: FontWeight.bold,
+                color: Colors.teal,
+              ),
         ),
         const SizedBox(height: 8),
         Text(
           S.of(context).sign_in_to_continue,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.grey),
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge
+              ?.copyWith(color: Colors.grey),
         ),
       ],
     );
   }
 
   Widget _buildLoginForm() {
-
     return TextFormField(
-      controller:_parentCodeController,
+      controller: _parentCodeController,
       decoration: InputDecoration(
         labelText: S.of(context).parent_code,
         hintText: S.of(context).enter_parent_code,
         prefixIcon: const Icon(Icons.person_outline, color: Colors.teal),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade300),
@@ -184,7 +175,9 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
           borderSide: const BorderSide(color: Colors.teal),
         ),
       ),
-       validator: (value) => value == null || value.isEmpty   ? 'Please enter your parent code' : null,
+      validator: (value) => value == null || value.isEmpty
+          ? 'Please enter your parent code'
+          : null,
     );
   }
 
@@ -198,17 +191,20 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
       ),
       child: _isLoading
           ? const SizedBox(
-        height: 20,
-        width: 20,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-        ),
-      )
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            )
           : Text(
-        S.of(context).sign_in,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-      ),
+              S.of(context).sign_in,
+              style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
     );
   }
 
@@ -216,14 +212,17 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(S.of(context).need_help, style: TextStyle(color: Colors.grey.shade600)),
+        Text(S.of(context).need_help,
+            style: TextStyle(color: Colors.grey.shade600)),
         TextButton(
           onPressed: () {
-            LauncherHelper.launchUrlFromString("https://wa.me/+201004092979?text=السلام عليكم");
+            LauncherHelper.launchUrlFromString(
+                "https://wa.me/+201004092979?text=السلام عليكم");
           },
           child: Text(
             S.of(context).contact_support,
-            style: const TextStyle(color: Colors.teal, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                color: Colors.teal, fontWeight: FontWeight.bold),
           ),
         ),
       ],

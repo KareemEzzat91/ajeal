@@ -1,19 +1,20 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/ai_result_screen.dart';
-import 'package:ajeal/core/models/child_model/child_model.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../core/models/child_model/child_model.dart';
+import '../../../../../helpers/generated/l10n.dart';
 
 class ProgressSection extends StatelessWidget {
   final Color theme;
   final Child child;
-  final bool isOthers ;
+  final bool isOthers;
   final bool isAnalysisEmpty;
 
   const ProgressSection({
@@ -31,9 +32,8 @@ class ProgressSection extends StatelessWidget {
         .where((session) => session['completed'] == true)
         .length;
 
-    final double progressValue = totalSessions > 0
-        ? completedSessions / totalSessions
-        : 0.0;
+    final double progressValue =
+        totalSessions > 0 ? completedSessions / totalSessions : 0.0;
 
     return Container(
       margin: const EdgeInsets.all(16),
@@ -56,7 +56,8 @@ class ProgressSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(S.of(context).progress ,
+              Text(
+                S.of(context).progress,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -119,29 +120,20 @@ class ProgressSection extends StatelessWidget {
                 ),
             ],
           ),
-
           if (progressValue >= 1.0) ...[
             const SizedBox(height: 16),
             ElevatedButton.icon(
-              onPressed: (){
-                isAnalysisEmpty? showAIResults(context ,child ): Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AIResultsScreen(
-                      childName: child.name,
-                      analysis: child.analysis,
-                      sessionsData:  child.scheduleSessions.where((session) => session['completed'] == true).map((session) => {
-                      "session": session["session"],
-                      "date": session["date"],
-                      "goals": session["goals"],
-                      "rate": session["rate"],
-                      "notes": session["notes"],
-                      "tasks": session["tasks"],
-                    }).toList(),
-                    ),
-                  ),
-                );
-                
+              onPressed: () {
+                isAnalysisEmpty
+                    ? showAIResults(context, child)
+                    : context
+                        .push('/admin/children/details/ai_results', extra: {
+                        'childName': child.name,
+                        'analysis': child.analysis,
+                        'sessionsData': child.scheduleSessions
+                            .where((s) => s['isCompleted'] == true)
+                            .toList()
+                      });
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
@@ -165,7 +157,8 @@ class ProgressSection extends StatelessWidget {
       ),
     );
   }
-  void showAIResults(BuildContext context,Child child ) async {
+
+  void showAIResults(BuildContext context, Child child) async {
     // Show loading indicator
     showDialog(
       context: context,
@@ -182,13 +175,13 @@ class ProgressSection extends StatelessWidget {
       final List<Map<String, dynamic>> sessionsData = child.scheduleSessions
           .where((session) => session['completed'] == true)
           .map((session) => {
-        "session": session["session"],
-        "date": session["date"],
-        "goals": session["goals"],
-        "rate": session["rate"],
-        "notes": session["notes"],
-        "tasks": session["tasks"],
-      })
+                "session": session["session"],
+                "date": session["date"],
+                "goals": session["goals"],
+                "rate": session["rate"],
+                "notes": session["notes"],
+                "tasks": session["tasks"],
+              })
           .toList();
 
       // Format data for Gemini API
@@ -208,10 +201,10 @@ class ProgressSection extends StatelessWidget {
       final String aiAnalysis = await callGeminiAPI(prompt);
       final batch = FirebaseFirestore.instance.batch();
 
-      DocumentReference childDoc = FirebaseFirestore.instance.collection("Children").doc(child.parentPhone);
-      batch.update(childDoc, {
-        "analysis": aiAnalysis
-      });
+      DocumentReference childDoc = FirebaseFirestore.instance
+          .collection("Children")
+          .doc(child.parentPhone);
+      batch.update(childDoc, {"analysis": aiAnalysis});
 
       if (!isOthers) {
         DocumentReference userChildDoc = FirebaseFirestore.instance
@@ -220,34 +213,26 @@ class ProgressSection extends StatelessWidget {
             .collection("children")
             .doc(child.parentPhone);
 
-        batch.update(userChildDoc, {
-          "analysis": aiAnalysis
-        });
+        batch.update(userChildDoc, {"analysis": aiAnalysis});
       }
 
 // تنفيذ كل العمليات دفعة واحدة
       await batch.commit();
 
-
       // Close loading dialog
       if (!context.mounted) return;
-      Navigator.pop(context);
+      context.pop();
 
       // Navigate to results screen
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AIResultsScreen(
-            childName: child.name,
-            analysis: aiAnalysis,
-            sessionsData: sessionsData,
-          ),
-        ),
-      );
+      context.push('/admin/children/details/ai_results', extra: {
+        'childName': child.name,
+        'analysis': aiAnalysis,
+        'sessionsData': sessionsData
+      });
     } catch (e) {
       // Close loading dialog
       if (!context.mounted) return;
-      Navigator.pop(context);
+      context.pop();
 
       // Show error
       ScaffoldMessenger.of(context).showSnackBar(
@@ -268,10 +253,11 @@ class ProgressSection extends StatelessWidget {
     while (retryCount < maxRetries) {
       try {
         // Make API request with timeout
-        final response = await gemini.prompt(parts: [Part.text(prompt)]).timeout(
+        final response =
+            await gemini.prompt(parts: [Part.text(prompt)]).timeout(
           const Duration(seconds: 130),
           onTimeout: () =>
-          throw TimeoutException('Gemini API request timed out'),
+              throw TimeoutException('Gemini API request timed out'),
         );
 
         if (response == null ||
@@ -282,7 +268,6 @@ class ProgressSection extends StatelessWidget {
 
         // Return the raw output text
         return response.output!;
-
       } on Exception catch (e) {
         final errorMessage = e.toString().toLowerCase();
 
@@ -293,7 +278,8 @@ class ProgressSection extends StatelessWidget {
           if (retryCount >= maxRetries) {
             _logError(
                 'Rate limit exceeded', 'Max retries reached after 429 error');
-            throw Exception('معدل الطلبات تجاوز الحد المسموح. الرجاء المحاولة لاحقاً.');
+            throw Exception(
+                'معدل الطلبات تجاوز الحد المسموح. الرجاء المحاولة لاحقاً.');
           }
 
           // Exponential backoff with jitter
@@ -311,7 +297,8 @@ class ProgressSection extends StatelessWidget {
           throw Exception('انتهت مدة الاتصال. الرجاء المحاولة مرة أخرى.');
         } else if (errorMessage.contains('400')) {
           _logError('Bad request', e);
-          throw Exception('طلب غير صالح إلى واجهة Gemini. تحقق من مفتاح API والمحتوى المرسل.');
+          throw Exception(
+              'طلب غير صالح إلى واجهة Gemini. تحقق من مفتاح API والمحتوى المرسل.');
         } else {
           _logError('Unexpected error', e);
           throw Exception('حدث خطأ أثناء تحليل البيانات: ${e.toString()}');
@@ -323,6 +310,5 @@ class ProgressSection extends StatelessWidget {
     throw Exception('فشل في تحليل البيانات بعد عدة محاولات.');
   }
 
-  void _logError(String type, dynamic error) {
-  }
+  void _logError(String type, dynamic error) {}
 }

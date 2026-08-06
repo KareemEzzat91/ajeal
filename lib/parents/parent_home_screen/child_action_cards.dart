@@ -1,12 +1,8 @@
-﻿import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/all_details_screen.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/daily_notes_screen.dart';
-import 'package:ajeal/core/models/child_model/child_model.dart';
-import 'package:ajeal/parents/parent_home_screen/parent_chat/all_parents_chats/global_chat_screen.dart';
-import 'package:ajeal/parents/parent_home_screen/parent_chat/parent_admin_chat/parent_admin_chat_screen.dart';
-import 'package:ajeal/parents/parent_home_screen/parent_child_goals_page/parentchildgoals_screen.dart';
-import 'package:ajeal/parents/parent_home_screen/parent_session_schedule_page/parent_session_schedule_screen.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../core/models/child_model/child_model.dart';
+import '../../helpers/generated/l10n.dart';
 
 class ChildActionCards extends StatelessWidget {
   const ChildActionCards({
@@ -26,69 +22,72 @@ class ChildActionCards extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ChildActionCardBuilder(context: context, title: S.of(context).childDetails, subtitle: S.of(context).detailedReports, icon: Icons.person, color: Colors.red, onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AllDetailsScreen(child),
-          ),
-        )),
+        ChildActionCardBuilder(
+            context: context,
+            title: S.of(context).childDetails,
+            subtitle: S.of(context).detailedReports,
+            icon: Icons.person,
+            color: Colors.red,
+            onTap: () => context
+                .push('/admin/children/details/all', extra: {'child': child})),
         const SizedBox(height: 16),
-        ChildActionCardBuilder(context: context, title: S.of(context).view_child_goals, subtitle: S.of(context).track_progress, icon: Icons.flag, color: Colors.orange, onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChildGoalsPage(goals: child.selectedGoals),
-          ),
-        )),
+        ChildActionCardBuilder(
+            context: context,
+            title: S.of(context).view_child_goals,
+            subtitle: S.of(context).track_progress,
+            icon: Icons.flag,
+            color: Colors.orange,
+            onTap: () =>
+                context.push('/parent/child_goals', extra: {'child': child})),
         const SizedBox(height: 16),
-        ChildActionCardBuilder(context: context, title: S.of(context).schedule_sessions, subtitle: S.of(context).manage_sessions, icon: Icons.calendar_today, color: Colors.purple, onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SessionSchedulePage(
-child: child,
-              completedSesions:child.completedSessions.toInt(),
-              name :child.name,
-              isParent: true,
-              childId: child.parentPhone,
-              scheduleSessions: child.scheduleSessions,
-            ),
-          ),
-        )),
+        ChildActionCardBuilder(
+            context: context,
+            title: S.of(context).schedule_sessions,
+            subtitle: S.of(context).manage_sessions,
+            icon: Icons.calendar_today,
+            color: Colors.purple,
+            onTap: () => context
+                .push('/parent/session_schedule', extra: {'child': child})),
         const SizedBox(height: 16),
-        ChildActionCardBuilder(context: context, title: S.of(context).chat_teacher, subtitle: S.of(context).direct_communication, icon: Icons.chat, color: Colors.blue, onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChatScreen(
-              isOthers: false ,
-              role: "parent",
-              isParent: true,
-              doctorId: adminId,
-              parentId: child.parentPhone,
-            ),
-          ),
-        )),
+        ChildActionCardBuilder(
+            context: context,
+            title: S.of(context).chat_teacher,
+            subtitle: S.of(context).direct_communication,
+            icon: Icons.chat,
+            color: Colors.blue,
+            onTap: () => context.push('/parent/chat', extra: {
+                  'isOthers': false,
+                  'role': 'parent',
+                  'isParent': true,
+                  'doctorId': adminId,
+                  'parentId': child.parentPhone
+                })),
         const SizedBox(height: 16),
-        ChildActionCardBuilder(context: context, title: S.of(context).global_chat, subtitle: S.of(context).connect_community, icon: Icons.people, color: Colors.green, onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => GlobalChatScreen(
-              childName: child.name,
-              isParent: true,
-              doctorId: adminId,
-              parentId: child.parentPhone,
-            ),
-          ),
-        )),
+        ChildActionCardBuilder(
+            context: context,
+            title: S.of(context).global_chat,
+            subtitle: S.of(context).connect_community,
+            icon: Icons.people,
+            color: Colors.green,
+            onTap: () => context.push('/parent/global_chat', extra: {
+                  'childName': child.name,
+                  'isParent': true,
+                  'doctorId': adminId,
+                  'parentId': child.parentPhone
+                })),
         const SizedBox(height: 16),
-        ChildActionCardBuilder(context: context, title: S.of(context).daily_notes, subtitle: S.of(context).write_daily_notes, icon: Icons.note_add_sharp, color: Colors.brown, onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DailyNotesScreen(
-              isOthers: false,
-              childID: parentCode,
-              userType: "Parent",
-            ),
-          ),
-        )),
+        ChildActionCardBuilder(
+            context: context,
+            title: S.of(context).daily_notes,
+            subtitle: S.of(context).write_daily_notes,
+            icon: Icons.note_add_sharp,
+            color: Colors.brown,
+            onTap: () => context.push('/admin/children/details/daily_notes',
+                    extra: {
+                      'isOthers': false,
+                      'childID': parentCode,
+                      'userType': "Parent"
+                    })),
       ],
     );
   }
@@ -129,7 +128,7 @@ class ChildActionCardBuilder extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: color ,
+                  color: color,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: Colors.white),

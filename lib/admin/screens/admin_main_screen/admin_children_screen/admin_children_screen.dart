@@ -1,18 +1,17 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/add_child_cubit.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_add_child/admin_add_child_screen.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_detail_screen.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_children_screen_states.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_cards.dart';
-import 'package:ajeal/core/constants/app_colors.dart';
-import 'package:ajeal/core/widgets/dialogs.dart';
-import 'package:ajeal/core/models/child_model/child_model.dart';
-import 'package:ajeal/features/admin/children/presentation/cubit/children_list/children_list_cubit.dart';
-import 'package:ajeal/features/admin/children/presentation/cubit/children_list/children_list_state.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/add_child_cubit.dart';
+import '../../../../admin/screens/admin_main_screen/admin_children_screen/admin_children_screen_states.dart';
+import '../../../../admin/screens/admin_main_screen/admin_children_screen/child_cards.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/models/child_model/child_model.dart';
+import '../../../../core/widgets/dialogs.dart';
+import '../../../../features/admin/children/presentation/cubit/children_list/children_list_cubit.dart';
+import '../../../../features/admin/children/presentation/cubit/children_list/children_list_state.dart';
+import '../../../../helpers/generated/l10n.dart';
 
 class AdminChildrenScreen extends StatefulWidget {
   final String doctorId;
@@ -79,8 +78,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
     );
   }
 
-  PreferredSizeWidget _buildAppBar(
-      BuildContext context, String currentFilter) {
+  PreferredSizeWidget _buildAppBar(BuildContext context, String currentFilter) {
     return AppBar(
       elevation: 0,
       backgroundColor: Theme.of(context).primaryColor,
@@ -125,11 +123,13 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
           ],
         ),
       ),
-    ).animate().slideY(begin: -1, end: 0, duration: 500.ms, curve: Curves.easeOut);
+    )
+        .animate()
+        .slideY(begin: -1, end: 0, duration: 500.ms, curve: Curves.easeOut);
   }
 
-  Widget _buildFilterChip(BuildContext context, String filter, String label,
-      String currentFilter) {
+  Widget _buildFilterChip(
+      BuildContext context, String filter, String label, String currentFilter) {
     final isSelected = currentFilter == filter;
     return Padding(
       padding: const EdgeInsets.only(right: 8),
@@ -198,7 +198,8 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
 
   Widget _buildChildrenList(
       BuildContext context, List<Map<String, Child>> items) {
-    final currentFilter = context.read<ChildrenListCubit>().state is ChildrenListLoaded
+    final currentFilter = context.read<ChildrenListCubit>().state
+            is ChildrenListLoaded
         ? (context.read<ChildrenListCubit>().state as ChildrenListLoaded).filter
         : 'all';
     return ListView.builder(
@@ -219,8 +220,11 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
   void _navigateToDetails(BuildContext context, Child child) {
     context.push('/admin/children/details', extra: {
       'child': child,
-      'isOthers': context.read<ChildrenListCubit>().state is ChildrenListLoaded &&
-          (context.read<ChildrenListCubit>().state as ChildrenListLoaded).filter == 'Others',
+      'isOthers':
+          context.read<ChildrenListCubit>().state is ChildrenListLoaded &&
+              (context.read<ChildrenListCubit>().state as ChildrenListLoaded)
+                      .filter ==
+                  'Others',
     }).then((v) {
       if (v == true) {
         context.read<ChildrenListCubit>().loadChildren();
@@ -266,9 +270,7 @@ class AddChildButton extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       icon: const Icon(Icons.add, color: Colors.white),
       label: Text(
-        isOthers
-            ? S.of(context).addNewChildOthers
-            : S.of(context).addNewChild,
+        isOthers ? S.of(context).addNewChildOthers : S.of(context).addNewChild,
         style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w600,

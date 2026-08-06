@@ -1,12 +1,13 @@
-import 'package:ajeal/core/di/service_locator.dart';
-import 'package:ajeal/core/models/doctor_model/doctor_model.dart';
-import 'package:ajeal/features/admin/children/data/doctor_repository.dart';
-import 'package:ajeal/features/admin/children/presentation/cubit/doctor_meta/doctor_meta_cubit.dart';
-import 'package:ajeal/features/admin/children/presentation/cubit/doctor_meta/doctor_meta_state.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/di/service_locator.dart';
+import '../../../../core/models/doctor_model/doctor_model.dart';
+import '../../../../features/admin/children/data/doctor_repository.dart';
+import '../../../../features/admin/children/presentation/cubit/doctor_meta/doctor_meta_cubit.dart';
+import '../../../../features/admin/children/presentation/cubit/doctor_meta/doctor_meta_state.dart';
+import '../../../../helpers/generated/l10n.dart';
 
 class AdminReportsScreen extends StatefulWidget {
   const AdminReportsScreen({super.key});
@@ -22,53 +23,59 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
   final Color primaryColor = const Color(0xff0186c7);
   final Color secondaryColor = const Color(0xff1e3a5c);
 
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-  create: (context) => DoctorMetaCubit(),
-  child: Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      appBar: AppBar(
-        backgroundColor: primaryColor,
-        title: Text(
-          S.of(context).reportsAnalytics,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.file_download_outlined),
-            onPressed: () {},
-            tooltip: S.of(context).exportReports,
+      create: (context) => DoctorMetaCubit(),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        appBar: AppBar(
+          backgroundColor: primaryColor,
+          title: Text(
+            S.of(context).reportsAnalytics,
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
-        ],
+          elevation: 0,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.file_download_outlined),
+              onPressed: () {},
+              tooltip: S.of(context).exportReports,
+            ),
+          ],
+        ),
+        body: FutureBuilder<Doctor?>(
+            future: sl<DoctorRepository>()
+                .getDoctorInfo(FirebaseAuth.instance.currentUser?.uid ?? ''),
+            builder: (context, snap) {
+              final Doctor? data;
+              if (snap.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snap.hasError) {
+                data = Doctor(
+                    lastChattedWith: " ",
+                    lastChildId: 0,
+                    lastChildName: "",
+                    lastSessionWith: "",
+                    taskAddedFor: "");
+              } else {
+                data = snap.data;
+              }
+              return Column(
+                children: [
+                  _buildReportHeader(data?.lastChildId.toString() ?? "0"),
+                  Expanded(
+                    child: _buildReportContent(data),
+                  ),
+                ],
+              );
+            }),
       ),
-      body: FutureBuilder<Doctor?>(
-        future: sl<DoctorRepository>().getDoctorInfo(
-            FirebaseAuth.instance.currentUser?.uid ?? ''),
-        builder: (context,snap) {
-          final Doctor? data  ;
-          if (snap.connectionState==ConnectionState.waiting){return const Center(child: CircularProgressIndicator());}
-          if (snap.hasError){
-            data = Doctor(lastChattedWith: " ", lastChildId: 0,lastChildName: "",lastSessionWith: "",taskAddedFor: "");
-          }
-          else {data= snap.data;}
-          return Column(
-              children: [
-                _buildReportHeader(data?.lastChildId.toString()??"0"),
-                Expanded(
-                  child: _buildReportContent(data),
-                ),
-              ],
-            );
-        }
-      ),
-    ),
-);
+    );
   }
 
-  Widget _buildReportHeader( String totalChildren ) {
+  Widget _buildReportHeader(String totalChildren) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -177,18 +184,17 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
     return Row(
       children: [
         BlocBuilder<DoctorMetaCubit, DoctorMetaState>(
-  builder: (context, state) {
-
-    return _buildStatCard(
-          title: S.of(context).totalChildren,
-          value: totalChildren,
-          icon: Icons.child_care,
-          color: Colors.white,
-          trend: '+12%',
-          isPositive: true,
-        );
-  },
-),
+          builder: (context, state) {
+            return _buildStatCard(
+              title: S.of(context).totalChildren,
+              value: totalChildren,
+              icon: Icons.child_care,
+              color: Colors.white,
+              trend: '+12%',
+              isPositive: true,
+            );
+          },
+        ),
         _buildStatCard(
           title: S.of(context).activeGoals,
           value: '7',
@@ -235,7 +241,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
                   Icon(icon, color: primaryColor, size: 20),
                   Container(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: isPositive ? Colors.green[50] : Colors.red[50],
                       borderRadius: BorderRadius.circular(12),
@@ -287,7 +293,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
           const SizedBox(height: 30),
           _buildSectionTitle(S.of(context).recentActivities),
           const SizedBox(height: 16),
-          _buildActivityList(data ),
+          _buildActivityList(data),
         ],
       ),
     );
@@ -408,14 +414,14 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: 5,
         itemBuilder: (context, index) {
-          final List <String>names=[
-            data?.lastChildName??"",
-            data?.taskAddedFor??"",
-            data?.lastSessionWith??"",
-            data?.lastChildId.toString()??"",
-            data?.lastChattedWith??"",
+          final List<String> names = [
+            data?.lastChildName ?? "",
+            data?.taskAddedFor ?? "",
+            data?.lastSessionWith ?? "",
+            data?.lastChildId.toString() ?? "",
+            data?.lastChattedWith ?? "",
           ];
-      return Card(
+          return Card(
             elevation: 2,
             margin: const EdgeInsets.only(bottom: 12),
             shape: RoundedRectangleBorder(
@@ -461,8 +467,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
               ),
             ),
           );
-        }
-    );
+        });
   }
 
   IconData _getActivityIcon(int index) {
@@ -478,7 +483,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
 
   String _getActivityTitle(int index) {
     final activities = [
-      S.of(context).newChildRegistered ,
+      S.of(context).newChildRegistered,
       S.of(context).goalUpdated,
       S.of(context).sessionCompleted,
       S.of(context).monthlyReportGenerated,
@@ -486,5 +491,4 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
     ];
     return activities[index];
   }
-
 }

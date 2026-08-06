@@ -1,9 +1,10 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:ajeal/core/models/goals_model/goals.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
+
+import '../../../../../../core/models/goals_model/goals.dart';
 
 class ScheduleGeneratorService {
   static final ScheduleGeneratorService _generateSchedule =
@@ -154,11 +155,12 @@ Requirements:
     while (retryCount < maxRetries) {
       try {
         // Make API request with timeout
-        final response = await gemini.prompt(parts: [Part.text(prompt)]).timeout(
-              const Duration(seconds: 130),
-              onTimeout: () =>
-                  throw TimeoutException('Gemini API request timed out'),
-            );
+        final response =
+            await gemini.prompt(parts: [Part.text(prompt)]).timeout(
+          const Duration(seconds: 130),
+          onTimeout: () =>
+              throw TimeoutException('Gemini API request timed out'),
+        );
 
         if (response == null ||
             response.output == null ||
@@ -314,5 +316,4 @@ Requirements:
 }
 
 // Log errors for debugging
-void _logError(String type, dynamic error) {
-}
+void _logError(String type, dynamic error) {}

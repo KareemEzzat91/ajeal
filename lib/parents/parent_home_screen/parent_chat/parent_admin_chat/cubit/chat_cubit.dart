@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:ajeal/parents/parent_home_screen/parent_chat/parent_admin_chat/chat_message.dart';
-import 'package:ajeal/parents/parent_home_screen/parent_chat/parent_admin_chat/chat_repository.dart';
-import 'package:ajeal/parents/parent_home_screen/parent_chat/parent_admin_chat/cubit/chat_state.dart';
 import 'package:bloc/bloc.dart';
+
+import '../chat_message.dart';
+import '../chat_repository.dart';
+import 'chat_state.dart';
 
 class ChatCubit extends Cubit<ChatState> {
   final ChatRepository _repository;
@@ -25,7 +26,8 @@ class ChatCubit extends Cubit<ChatState> {
     required this.isParent,
     required this.isOthers,
     this.doctorOthersId,
-  }) : _repository = repository, super(const ChatState()) {
+  })  : _repository = repository,
+        super(const ChatState()) {
     initialize();
   }
 
@@ -101,7 +103,8 @@ class ChatCubit extends Cubit<ChatState> {
           emit(state.copyWith(
             isLoading: false,
             isAuthorized: false,
-            errorMessage: 'Error retrieving doctor information: ${e.toString()}',
+            errorMessage:
+                'Error retrieving doctor information: ${e.toString()}',
           ));
           return;
         }
@@ -146,13 +149,15 @@ class ChatCubit extends Cubit<ChatState> {
 
   void _subscribeToStreams(String chatId) {
     // Subscribe to messages stream
-    _messagesSubscription = _repository.getMessagesStream(chatId).listen((messages) {
+    _messagesSubscription =
+        _repository.getMessagesStream(chatId).listen((messages) {
       emit(state.copyWith(messages: messages));
     });
 
     // Subscribe to other user's status
     final otherUserId = isParent ? doctorId : parentId;
-    _userStatusSubscription = _repository.getUserStatusStream(otherUserId).listen((snapshot) {
+    _userStatusSubscription =
+        _repository.getUserStatusStream(otherUserId).listen((snapshot) {
       final isOnline = snapshot.exists && snapshot.get('online') == true;
       emit(state.copyWith(isOtherUserOnline: isOnline));
     });
@@ -197,11 +202,7 @@ class ChatCubit extends Cubit<ChatState> {
   Future<void> submitReport(String reportText) async {
     try {
       await _repository.submitReport(
-          state.chatId,
-          state.currentUserId,
-          role,
-          reportText
-      );
+          state.chatId, state.currentUserId, role, reportText);
     } catch (e) {
       emit(state.copyWith(
         errorMessage: 'Failed to submit report: ${e.toString()}',

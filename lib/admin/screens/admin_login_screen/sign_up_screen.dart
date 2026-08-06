@@ -1,9 +1,10 @@
-import 'package:ajeal/admin/screens/admin_login_screen/login_screen.dart';
-import 'package:ajeal/admin/screens/admin_login_screen/cubit/sign_cubit.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../admin/screens/admin_login_screen/cubit/sign_cubit.dart';
+import '../../../helpers/generated/l10n.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -257,11 +258,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   style: TextStyle(color: Colors.grey.shade700),
                                 ),
                                 TextButton(
-                                  onPressed: () => Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => const AdminLoginScreen()),
-                                  ),
+                                  onPressed: () => context.go('/admin/login'),
                                   child: Text(
                                     S.of(context).loginPage,
                                     style: const TextStyle(

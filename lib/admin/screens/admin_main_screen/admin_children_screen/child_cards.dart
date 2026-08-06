@@ -1,22 +1,23 @@
-﻿import 'package:ajeal/core/constants/app_colors.dart';
-import 'package:ajeal/core/widgets/dialogs.dart';
-import 'package:ajeal/core/models/child_model/child_model.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/models/child_model/child_model.dart';
+import '../../../../core/widgets/dialogs.dart';
+import '../../../../helpers/generated/l10n.dart';
 
 class ChildCard extends StatelessWidget {
   final Child child;
   final VoidCallback onTap;
-  final bool isOthers ;
+  final bool isOthers;
 
   const ChildCard({
     super.key,
@@ -55,7 +56,7 @@ class ChildCard extends StatelessWidget {
                     _buildAvatar(),
                     const SizedBox(width: 16),
                     Expanded(child: _buildChildInfo(context)),
-                    _buildMoreButton(context,child.parentPhone),
+                    _buildMoreButton(context, child.parentPhone),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -103,7 +104,7 @@ class ChildCard extends StatelessWidget {
     );
   }
 
-  Widget _buildChildInfo(BuildContext context ) {
+  Widget _buildChildInfo(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -127,16 +128,16 @@ class ChildCard extends StatelessWidget {
     );
   }
 
-  Widget _buildProgressIndicator(BuildContext context ) {
+  Widget _buildProgressIndicator(BuildContext context) {
     // Calculate progress percentage based on completed sessions
     final int totalSessions = child.scheduleSessions.length;
-    final  num completedSessions = child.completedSessions;
-    final double progressPercentage = totalSessions > 0
-        ? completedSessions / totalSessions
-        : 0.0;
+    final num completedSessions = child.completedSessions;
+    final double progressPercentage =
+        totalSessions > 0 ? completedSessions / totalSessions : 0.0;
 
     // Format percentage for display
-    final String percentageText = "${(progressPercentage * 100).toStringAsFixed(0)}%";
+    final String percentageText =
+        "${(progressPercentage * 100).toStringAsFixed(0)}%";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,7 +170,7 @@ class ChildCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-             Text(
+            Text(
               S.of(context).goalProgress,
               style: const TextStyle(
                 fontSize: 14,
@@ -189,22 +190,20 @@ class ChildCard extends StatelessWidget {
       ],
     );
   }
-  Widget _buildMoreButton(BuildContext context, String parentPhone) {
 
+  Widget _buildMoreButton(BuildContext context, String parentPhone) {
     return PullDownButton(
       itemBuilder: (context) => [
         PullDownMenuItem(
           enabled: !isOthers,
           onTap: () async {
-
-            showCustomDialog(context,child: child);
+            showCustomDialog(context, child: child);
           },
           title: 'Transfer',
           icon: CupertinoIcons.arrow_2_circlepath,
         ),
         PullDownMenuItem(
           onTap: () {
-
             QuickAlert.show(
                 context: context,
                 type: QuickAlertType.confirm,
@@ -212,19 +211,35 @@ class ChildCard extends StatelessWidget {
                 confirmBtnText: 'Yes',
                 cancelBtnText: 'No',
                 confirmBtnColor: Colors.green,
-                onConfirmBtnTap: (){
+                onConfirmBtnTap: () {
                   try {
-                    isOthers?FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("OthersChildren").doc(child.parentPhone).delete()
-                        :FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("children").doc(child.parentPhone).delete();
-                    ScaffoldMessenger.of(context).showSnackBar( const SnackBar(content: Text("Deleted Scuccfluy",),backgroundColor: CupertinoColors.activeGreen,));
+                    isOthers
+                        ? FirebaseFirestore.instance
+                            .collection("users")
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .collection("OthersChildren")
+                            .doc(child.parentPhone)
+                            .delete()
+                        : FirebaseFirestore.instance
+                            .collection("users")
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .collection("children")
+                            .doc(child.parentPhone)
+                            .delete();
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text(
+                        "Deleted Scuccfluy",
+                      ),
+                      backgroundColor: CupertinoColors.activeGreen,
+                    ));
 
-                    Navigator.pop(context);
-                  }catch(e){
-                    ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(e.toString())));
-                    Navigator.pop(context);
+                    context.pop();
+                  } catch (e) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(e.toString())));
+                    context.pop();
                   }
-                }
-            );
+                });
           },
           title: 'Remove',
           icon: CupertinoIcons.delete,
@@ -304,7 +319,7 @@ class ChildGridCard extends StatelessWidget {
 
                 // Birthdate
                 Text(
-                    "${S.of(context).dateOfBirth} :${_formatDate( child.dateOfBirth)}" ,
+                  "${S.of(context).dateOfBirth} :${_formatDate(child.dateOfBirth)}",
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: AppColors.textSecondary,
                   ),
@@ -335,7 +350,8 @@ class ChildGridCard extends StatelessWidget {
         ),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(14), // Adjusted to account for border
+        borderRadius:
+            BorderRadius.circular(14), // Adjusted to account for border
         child: CachedNetworkImage(
           imageUrl: imageUrl,
           fit: BoxFit.cover,
@@ -348,16 +364,17 @@ class ChildGridCard extends StatelessWidget {
             color: Colors.grey[100],
             child: const Icon(Icons.person, size: 32, color: Colors.grey),
           ),
-          memCacheHeight: (height / 6.3 * MediaQuery.of(context).devicePixelRatio).round(),
+          memCacheHeight:
+              (height / 6.3 * MediaQuery.of(context).devicePixelRatio).round(),
         ),
       ),
     );
 
     return useHeroAnimation
         ? Hero(
-      tag: 'child_avatar_${child.id}${child.name}',
-      child: avatarContent,
-    )
+            tag: 'child_avatar_${child.id}${child.name}',
+            child: avatarContent,
+          )
         : avatarContent;
   }
 
@@ -373,8 +390,9 @@ class ChildGridCard extends StatelessWidget {
         : 0.0;
 
     // Format percentage for display
-    final String percentageText = "${(progressPercentage * 100).toStringAsFixed(0)}%";
-    final String progressLabel = localizations.goalProgress ;
+    final String percentageText =
+        "${(progressPercentage * 100).toStringAsFixed(0)}%";
+    final String progressLabel = localizations.goalProgress;
     final String progressText = "$completedSessions من $totalSessions";
 
     return Column(
@@ -400,7 +418,7 @@ class ChildGridCard extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 color: AppColors.text,
               ),
-              semanticsLabel:  "نسبة الإكمال $percentageText",
+              semanticsLabel: "نسبة الإكمال $percentageText",
             ),
           ],
         ),
@@ -420,7 +438,8 @@ class ChildGridCard extends StatelessWidget {
                 color: AppColors.textSecondary,
                 fontWeight: FontWeight.w500,
               ),
-              semanticsLabel: "$completedSessions جلسات مكتملة من أصل $totalSessions",
+              semanticsLabel:
+                  "$completedSessions جلسات مكتملة من أصل $totalSessions",
             ),
           ],
         ),
@@ -433,11 +452,12 @@ class ChildGridCard extends StatelessWidget {
         ? "https://img.freepik.com/premium-photo/professional-portrait-studio-photograph-adorable-mixedrace-child-generative-ai_895561-2847.jpg"
         : "https://avatarfiles.alphacoders.com/143/143832.jpg";
   }
+
   String _formatDate(DateTime date) {
     return "${date.day}/${date.month}/${date.year}";
   }
+} // Handle the case where user is adding someone else's child
 
-}// Handle the case where user is adding someone else's child
 Future<void> handleOthersCase(BuildContext context, String childCode) async {
   // Show loading indicator
   showLoadingDialog(context);
@@ -450,9 +470,11 @@ Future<void> handleOthersCase(BuildContext context, String childCode) async {
 
     // Close loading dialog
     if (!context.mounted) return;
-    Navigator.pop(context);
+    context.pop();
 
-    if (!childSnap.exists || childSnap.data() == null || childSnap.data()!.isEmpty) {
+    if (!childSnap.exists ||
+        childSnap.data() == null ||
+        childSnap.data()!.isEmpty) {
       showErrorMessage(context, 'Child code not found');
       return;
     }
@@ -469,23 +491,18 @@ Future<void> handleOthersCase(BuildContext context, String childCode) async {
 
     // Close dialog and show success message
     if (!context.mounted) return;
-    Navigator.pop(context);
+    context.pop();
     showSuccessMessage(context, 'Child added successfully');
-
   } catch (e) {
     if (!context.mounted) return;
-    Navigator.pop(context); // Close loading dialog if open
+    context.pop(); // Close loading dialog if open
     showErrorMessage(context, e.toString());
   }
 }
 
 // Handle the case where a doctor is being assigned to a child
-Future<void> handleDoctorAssignment(
-    BuildContext context,
-    Child child,
-    String doctorName,
-    String doctorId
-    ) async {
+Future<void> handleDoctorAssignment(BuildContext context, Child child,
+    String doctorName, String doctorId) async {
   // Show loading indicator
   showLoadingDialog(context);
 
@@ -497,7 +514,7 @@ Future<void> handleDoctorAssignment(
 
     // Close loading dialog
     if (!context.mounted) return;
-    Navigator.pop(context);
+    context.pop();
 
     if (!doctorSnap.exists) {
       showErrorMessage(context, 'Doctor ID does not exist');
@@ -532,14 +549,12 @@ Future<void> handleDoctorAssignment(
 
     // Close dialog and show success message
     if (!context.mounted) return;
-    Navigator.pop(context);
+    context.pop();
     showSuccessMessage(
-        context,
-        "Child transferred to Dr. $doctorName successfully!"
-    );
+        context, "Child transferred to Dr. $doctorName successfully!");
   } catch (e) {
     if (!context.mounted) return;
-    Navigator.pop(context); // Close loading dialog if open
+    context.pop(); // Close loading dialog if open
     showErrorMessage(context, e.toString());
   }
 }

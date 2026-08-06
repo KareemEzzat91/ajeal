@@ -1,15 +1,17 @@
 import 'dart:async';
 
-import 'package:ajeal/core/di/service_locator.dart';
-import 'package:ajeal/core/models/child_model/child_model.dart';
-import 'package:ajeal/core/models/goals_model/goals.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/generate.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/send_verification_message.dart';
-import 'package:ajeal/features/admin/children/data/child_repository.dart';
-import 'package:ajeal/features/admin/children/data/doctor_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../../../admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/generate.dart';
+import '../../../../../../admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/send_verification_message.dart';
+import '../../../../../../core/di/service_locator.dart';
+import '../../../../../../core/models/child_model/child_model.dart';
+import '../../../../../../core/models/goals_model/goals.dart';
+import '../../../../../../features/admin/children/data/child_repository.dart';
+import '../../../../../../features/admin/children/data/doctor_repository.dart';
+
 part 'add_child_state.dart';
 
 /// Cubit responsible ONLY for the add-child form submission
@@ -256,7 +258,8 @@ class AddChildCubit extends Cubit<AddChildState> {
   void _showMaxGoalsMessage(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('You have reached the maximum limit of 7 goals for this child.'),
+        content: Text(
+            'You have reached the maximum limit of 7 goals for this child.'),
       ),
     );
   }

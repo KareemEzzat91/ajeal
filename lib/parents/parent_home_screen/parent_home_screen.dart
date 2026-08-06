@@ -1,15 +1,16 @@
-﻿import 'package:ajeal/core/models/child_model/child_model.dart';
-import 'package:ajeal/parents/parent_home_screen/emergency_contact_dialog.dart';
-import 'package:ajeal/parents/parent_home_screen/child_app_bar.dart';
-import 'package:ajeal/parents/parent_home_screen/child_action_cards.dart';
-import 'package:ajeal/parents/parent_home_screen/child_profile_section_name_age.dart';
-import 'package:ajeal/parents/parent_home_screen/child_progress.dart';
-import 'package:ajeal/parents/parent_home_screen/child_quickstats.dart';
-import 'package:ajeal/core/theme/dark_theme/theme_cubit/themes_cubit.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../core/models/child_model/child_model.dart';
+import '../../core/theme/dark_theme/theme_cubit/themes_cubit.dart';
+import 'child_action_cards.dart';
+import 'child_app_bar.dart';
+import 'child_profile_section_name_age.dart';
+import 'child_progress.dart';
+import 'child_quickstats.dart';
+import 'emergency_contact_dialog.dart';
 
 class ParentHomePage extends StatelessWidget {
   final String parentCode;
@@ -47,7 +48,8 @@ class ParentHomePage extends StatelessWidget {
                   /// إضافة FadeInDown عند تحميل بيانات الطفل
                   FadeInDown(
                     duration: 600.ms,
-                    child: ChildProfileHeader(child: child, isDarkMode: isDarkMode),
+                    child: ChildProfileHeader(
+                        child: child, isDarkMode: isDarkMode),
                   ),
                   const SizedBox(height: 24),
 

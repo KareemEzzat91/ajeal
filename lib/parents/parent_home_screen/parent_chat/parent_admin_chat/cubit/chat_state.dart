@@ -1,6 +1,6 @@
-
-import 'package:ajeal/parents/parent_home_screen/parent_chat/parent_admin_chat/chat_message.dart';
 import 'package:equatable/equatable.dart';
+
+import '../chat_message.dart';
 
 class ChatState extends Equatable {
   final bool isLoading;
@@ -51,14 +51,14 @@ class ChatState extends Equatable {
 
   @override
   List<Object?> get props => [
-    isLoading,
-    isAuthorized,
-    isTyping,
-    messages,
-    chatId,
-    currentUserId,
-    errorMessage,
-    showScrollToBottom,
-    isOtherUserOnline,
-  ];
+        isLoading,
+        isAuthorized,
+        isTyping,
+        messages,
+        chatId,
+        currentUserId,
+        errorMessage,
+        showScrollToBottom,
+        isOtherUserOnline,
+      ];
 }

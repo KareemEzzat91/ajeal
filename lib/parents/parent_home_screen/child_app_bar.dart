@@ -1,9 +1,10 @@
-﻿import 'package:ajeal/parents/parent_home_screen/parent_home_screen.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
-import 'package:ajeal/core/theme/dark_theme/theme_cubit/themes_cubit.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+
+import '../../core/theme/dark_theme/theme_cubit/themes_cubit.dart';
+import '../../helpers/generated/l10n.dart';
+import 'parent_home_screen.dart';
 
 class ChildAppBar extends StatelessWidget {
   const ChildAppBar({
@@ -51,13 +52,11 @@ class ChildAppBar extends StatelessWidget {
                 top: -50,
                 child: FadeInLeft(
                   duration: 1210.ms,
-                    child: CircleAvatar(
-                      radius: 100,
-                      backgroundColor: isDarkMode
-                          ? Colors.black12
-                          : Colors.teal.shade700,
-                    ),
-
+                  child: CircleAvatar(
+                    radius: 100,
+                    backgroundColor:
+                        isDarkMode ? Colors.black12 : Colors.teal.shade700,
+                  ),
                 ),
               ),
             ],

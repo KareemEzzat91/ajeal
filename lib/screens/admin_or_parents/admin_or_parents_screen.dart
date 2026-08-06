@@ -1,11 +1,11 @@
-﻿import 'package:ajeal/admin/screens/admin_login_screen/login_screen.dart';
-import 'package:ajeal/parents/parent_login_page/parent_login_page.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
-import 'package:ajeal/core/theme/dark_theme/theme_cubit/themes_cubit.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../core/theme/dark_theme/theme_cubit/themes_cubit.dart';
+import '../../helpers/generated/l10n.dart';
 
 class AdminOrParentsScreen extends StatelessWidget {
   const AdminOrParentsScreen({super.key});
@@ -71,7 +71,8 @@ class AdminOrParentsScreen extends StatelessWidget {
           // Main content
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -90,7 +91,8 @@ class AdminOrParentsScreen extends StatelessWidget {
                                 Icons.school,
                                 color: Theme.of(context).colorScheme.primary,
                                 size: 24,
-                              ).animate()
+                              )
+                                  .animate()
                                   .scale(delay: 300.ms, duration: 500.ms)
                                   .then(delay: 200.ms)
                                   .shake(hz: 4, curve: Curves.easeInOut),
@@ -102,9 +104,9 @@ class AdminOrParentsScreen extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
-                              ).animate()
-                                  .fadeIn(duration: 800.ms)
-                                  .slide(begin: const Offset(-0.5, 0), duration: 500.ms),
+                              ).animate().fadeIn(duration: 800.ms).slide(
+                                  begin: const Offset(-0.5, 0),
+                                  duration: 500.ms),
                             ],
                           ),
                         ),
@@ -123,7 +125,9 @@ class AdminOrParentsScreen extends StatelessWidget {
                             const SizedBox(width: 8),
                             _buildIconButton(
                               context,
-                              icon: isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                              icon: isDarkMode
+                                  ? Icons.light_mode
+                                  : Icons.dark_mode,
                               tooltip: S.of(context).changeTheme,
                               onPressed: () {
                                 themeCubit.toggleTheme(!isDarkMode);
@@ -155,18 +159,20 @@ class AdminOrParentsScreen extends StatelessWidget {
                             ),
                           ],
                           image: const DecorationImage(
-                            image: AssetImage('assets/images/Untitled design.png'),
+                            image:
+                                AssetImage('assets/images/Untitled design.png'),
                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                    ).animate()
+                    )
+                        .animate()
                         .fadeIn(duration: 800.ms)
                         .scale(
-                      delay: 200.ms,
-                      duration: 700.ms,
-                      curve: Curves.elasticOut,
-                    )
+                          delay: 200.ms,
+                          duration: 700.ms,
+                          curve: Curves.elasticOut,
+                        )
                         .then(delay: 1.seconds)
                         .shimmer(duration: 1.seconds),
                   ),
@@ -180,9 +186,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                       delay: const Duration(milliseconds: 300),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 10
-                        ),
+                            horizontal: 20, vertical: 10),
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.primary,
                           borderRadius: BorderRadius.circular(30),
@@ -194,12 +198,10 @@ class AdminOrParentsScreen extends StatelessWidget {
                             color: isDarkMode ? Colors.black : Colors.white,
                           ),
                         ),
-                      ).animate()
-                          .scale(
+                      ).animate().scale(
                           delay: 300.ms,
                           duration: 400.ms,
-                          curve: Curves.bounceOut
-                      ),
+                          curve: Curves.bounceOut),
                     ),
                   ),
 
@@ -219,25 +221,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                           : [const Color(0xFFE1BEE7), const Color(0xFF9C27B0)],
                       onTap: () {
                         // Add tap animation
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation, secondaryAnimation) =>
-                            const ParentLoginPage(),
-                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              var begin = const Offset(1.0, 0.0);
-                              var end = Offset.zero;
-                              var curve = Curves.easeInOut;
-                              var tween = Tween(begin: begin, end: end).chain(
-                                CurveTween(curve: curve),
-                              );
-                              return SlideTransition(
-                                position: animation.drive(tween),
-                                child: child,
-                              );
-                            },
-                          ),
-                        );
+                        context.push('/parent/login');
                       },
                     ),
                   ),
@@ -257,25 +241,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                           ? [const Color(0xFF00BCD4), const Color(0xFF2196F3)]
                           : [const Color(0xFFB2EBF2), const Color(0xFF00BCD4)],
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation, secondaryAnimation) =>
-                                const AdminLoginScreen(),
-                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              var begin = const Offset(1.0, 0.0);
-                              var end = Offset.zero;
-                              var curve = Curves.easeInOut;
-                              var tween = Tween(begin: begin, end: end).chain(
-                                CurveTween(curve: curve),
-                              );
-                              return SlideTransition(
-                                position: animation.drive(tween),
-                                child: child,
-                              );
-                            },
-                          ),
-                        );
+                        context.push('/admin/login');
                       },
                     ),
                   ),
@@ -306,11 +272,11 @@ class AdminOrParentsScreen extends StatelessWidget {
   }
 
   Widget _buildIconButton(
-      BuildContext context, {
-        required IconData icon,
-        required String tooltip,
-        required VoidCallback onPressed,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String tooltip,
+    required VoidCallback onPressed,
+  }) {
     return IconButton(
       onPressed: onPressed,
       icon: Icon(icon),
@@ -327,13 +293,13 @@ class AdminOrParentsScreen extends StatelessWidget {
   }
 
   Widget _buildAnimatedOptionCard(
-      BuildContext context, {
-        required IconData icon,
-        required String label,
-        required String description,
-        required List<Color> gradientColors,
-        required VoidCallback onTap,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required String description,
+    required List<Color> gradientColors,
+    required VoidCallback onTap,
+  }) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
@@ -375,9 +341,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                       icon,
                       size: 34,
                       color: Colors.white,
-                    ).animate()
-                        .fade(duration: 300.ms)
-                        .scale(delay: 200.ms),
+                    ).animate().fade(duration: 300.ms).scale(delay: 200.ms),
                   ),
                   const SizedBox(width: 20),
                   Expanded(
@@ -417,7 +381,8 @@ class AdminOrParentsScreen extends StatelessWidget {
                       color: Colors.white,
                       size: 20,
                     ),
-                  ).animate(onPlay: (controller) => controller.repeat())
+                  )
+                      .animate(onPlay: (controller) => controller.repeat())
                       .shake(delay: 2.seconds, duration: 700.ms, hz: 3)
                       .then(delay: 3.seconds),
                 ],
@@ -426,13 +391,14 @@ class AdminOrParentsScreen extends StatelessWidget {
           ),
         ),
       ),
-    ).animate()
-        .scale(
-      begin: const Offset(0.97, 0.97),
-      end: const Offset(1, 1),
-      duration: 2.seconds,
-      curve: Curves.easeInOut,
     )
+        .animate()
+        .scale(
+          begin: const Offset(0.97, 0.97),
+          end: const Offset(1, 1),
+          duration: 2.seconds,
+          curve: Curves.easeInOut,
+        )
         .then()
         .shimmer(delay: 1.seconds, duration: 1.seconds);
   }

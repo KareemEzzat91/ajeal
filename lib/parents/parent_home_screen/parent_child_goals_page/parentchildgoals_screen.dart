@@ -1,6 +1,7 @@
-﻿import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_children_select_goals/goal_detail_screen.dart';
-import 'package:ajeal/core/models/goals_model/goals.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../core/models/goals_model/goals.dart';
 
 class ChildGoalsPage extends StatelessWidget {
   final List<Goal> goals;
@@ -51,11 +52,7 @@ class ChildGoalsPage extends StatelessWidget {
               Positioned(
                 right: -30,
                 top: -30,
-                child: Icon(
-                  Icons.stars,
-                  size: 150,
-                  color: Colors.white
-                ),
+                child: Icon(Icons.stars, size: 150, color: Colors.white),
               ),
             ],
           ),
@@ -148,12 +145,8 @@ class ChildGoalsPage extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (c) => GoalDetailScreen(goal: goal),
-            ),
-          );
+          context
+              .push('/admin/children/add/goals/detail', extra: {'goal': goal});
         },
         borderRadius: BorderRadius.circular(16),
         child: Column(
@@ -220,12 +213,8 @@ class ChildGoalsPage extends StatelessWidget {
                       _buildGoalTag("In Progress", Colors.orange),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (c) => GoalDetailScreen(goal: goal),
-                            ),
-                          );
+                          context.push('/admin/children/add/goals/detail',
+                              extra: {'goal': goal});
                         },
                         child: const Text("View Details"),
                       ),
@@ -256,5 +245,4 @@ class ChildGoalsPage extends StatelessWidget {
       ),
     );
   }
-
 }

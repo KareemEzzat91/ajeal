@@ -1,24 +1,21 @@
-import 'package:ajeal/features/admin/children/presentation/cubit/child_detail/child_detail_cubit.dart';
-import 'package:ajeal/features/admin/children/presentation/cubit/doctor_meta/doctor_meta_cubit.dart';
-import 'package:ajeal/features/admin/children/presentation/cubit/doctor_meta/doctor_meta_state.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_children_select_goals/goal_detail_screen.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/daily_notes_screen.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/session_detail_screen/session_detail_screen.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_header.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_info.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_progress.dart';
-import 'package:ajeal/core/constants/app_colors.dart';
-import 'package:ajeal/core/widgets/dialogs.dart';
-import 'package:ajeal/core/models/child_model/child_model.dart';
-import 'package:ajeal/core/models/goals_model/goals.dart';
-import 'package:ajeal/parents/parent_home_screen/parent_chat/parent_admin_chat/parent_admin_chat_screen.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
+
+import '../../../../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_header.dart';
+import '../../../../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_info.dart';
+import '../../../../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_progress.dart';
+import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/models/child_model/child_model.dart';
+import '../../../../../core/models/goals_model/goals.dart';
+import '../../../../../core/widgets/dialogs.dart';
+import '../../../../../features/admin/children/presentation/cubit/child_detail/child_detail_cubit.dart';
+import '../../../../../features/admin/children/presentation/cubit/doctor_meta/doctor_meta_cubit.dart';
+import '../../../../../features/admin/children/presentation/cubit/doctor_meta/doctor_meta_state.dart';
+import '../../../../../helpers/generated/l10n.dart';
 
 class ChildDetailScreen extends StatelessWidget {
   final Child child;
@@ -37,7 +34,6 @@ class ChildDetailScreen extends StatelessWidget {
     required this.isOthers,
     required this.child,
   });
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,26 +58,21 @@ class ChildDetailScreen extends StatelessWidget {
           leading: BlocBuilder<DoctorMetaCubit, DoctorMetaState>(
             builder: (context, state) {
               return IconButton(
-                icon: const Icon(
-                    Icons.chat_bubble_outline, color: Colors.white),
+                icon:
+                    const Icon(Icons.chat_bubble_outline, color: Colors.white),
                 onPressed: () {
                   context.read<DoctorMetaCubit>().updateField(
-                    isOthers: isOthers,
-                      key: "lastChattedWith", value: childName);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (c) =>
-                          ChatScreen(
-                            isOthers: isOthers,
-                            role: "doctor",
-                            doctorId: adminId!,
-                            parentId: child.parentPhone,
-                            isParent: false,
-                            doctorOthersId: isOthers ? child.doctorId : null,
-                          ),
-                    ),
-                  );
+                      isOthers: isOthers,
+                      key: "lastChattedWith",
+                      value: childName);
+                  context.push('/parent/chat', extra: {
+                    'isOthers': isOthers,
+                    'role': 'doctor',
+                    'doctorId': adminId!,
+                    'parentId': child.parentPhone,
+                    'isParent': false,
+                    'doctorOthersId': isOthers ? child.doctorId : null,
+                  });
                 },
               );
             },
@@ -90,22 +81,14 @@ class ChildDetailScreen extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.note_add_outlined, color: Colors.white),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        DailyNotesScreen(
-                          isOthers: isOthers,
-                          otherDoctorId: child.doctorId,
-                          userType: isOthers ? "Teacher" : 'Doctor',
-                          childID: child.parentPhone,
-
-                        ),
-                  ),
-                );
+                context.push('/admin/children/details/daily_notes', extra: {
+                  'isOthers': isOthers,
+                  'otherDoctorId': child.doctorId,
+                  'userType': isOthers ? "Teacher" : 'Doctor',
+                  'childID': child.parentPhone
+                });
               },
             ),
-
           ],
           centerTitle: true,
           backgroundColor: Colors.blue[700],
@@ -114,12 +97,20 @@ class ChildDetailScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-
               ChildHeaderSection(child: child),
-              ChildInfoSection(theme: theme, context: context, birthDate: birthDate, child: child),
-              _buildSessionsSection(context,child),
+              ChildInfoSection(
+                  theme: theme,
+                  context: context,
+                  birthDate: birthDate,
+                  child: child),
+              _buildSessionsSection(context, child),
               _buildGoalsSection(context),
-              ProgressSection(child: child,theme:theme.primaryColor,isOthers: isOthers,isAnalysisEmpty: child.analysis.isEmpty,),
+              ProgressSection(
+                child: child,
+                theme: theme.primaryColor,
+                isOthers: isOthers,
+                isAnalysisEmpty: child.analysis.isEmpty,
+              ),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -127,7 +118,8 @@ class ChildDetailScreen extends StatelessWidget {
                     onPressed: () {
                       showCustomDialog(context, child: child);
                     },
-                    icon: const Icon(Icons.change_circle_outlined, color: Colors.blueAccent),
+                    icon: const Icon(Icons.change_circle_outlined,
+                        color: Colors.blueAccent),
                     label: const Text('Transfer'),
                   ),
                   TextButton.icon(
@@ -140,30 +132,33 @@ class ChildDetailScreen extends StatelessWidget {
                         cancelBtnText: 'No',
                         confirmBtnColor: Colors.green,
                         onConfirmBtnTap: () {
-                          context.read<ChildDetailCubit>().deleteChild(child.parentPhone, isOthers).then((_) {
+                          context
+                              .read<ChildDetailCubit>()
+                              .deleteChild(child.parentPhone, isOthers)
+                              .then((_) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text("Deleted Successfully"),
                                 backgroundColor: Colors.green,
                               ),
                             );
-                            Navigator.pop(context);
-                            Navigator.pop(context); // Pop back to list
+                            context.pop();
+                            context.pop(); // Pop back to list
                           }).catchError((e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(e.toString())),
                             );
-                            Navigator.pop(context);
+                            context.pop();
                           });
                         },
                       );
                     },
-                    icon: const Icon(Icons.delete_forever, color: AppColors.error),
+                    icon: const Icon(Icons.delete_forever,
+                        color: AppColors.error),
                     label: const Text('Remove'),
                   ),
                 ],
               )
-
             ],
           ),
         ),
@@ -171,12 +166,11 @@ class ChildDetailScreen extends StatelessWidget {
     );
   }
 
-
-  Widget _buildSessionsSection(BuildContext context,Child child ) {
+  Widget _buildSessionsSection(BuildContext context, Child child) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         Padding(
+        Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
             S.of(context).sessions,
@@ -193,9 +187,7 @@ class ChildDetailScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final session = child.scheduleSessions[index];
             return _buildSessionCard(
-                context, session, index, Theme
-                .of(context)
-                .primaryColor);
+                context, session, index, Theme.of(context).primaryColor);
           },
         ),
       ],
@@ -215,7 +207,8 @@ class ChildDetailScreen extends StatelessWidget {
 
           return InkWell(
             onTap: () {
-              context.read<DoctorMetaCubit>().updateField(isOthers: isOthers, key: "lastSessionWith", value: childName);
+              context.read<DoctorMetaCubit>().updateField(
+                  isOthers: isOthers, key: "lastSessionWith", value: childName);
               _navigateToSessionDetail(context, session);
             },
             borderRadius: BorderRadius.circular(12),
@@ -228,9 +221,8 @@ class ChildDetailScreen extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         // Change background color based on completion status
-                        backgroundColor: isCompleted
-                            ? Colors.green[100]
-                            : Colors.blue[100],
+                        backgroundColor:
+                            isCompleted ? Colors.green[100] : Colors.blue[100],
                         child: isCompleted
                             ? const Icon(Icons.check, color: Colors.green)
                             : Text('${index + 1}'),
@@ -290,42 +282,26 @@ class ChildDetailScreen extends StatelessWidget {
     );
   }
 
-  void _navigateToSessionDetail(BuildContext context,
-      Map<String, dynamic> session) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            SessionDetailScreen(
-              childName: childName,
-
-              isParent: false,
-              childId: child.parentPhone,
-              sessionName: session['session'],
-              date: session['date'],
-              goals: List<String>.from(session['goals']),
-              notes: session['notes'] ?? '',
-              rate: session['rate'] ?? 0.0,
-              tasks: List.from(session['tasks'] ?? []),
-              isCompleted:session['completed']??false,
-              isOthers: isOthers,
-              doctorId: child.doctorId,
-              completedSessions: child.completedSessions.toInt(),
-
-
-            ),
-      ),
-    );
+  void _navigateToSessionDetail(
+      BuildContext context, Map<String, dynamic> session) {
+    context.push('/admin/children/sessions', extra: {
+      'childName': childName,
+      'isParent': false,
+      'childId': child.parentPhone,
+      'sessionName': session['session'],
+      'date': session['date'],
+      'goals': List<String>.from(session['goals'])
+    });
   }
 
   Widget _buildGoalsSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         Padding(
+        Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-           S.of(context).goals,
+            S.of(context).goals,
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -355,20 +331,17 @@ class ChildDetailScreen extends StatelessWidget {
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: InkWell(
-          onTap: () =>
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => GoalDetailScreen(goal: goal),
-                ),
-              ),
+          onTap: () {
+            context.push('/admin/children/add/goals/detail',
+                extra: {'goal': goal});
+          },
           borderRadius: BorderRadius.circular(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipRRect(
                 borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(12)),
+                    const BorderRadius.vertical(top: Radius.circular(12)),
                 child: Image.network(
                   "https://th.bing.com/th/id/OIP.j-y_XOKtbpnI_dDwjSG8QAAAAA?rs=1&pid=ImgDetMain",
                   height: 140,
@@ -409,13 +382,6 @@ class ChildDetailScreen extends StatelessWidget {
       ),
     );
   }
-
-
 }
-
-
-
-
-
 
 // AI Results Screen

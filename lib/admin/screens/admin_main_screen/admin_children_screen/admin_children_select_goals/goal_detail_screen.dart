@@ -1,5 +1,6 @@
-﻿import 'package:ajeal/core/models/goals_model/goals.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../../core/models/goals_model/goals.dart';
 
 class GoalDetailScreen extends StatelessWidget {
   final Goal goal;

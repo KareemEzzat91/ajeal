@@ -1,8 +1,8 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/note_model.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/notes_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/note_model.dart';
+import '../../../../../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/notes_repository.dart';
 import 'daily_notes_state.dart';
 
 class DailyNotesCubit extends Cubit<DailyNotesState> {
@@ -18,8 +18,7 @@ class DailyNotesCubit extends Cubit<DailyNotesState> {
     required this.isOthers,
     this.otherDoctorId,
     NotesRepository? repository,
-  }) :
-        _repository = repository ?? NotesRepository(),
+  })  : _repository = repository ?? NotesRepository(),
         super(DailyNotesInitial());
 
   Future<void> loadNotes() async {

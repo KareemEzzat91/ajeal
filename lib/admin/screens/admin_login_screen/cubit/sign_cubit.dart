@@ -1,9 +1,8 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_main_screen/admin_main_screen.dart';
-import 'package:ajeal/screens/admin_or_parents/admin_or_parents_screen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'sign_state.dart';
@@ -65,17 +64,11 @@ class SignCubit extends Cubit<SignState> {
 
       if (!context.mounted) return;
 
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AdminMainScreen(
-            doctorId: doctorId,
-            doctorName: doctorName,
-            doctorPhone: doctorPhone,
-          ),
-        ),
-        (Route<dynamic> route) => false,
-      );
+      context.go('/admin/main', extra: {
+        'doctorId': doctorId,
+        'doctorName': doctorName,
+        'doctorPhone': doctorPhone
+      });
 
       emit(SignSuccessState());
     } catch (e) {
@@ -107,11 +100,7 @@ class SignCubit extends Cubit<SignState> {
 
       if (!context.mounted) return;
 
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const AdminOrParentsScreen()),
-        (Route<dynamic> route) => false,
-      );
+      context.go('/choice');
     } catch (e) {
       // Empty catch
     }

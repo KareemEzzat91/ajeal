@@ -1,5 +1,7 @@
-﻿import 'package:ajeal/core/models/goals_model/goals.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../../../core/models/goals_model/goals.dart';
 
 class SessionTaskRateScreen extends StatefulWidget {
   final Task task;
@@ -38,7 +40,7 @@ class _SessionTaskRateScreenState extends State<SessionTaskRateScreen> {
               widget.task.rate = _rating;
               widget.task.notes = _notesController.text;
 
-              Navigator.pop(context, widget.task);
+              context.pop(widget.task);
             },
             child: const Text("حسنًا"),
           ),

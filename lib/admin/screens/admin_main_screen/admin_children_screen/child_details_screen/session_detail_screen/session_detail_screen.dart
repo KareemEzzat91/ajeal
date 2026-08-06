@@ -1,16 +1,15 @@
-import 'package:ajeal/features/admin/children/presentation/cubit/child_detail/child_detail_cubit.dart';
-import 'package:ajeal/features/admin/children/presentation/cubit/child_detail/child_detail_state.dart';
-import 'package:ajeal/features/admin/children/presentation/cubit/doctor_meta/doctor_meta_cubit.dart';
-import 'package:ajeal/features/admin/children/presentation/cubit/doctor_meta/doctor_meta_state.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/session_detail_screen/choosetasks_screen/choosetasks_screen.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/session_detail_screen/sessiontaskrate_screen/sessiontaskrate_screen.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/goal_lists/goal_lists.dart';
-import 'package:ajeal/core/models/goals_model/goals.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../../admin/screens/admin_main_screen/admin_children_screen/goal_lists/goal_lists.dart';
+import '../../../../../../core/models/goals_model/goals.dart';
+import '../../../../../../features/admin/children/presentation/cubit/child_detail/child_detail_cubit.dart';
+import '../../../../../../features/admin/children/presentation/cubit/doctor_meta/doctor_meta_cubit.dart';
+import '../../../../../../features/admin/children/presentation/cubit/doctor_meta/doctor_meta_state.dart';
+import '../../../../../../helpers/generated/l10n.dart';
 
 class SessionDetailScreen extends StatefulWidget {
   final String childId;
@@ -21,9 +20,9 @@ class SessionDetailScreen extends StatefulWidget {
   final String notes;
   final List tasks;
   final bool isParent;
-  final String childName ;
-  final bool ? isOthers ;
-  final String ?doctorId;
+  final String childName;
+  final bool? isOthers;
+  final String? doctorId;
   final int? completedSessions;
   final bool isCompleted;
 
@@ -39,9 +38,9 @@ class SessionDetailScreen extends StatefulWidget {
     required this.tasks,
     required this.isParent,
     required this.isCompleted,
-     this.isOthers,
-     this.doctorId,
-     this.completedSessions,
+    this.isOthers,
+    this.doctorId,
+    this.completedSessions,
   });
 
   @override
@@ -83,10 +82,9 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
     );
   }
 
-  Future<void>
-  _saveSessionDetails() async {
+  Future<void> _saveSessionDetails() async {
     setState(() => _isSaving = true);
-    
+
     try {
       final tasksData = _selectedTasksPerGoal
           .expand((tasks) => tasks)
@@ -105,22 +103,25 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
       String uid;
       if (widget.isOthers == true && widget.doctorId != null) {
-        final doctorSnap = await FirebaseFirestore.instance.collection("Doctors").doc(widget.doctorId).get();
+        final doctorSnap = await FirebaseFirestore.instance
+            .collection("Doctors")
+            .doc(widget.doctorId)
+            .get();
         uid = doctorSnap["Doctor_id"];
       } else {
         uid = FirebaseAuth.instance.currentUser!.uid;
       }
 
       await context.read<ChildDetailCubit>().saveSessionDetails(
-        childId: widget.childId,
-        isOthers: widget.isOthers ?? false,
-        otherDoctorId: uid, // passing the resolved uid
-        sessionData: sessionData,
-        sessionName: widget.sessionName,
-        isCompleted: widget.isCompleted,
-        completedSessions: widget.completedSessions ?? 0,
-      );
-      
+            childId: widget.childId,
+            isOthers: widget.isOthers ?? false,
+            otherDoctorId: uid, // passing the resolved uid
+            sessionData: sessionData,
+            sessionName: widget.sessionName,
+            isCompleted: widget.isCompleted,
+            completedSessions: widget.completedSessions ?? 0,
+          );
+
       _showSuccessDialog();
     } catch (e) {
       _showErrorDialog("حدث خطأ أثناء الحفظ: $e");
@@ -134,9 +135,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        title:
-
-     const Row(
+        title: const Row(
           children: [
             Icon(Icons.check_circle, color: Colors.green),
             SizedBox(width: 10),
@@ -154,7 +153,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.pop(),
             child: const Text("حسنًا"),
           ),
         ],
@@ -177,7 +176,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         content: Text(message),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.pop(),
             child: const Text("حسنًا"),
           ),
         ],
@@ -239,14 +238,18 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         ),
         leading: const Icon(Icons.flag, color: Colors.blue),
         trailing: BlocBuilder<DoctorMetaCubit, DoctorMetaState>(
-  builder: (context, state) {
-    
-    return IconButton(
-          icon: const Icon(Icons.add_task),
-          onPressed: () { context.read<DoctorMetaCubit>().updateField(isOthers: widget.isOthers??false, key: "taskAddedFor", value: widget.childName); _addTasksToGoal(goalIndex); }
-        );
-  },
-),
+          builder: (context, state) {
+            return IconButton(
+                icon: const Icon(Icons.add_task),
+                onPressed: () {
+                  context.read<DoctorMetaCubit>().updateField(
+                      isOthers: widget.isOthers ?? false,
+                      key: "taskAddedFor",
+                      value: widget.childName);
+                  _addTasksToGoal(goalIndex);
+                });
+          },
+        ),
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
@@ -310,29 +313,21 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   }
 
   Future<void> _addTasksToGoal(int goalIndex) async {
-    
     final thisGoal = getGoal(widget.goals[goalIndex]);
-    final selectedTasks = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ChooseTasksScreen(selectedGoal: thisGoal),
-      ),
-    );
+    final selectedTasks = await context.push(
+        '/admin/children/sessions/choose_tasks',
+        extra: {'selectedGoal': thisGoal}) as List<Task>?;
     if (selectedTasks != null) {
       setState(() => _selectedTasksPerGoal[goalIndex] = selectedTasks);
     }
   }
 
   Future<void> _editTaskRate(int goalIndex, int taskIndex) async {
-    final updatedTask = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SessionTaskRateScreen(
-          isParent: widget.isParent,
-          task: _selectedTasksPerGoal[goalIndex][taskIndex],
-        ),
-      ),
-    );
+    final updatedTask = await context.push('/admin/children/sessions/rate_task',
+        extra: {
+          'isParent': widget.isParent,
+          'task': _selectedTasksPerGoal[goalIndex][taskIndex]
+        }) as Task?;
     if (updatedTask != null) {
       setState(() => _selectedTasksPerGoal[goalIndex][taskIndex] = updatedTask);
     }
@@ -347,7 +342,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Text(
+            Text(
               S.of(context).childRate,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -389,7 +384,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Text(
+            Text(
               S.of(context).sessionNote,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -413,17 +408,16 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-  providers: [
-    BlocProvider(create: (context) => DoctorMetaCubit()),
-    BlocProvider(create: (context) => ChildDetailCubit()),
-  ],
-  child: Builder(
-    builder: (context) {
-      final bloc = context.read<DoctorMetaCubit>();
-      return Scaffold(
+      providers: [
+        BlocProvider(create: (context) => DoctorMetaCubit()),
+        BlocProvider(create: (context) => ChildDetailCubit()),
+      ],
+      child: Builder(builder: (context) {
+        final bloc = context.read<DoctorMetaCubit>();
+        return Scaffold(
           appBar: AppBar(
             title: Text(
-              "${S.of(context).details } ${S.of(context).session} ${widget.sessionName}",
+              "${S.of(context).details} ${S.of(context).session} ${widget.sessionName}",
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             centerTitle: true,
@@ -454,7 +448,15 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                       left: 16,
                       right: 16,
                       child: ElevatedButton(
-                        onPressed: _isSaving ? null : () { _saveSessionDetails(); bloc.updateField(isOthers: widget.isOthers ?? false, key: "lastSessionWith", value: widget.childName); },
+                        onPressed: _isSaving
+                            ? null
+                            : () {
+                                _saveSessionDetails();
+                                bloc.updateField(
+                                    isOthers: widget.isOthers ?? false,
+                                    key: "lastSessionWith",
+                                    value: widget.childName);
+                              },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue[700],
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -463,8 +465,9 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                           ),
                         ),
                         child: _isSaving
-                            ? const CircularProgressIndicator(color: Colors.white)
-                            :  Text(
+                            ? const CircularProgressIndicator(
+                                color: Colors.white)
+                            : Text(
                                 S.of(context).saveChildInformation,
                                 style: const TextStyle(
                                   fontSize: 16,
@@ -476,8 +479,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
             ],
           ),
         );
-    }
-  ),
-);
+      }),
+    );
   }
 }

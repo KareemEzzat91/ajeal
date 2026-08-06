@@ -1,10 +1,10 @@
-import 'package:ajeal/admin/screens/admin_login_screen/reset_password_screen.dart';
-import 'package:ajeal/admin/screens/admin_login_screen/sign_up_screen.dart';
-import 'package:ajeal/admin/screens/admin_login_screen/cubit/sign_cubit.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../admin/screens/admin_login_screen/cubit/sign_cubit.dart';
+import '../../../helpers/generated/l10n.dart';
 
 class AdminLoginScreen extends StatefulWidget {
   const AdminLoginScreen({super.key});
@@ -155,13 +155,8 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                                   Align(
                                     alignment: Alignment.centerRight,
                                     child: TextButton(
-                                      onPressed: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) =>
-                                              const ResetPasswordScreen(),
-                                        ),
-                                      ),
+                                      onPressed: () =>
+                                          context.push('/admin/reset_password'),
                                       child: Text(
                                         s.forgot_password,
                                         style: const TextStyle(
@@ -214,12 +209,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                                       ),
                                       TextButton(
                                         onPressed: () =>
-                                            Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => const SignupScreen(),
-                                          ),
-                                        ),
+                                            context.go('/admin/signup'),
                                         child: Text(
                                           s.register_now,
                                           style: const TextStyle(
@@ -253,7 +243,6 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
     required IconData icon,
     required FocusNode focusNode,
     FocusNode? nextFocus,
-
     bool isPassword = false,
     String? Function(String?)? validator,
   }) {
@@ -271,14 +260,12 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
           FocusScope.of(context).unfocus();
         }
       },
-
       onEditingComplete: () {
         // This prevents the flickering issue in some cases
         if (nextFocus != null) {
           FocusScope.of(context).requestFocus(nextFocus);
         }
       },
-
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: Icon(icon, color: const Color(0xff0186c7)),

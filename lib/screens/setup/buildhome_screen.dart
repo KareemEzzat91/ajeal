@@ -1,16 +1,15 @@
-
-import 'package:ajeal/core/models/child_model/child_model.dart';
-import 'package:ajeal/core/constants/preference_keys.dart';
-
-import 'package:ajeal/screens/setup/loading_screen.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
-import 'package:ajeal/core/theme/dark_theme/theme_cubit/themes_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ajeal/core/routing/app_router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../core/constants/preference_keys.dart';
+import '../../core/models/child_model/child_model.dart';
+import '../../core/routing/app_router.dart';
+import '../../core/theme/dark_theme/theme_cubit/themes_cubit.dart';
+import '../../helpers/generated/l10n.dart';
+import '../../screens/setup/loading_screen.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -57,14 +56,15 @@ class _MyAppState extends State<MyApp> {
       _isParentLogin = _prefs.getBool(PreferenceKeys.parentLogin) ?? false;
       _adminDoctorId = _prefs.getString(PreferenceKeys.adminDoctorId) ?? '';
       _adminDoctorName = _prefs.getString(PreferenceKeys.adminDoctorName) ?? '';
-      _adminDoctorPhone = _prefs.getString(PreferenceKeys.adminDoctorPhone) ?? '';
+      _adminDoctorPhone =
+          _prefs.getString(PreferenceKeys.adminDoctorPhone) ?? '';
       _parentDoctorKey = _prefs.getString(PreferenceKeys.parentDoctorKey) ?? '';
       _parentCode = _prefs.getString(PreferenceKeys.parentCode) ?? '';
     });
   }
 
   Future<void> _loadChildData() async {
-    if (_parentCode.isNotEmpty ) {
+    if (_parentCode.isNotEmpty) {
       try {
         final userDoc = await FirebaseFirestore.instance
             .collection("Children")
@@ -127,4 +127,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-

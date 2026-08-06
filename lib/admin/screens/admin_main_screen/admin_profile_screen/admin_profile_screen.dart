@@ -1,16 +1,21 @@
-﻿import 'package:ajeal/admin/screens/admin_login_screen/cubit/sign_cubit.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
-import 'package:ajeal/core/theme/dark_theme/theme_cubit/themes_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../admin/screens/admin_login_screen/cubit/sign_cubit.dart';
+import '../../../../core/theme/dark_theme/theme_cubit/themes_cubit.dart';
+import '../../../../helpers/generated/l10n.dart';
+
 class AdminProfileScreen extends StatelessWidget {
   final String doctorId;
   final String doctorName;
   final String doctorPhone;
-  const AdminProfileScreen({super.key, required this.doctorId, required this.doctorName, required this.doctorPhone});
+  const AdminProfileScreen(
+      {super.key,
+      required this.doctorId,
+      required this.doctorName,
+      required this.doctorPhone});
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +31,8 @@ class AdminProfileScreen extends StatelessWidget {
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-               centerTitle: true,
+              centerTitle: true,
               title: Text(S.of(context).profilePage,
-
                   style: const TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold)),
               background: Container(
@@ -55,10 +59,14 @@ class AdminProfileScreen extends StatelessWidget {
                             ),
                             child: CircleAvatar(
                               radius: 50,
-                             child:  Text(doctorName[0].toUpperCase(),style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 40), ),
+                              child: Text(
+                                doctorName[0].toUpperCase(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 40),
+                              ),
                             ),
                           ),
-                         ],
+                        ],
                       ),
                     ],
                   ),
@@ -78,23 +86,21 @@ class AdminProfileScreen extends StatelessWidget {
                     S.of(context).personalInfo,
                     [
                       _buildProfileCard(context,
-                        icon: Icons.person,
-                        title: S.of(context).name,
-                        value: doctorName
-
-                      ),
+                          icon: Icons.person,
+                          title: S.of(context).name,
+                          value: doctorName),
                       _buildProfileCard(
                         context,
                         icon: Icons.email,
                         title: S.of(context).email,
                         value: currentUser?.email ?? "admin@gmail.com",
-                       ),
+                      ),
                       _buildProfileCard(
                         context,
                         icon: Icons.phone,
                         title: S.of(context).doctorCode,
                         value: doctorId,
-                       ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 24),
@@ -149,7 +155,7 @@ class AdminProfileScreen extends StatelessWidget {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-             ),
+            ),
           ),
         ),
         ...children,
@@ -157,7 +163,8 @@ class AdminProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileCard(context,{
+  Widget _buildProfileCard(
+    context, {
     required IconData icon,
     required String title,
     required String value,
@@ -173,15 +180,20 @@ class AdminProfileScreen extends StatelessWidget {
             color: Colors.blue,
             shape: BoxShape.circle,
           ),
-          child: Icon(icon,  ),
+          child: Icon(
+            icon,
+          ),
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
         subtitle: Text(value, style: const TextStyle(color: Colors.blue)),
-        trailing: IconButton(onPressed: (){
-          Clipboard.setData(ClipboardData(text: value));
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("تم نسخ $title")));
-         }, icon: const Icon(Icons.copy)),
-       ),
+        trailing: IconButton(
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: value));
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text("تم نسخ $title")));
+            },
+            icon: const Icon(Icons.copy)),
+      ),
     );
   }
 

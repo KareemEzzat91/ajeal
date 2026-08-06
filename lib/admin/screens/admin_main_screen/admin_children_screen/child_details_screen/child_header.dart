@@ -1,5 +1,6 @@
-﻿import 'package:ajeal/core/models/child_model/child_model.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../../core/models/child_model/child_model.dart';
 
 class ChildHeaderSection extends StatelessWidget {
   const ChildHeaderSection({

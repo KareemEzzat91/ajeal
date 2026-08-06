@@ -1,6 +1,7 @@
-﻿import 'package:ajeal/core/models/child_model/child_model.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
+
+import '../../core/models/child_model/child_model.dart';
+import '../../helpers/generated/l10n.dart';
 
 class ChildQuickStats extends StatelessWidget {
   const ChildQuickStats({
@@ -14,14 +15,27 @@ class ChildQuickStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   final double progress=  (child.completedSessions/child.scheduleSessions.length)*100 ;
+    final double progress =
+        (child.completedSessions / child.scheduleSessions.length) * 100;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        ChildStatsBuilder(title: S.of(context).sessions, value: "${child.scheduleSessions.length}", icon: Icons.calendar_today, color: Colors.blue),
-        ChildStatsBuilder(title: S.of(context).goals, value: "${child.selectedGoals.length}", icon: Icons.track_changes, color: Colors.green),
-        ChildStatsBuilder(title: S.of(context).progress, value: "${progress.toStringAsFixed(0)}%", icon: Icons.trending_up, color: Colors.orange),
+        ChildStatsBuilder(
+            title: S.of(context).sessions,
+            value: "${child.scheduleSessions.length}",
+            icon: Icons.calendar_today,
+            color: Colors.blue),
+        ChildStatsBuilder(
+            title: S.of(context).goals,
+            value: "${child.selectedGoals.length}",
+            icon: Icons.track_changes,
+            color: Colors.green),
+        ChildStatsBuilder(
+            title: S.of(context).progress,
+            value: "${progress.toStringAsFixed(0)}%",
+            icon: Icons.trending_up,
+            color: Colors.orange),
       ],
     );
   }

@@ -1,10 +1,11 @@
-﻿import 'package:ajeal/core/models/child_model/child_model.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+
+import '../../../../../core/models/child_model/child_model.dart';
+import '../../../../../helpers/generated/l10n.dart';
 
 class AllDetailsScreen extends StatelessWidget {
   final Child child;
@@ -25,7 +26,7 @@ class AllDetailsScreen extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-         ),
+        ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -40,7 +41,8 @@ class AllDetailsScreen extends StatelessWidget {
                 [
                   _buildDetailItem(s.childName, child.name),
                   _buildDetailItem(s.age, child.age),
-                  _buildDetailItem(s.dateOfBirth, _formatDate(child.dateOfBirth)),
+                  _buildDetailItem(
+                      s.dateOfBirth, _formatDate(child.dateOfBirth)),
                   _buildDetailItem(s.startDate, _formatDate(child.startDate)),
                   _buildDetailItem(s.endDate, _formatDate(child.endDate)),
                   _buildDetailItem(s.period, child.period),
@@ -59,11 +61,14 @@ class AllDetailsScreen extends StatelessWidget {
                   _buildDetailItem(s.fatherOccupation, child.fatherOccupation),
                   _buildDetailItem(s.motherOccupation, child.motherOccupation),
                   _buildDetailItem(s.familyMembers, child.familyMembers),
-                  _buildDetailItem(s.siblingsInfluence, child.siblingsInfluence),
+                  _buildDetailItem(
+                      s.siblingsInfluence, child.siblingsInfluence),
                   _buildDetailItem(s.siblingCloseness, child.siblingCloseness),
                   _buildDetailItem(s.motherAge, child.motherAge),
-                  _buildDetailItem(s.parentsRelationship, child.parentsRelationship),
-                  _buildDetailItem(s.familyRelationship, child.familyRelationship),
+                  _buildDetailItem(
+                      s.parentsRelationship, child.parentsRelationship),
+                  _buildDetailItem(
+                      s.familyRelationship, child.familyRelationship),
                   _buildDetailItem(s.motherNature, child.motherNature),
                 ],
               ),
@@ -73,9 +78,12 @@ class AllDetailsScreen extends StatelessWidget {
                 s.pregnancyPhase,
                 [
                   _buildDetailItem(s.pregnancyNature, child.pregnancyNature),
-                  _buildDetailItem(s.motherDiseasesDuringPregnancy, child.motherDiseasesDuringPregnancy),
-                  _buildDetailItem(s.pregnancyComplications, child.pregnancyComplications),
-                  _buildDetailItem(s.motherStressDuringPregnancy, child.motherStressDuringPregnancy),
+                  _buildDetailItem(s.motherDiseasesDuringPregnancy,
+                      child.motherDiseasesDuringPregnancy),
+                  _buildDetailItem(
+                      s.pregnancyComplications, child.pregnancyComplications),
+                  _buildDetailItem(s.motherStressDuringPregnancy,
+                      child.motherStressDuringPregnancy),
                 ],
               ),
 
@@ -84,7 +92,8 @@ class AllDetailsScreen extends StatelessWidget {
                 s.birthPhase,
                 [
                   _buildDetailItem(s.birthType, child.birthType),
-                  _buildDetailItem(s.birthComplications, child.birthComplications),
+                  _buildDetailItem(
+                      s.birthComplications, child.birthComplications),
                   _buildDetailItem(s.birthTiming, child.birthTiming),
                 ],
               ),
@@ -117,7 +126,8 @@ class AllDetailsScreen extends StatelessWidget {
                 [
                   _buildDetailItem(s.teething, child.teething),
                   _buildDetailItem(s.babbling, child.babbling),
-                  _buildDetailItem(s.mothersStressDuringPregnancy, child.motherVoiceAttention),
+                  _buildDetailItem(s.mothersStressDuringPregnancy,
+                      child.motherVoiceAttention),
                   _buildDetailItem(s.sittingAlone, child.sittingAlone),
                   _buildDetailItem(s.crawling, child.crawling),
                   _buildDetailItem(s.walking, child.walking),
@@ -129,7 +139,8 @@ class AllDetailsScreen extends StatelessWidget {
                 context,
                 s.psychologicalHistory,
                 [
-                  _buildDetailItem(s.familyDisabilities, child.familyDisabilities),
+                  _buildDetailItem(
+                      s.familyDisabilities, child.familyDisabilities),
                 ],
               ),
 
@@ -137,7 +148,8 @@ class AllDetailsScreen extends StatelessWidget {
                 context,
                 s.socialHistory,
                 [
-                  _buildDetailItem(s.socialInteraction, child.socialInteraction),
+                  _buildDetailItem(
+                      s.socialInteraction, child.socialInteraction),
                   _buildDetailItem(s.parentAbsence, child.parentAbsence),
                 ],
               ),
@@ -194,7 +206,8 @@ class AllDetailsScreen extends StatelessWidget {
                   icon: const Icon(Icons.print),
                   label: Text(s.printReport),
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -209,11 +222,12 @@ class AllDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildChildHeader(BuildContext context, s ,  ) {
+  Widget _buildChildHeader(
+    BuildContext context,
+    s,
+  ) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final cardColor = isDarkMode
-        ? Theme.of(context).cardColor
-        : Colors.white;
+    final cardColor = isDarkMode ? Theme.of(context).cardColor : Colors.white;
     final textColor = isDarkMode ? Colors.white : Colors.black87;
 
     return Card(
@@ -276,8 +290,8 @@ class AllDetailsScreen extends StatelessWidget {
                     _formatDate(child.startDate), textColor),
                 _buildHeaderInfoItem(context, Icons.calendar_month, s.endDate,
                     _formatDate(child.endDate), textColor),
-                _buildHeaderInfoItem(context, Icons.school, s.school,
-                    child.school, textColor),
+                _buildHeaderInfoItem(
+                    context, Icons.school, s.school, child.school, textColor),
               ],
             ),
           ],
@@ -286,7 +300,8 @@ class AllDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderInfoItem(BuildContext context, IconData icon, String label, String value, Color textColor) {
+  Widget _buildHeaderInfoItem(BuildContext context, IconData icon, String label,
+      String value, Color textColor) {
     return Expanded(
       child: Column(
         children: [
@@ -317,14 +332,13 @@ class AllDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(BuildContext context, String title, List<Widget> children) {
+  Widget _buildSection(
+      BuildContext context, String title, List<Widget> children) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final headerColor = isDarkMode
         ? Theme.of(context).primaryColor
         : Theme.of(context).primaryColor;
-    final cardColor = isDarkMode
-        ? Theme.of(context).cardColor
-        : Colors.white;
+    final cardColor = isDarkMode ? Theme.of(context).cardColor : Colors.white;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -333,7 +347,7 @@ class AllDetailsScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: const [
           BoxShadow(
-            color: Colors.black ,
+            color: Colors.black,
             spreadRadius: 1,
             blurRadius: 6,
             offset: Offset(0, 2),
@@ -379,7 +393,7 @@ class AllDetailsScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        textDirection: TextDirection.rtl,  // Force RTL for Arabic support
+        textDirection: TextDirection.rtl, // Force RTL for Arabic support
         children: [
           Expanded(
             flex: 2,
@@ -407,6 +421,7 @@ class AllDetailsScreen extends StatelessWidget {
   String _formatDate(DateTime date) {
     return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
+
   Future<void> _printChildReport(BuildContext context) async {
     final s = S.of(context);
 
@@ -414,13 +429,17 @@ class AllDetailsScreen extends StatelessWidget {
     final pdf = pw.Document();
 
     // Load a font that supports Arabic
-    final fontData = await rootBundle.load("assets/fonts/NotoSansArabic-Regular.ttf");
+    final fontData =
+        await rootBundle.load("assets/fonts/NotoSansArabic-Regular.ttf");
     final ttf = pw.Font.ttf(fontData);
 
     // Define the styles
-    final headerStyle = pw.TextStyle(font: ttf, fontSize: 18, fontWeight: pw.FontWeight.bold);
-    final sectionStyle = pw.TextStyle(font: ttf, fontSize: 14, fontWeight: pw.FontWeight.bold);
-    final labelStyle = pw.TextStyle(font: ttf, fontSize: 12, fontWeight: pw.FontWeight.bold);
+    final headerStyle =
+        pw.TextStyle(font: ttf, fontSize: 18, fontWeight: pw.FontWeight.bold);
+    final sectionStyle =
+        pw.TextStyle(font: ttf, fontSize: 14, fontWeight: pw.FontWeight.bold);
+    final labelStyle =
+        pw.TextStyle(font: ttf, fontSize: 12, fontWeight: pw.FontWeight.bold);
     final valueStyle = pw.TextStyle(font: ttf, fontSize: 12);
 
     // Define the page theme with right-to-left support
@@ -438,36 +457,37 @@ class AllDetailsScreen extends StatelessWidget {
             pw.Container(
               color: PdfColors.blue100,
               padding: const pw.EdgeInsets.all(8),
-              child: pw.Text(title, style: sectionStyle, textDirection: pw.TextDirection.rtl),
+              child: pw.Text(title,
+                  style: sectionStyle, textDirection: pw.TextDirection.rtl),
             ),
             pw.SizedBox(height: 5),
             ...items.map((item) => pw.Padding(
-              padding: const pw.EdgeInsets.symmetric(vertical: 4),
-              child: pw.Row(
-                 crossAxisAlignment: pw.CrossAxisAlignment.start,
-                children: [
-                  pw.Expanded(
-                    flex: 2,
-                    child: pw.Text(
-                      "${item['label']}:",
-                      style: labelStyle,
-                      textDirection: pw.TextDirection.rtl,
-                      textAlign: pw.TextAlign.right,
-                    ),
+                  padding: const pw.EdgeInsets.symmetric(vertical: 4),
+                  child: pw.Row(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Expanded(
+                        flex: 2,
+                        child: pw.Text(
+                          "${item['label']}:",
+                          style: labelStyle,
+                          textDirection: pw.TextDirection.rtl,
+                          textAlign: pw.TextAlign.right,
+                        ),
+                      ),
+                      pw.SizedBox(width: 10),
+                      pw.Expanded(
+                        flex: 3,
+                        child: pw.Text(
+                          item['value'] ?? "-",
+                          style: valueStyle,
+                          textDirection: pw.TextDirection.rtl,
+                          textAlign: pw.TextAlign.right,
+                        ),
+                      ),
+                    ],
                   ),
-                  pw.SizedBox(width: 10),
-                  pw.Expanded(
-                    flex: 3,
-                    child: pw.Text(
-                      item['value'] ?? "-",
-                      style: valueStyle,
-                      textDirection: pw.TextDirection.rtl,
-                      textAlign: pw.TextAlign.right,
-                    ),
-                  ),
-                ],
-              ),
-            )),
+                )),
           ],
         ),
       );
@@ -484,7 +504,8 @@ class AllDetailsScreen extends StatelessWidget {
         header: (context) => pw.Center(
           child: pw.Column(
             children: [
-              pw.Text(s.childDetails, style: headerStyle, textDirection: pw.TextDirection.rtl),
+              pw.Text(s.childDetails,
+                  style: headerStyle, textDirection: pw.TextDirection.rtl),
               pw.SizedBox(height: 5),
               pw.Divider(),
             ],
@@ -506,7 +527,7 @@ class AllDetailsScreen extends StatelessWidget {
               borderRadius: const pw.BorderRadius.all(pw.Radius.circular(10)),
             ),
             child: pw.Row(
-               children: [
+              children: [
                 pw.Container(
                   width: 60,
                   height: 60,
@@ -517,7 +538,8 @@ class AllDetailsScreen extends StatelessWidget {
                   alignment: pw.Alignment.center,
                   child: pw.Text(
                     child.name.isNotEmpty ? child.name[0] : "?",
-                    style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+                    style: pw.TextStyle(
+                        fontSize: 24, fontWeight: pw.FontWeight.bold),
                   ),
                 ),
                 pw.SizedBox(width: 10),
@@ -525,8 +547,15 @@ class AllDetailsScreen extends StatelessWidget {
                   child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text(child.name, style: pw.TextStyle(font: ttf, fontSize: 16, fontWeight: pw.FontWeight.bold), textDirection: pw.TextDirection.rtl),
-                      pw.Text("${s.age}: ${child.age}", style: pw.TextStyle(font: ttf, fontSize: 12), textDirection: pw.TextDirection.rtl),
+                      pw.Text(child.name,
+                          style: pw.TextStyle(
+                              font: ttf,
+                              fontSize: 16,
+                              fontWeight: pw.FontWeight.bold),
+                          textDirection: pw.TextDirection.rtl),
+                      pw.Text("${s.age}: ${child.age}",
+                          style: pw.TextStyle(font: ttf, fontSize: 12),
+                          textDirection: pw.TextDirection.rtl),
                     ],
                   ),
                 ),
@@ -558,7 +587,10 @@ class AllDetailsScreen extends StatelessWidget {
             {'label': s.siblingsInfluence, 'value': child.siblingsInfluence},
             {'label': s.siblingCloseness, 'value': child.siblingCloseness},
             {'label': s.motherAge, 'value': child.motherAge},
-            {'label': s.parentsRelationship, 'value': child.parentsRelationship},
+            {
+              'label': s.parentsRelationship,
+              'value': child.parentsRelationship
+            },
             {'label': s.familyRelationship, 'value': child.familyRelationship},
             {'label': s.motherNature, 'value': child.motherNature},
           ]),
@@ -566,9 +598,18 @@ class AllDetailsScreen extends StatelessWidget {
           // Pregnancy phase section
           buildSection(s.pregnancyPhase, [
             {'label': s.pregnancyNature, 'value': child.pregnancyNature},
-            {'label': s.motherDiseasesDuringPregnancy, 'value': child.motherDiseasesDuringPregnancy},
-            {'label': s.pregnancyComplications, 'value': child.pregnancyComplications},
-            {'label': s.motherStressDuringPregnancy, 'value': child.motherStressDuringPregnancy},
+            {
+              'label': s.motherDiseasesDuringPregnancy,
+              'value': child.motherDiseasesDuringPregnancy
+            },
+            {
+              'label': s.pregnancyComplications,
+              'value': child.pregnancyComplications
+            },
+            {
+              'label': s.motherStressDuringPregnancy,
+              'value': child.motherStressDuringPregnancy
+            },
           ]),
 
           // Birth phase section
@@ -598,7 +639,10 @@ class AllDetailsScreen extends StatelessWidget {
           buildSection(s.firstYearGrowth, [
             {'label': s.teething, 'value': child.teething},
             {'label': s.babbling, 'value': child.babbling},
-            {'label': "motherVoiceAttention", 'value': child.motherVoiceAttention},
+            {
+              'label': "motherVoiceAttention",
+              'value': child.motherVoiceAttention
+            },
             {'label': s.sittingAlone, 'value': child.sittingAlone},
             {'label': s.crawling, 'value': child.crawling},
             {'label': s.walking, 'value': child.walking},
@@ -658,4 +702,3 @@ class AllDetailsScreen extends StatelessWidget {
     );
   }
 }
-

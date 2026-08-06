@@ -1,4 +1,4 @@
-﻿import 'package:ajeal/core/models/goals_model/goals.dart';
+import '../../../../../core/models/goals_model/goals.dart';
 
 class GoalLists {
   static final List<Goal> goalList = [

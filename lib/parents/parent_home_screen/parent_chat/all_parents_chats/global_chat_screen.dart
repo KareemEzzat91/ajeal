@@ -1,6 +1,6 @@
-import 'package:ajeal/parents/parent_home_screen/parent_chat/parent_admin_chat/parent_admin_chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class GlobalChatScreen extends StatefulWidget {
@@ -240,18 +240,13 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
       onTap: () {
         if (widget.isParent == false &&
             message["sender_id"] != widget.doctorId) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChatScreen(
-                isOthers: false,
-                role: "doctor",
-                doctorId: widget.doctorId,
-                parentId: message['sender_id'],
-                isParent: false,
-              ),
-            ),
-          );
+          context.push('/parent/chat', extra: {
+            'isOthers': false,
+            'role': 'doctor',
+            'doctorId': widget.doctorId,
+            'parentId': message['sender_id'],
+            'isParent': false,
+          });
         }
       },
       child: Padding(
@@ -345,7 +340,8 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
         child: isDoctorMessage
             ? const CircleAvatar(
                 radius: 14,
-                backgroundImage: AssetImage('assets/images/man-teacher-with-chalkboard-on-blue-background-vector-33671420.jpg'),
+                backgroundImage: AssetImage(
+                    'assets/images/man-teacher-with-chalkboard-on-blue-background-vector-33671420.jpg'),
               )
             : Icon(
                 Icons.person,
@@ -380,7 +376,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
             color: Colors.grey,
             spreadRadius: 1,
             blurRadius: 10,
-            offset:  Offset(0, -3),
+            offset: Offset(0, -3),
           ),
         ],
       ),
@@ -400,7 +396,6 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                     hintText: 'Type your message...',
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(vertical: 12),
-
                   ),
                   style: const TextStyle(color: Colors.grey),
                   maxLines: null,
@@ -416,10 +411,10 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                 shape: BoxShape.circle,
                 boxShadow: const [
                   BoxShadow(
-                    color: Colors.blue ,
+                    color: Colors.blue,
                     spreadRadius: 1,
                     blurRadius: 5,
-                    offset:  Offset(0, 2),
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),

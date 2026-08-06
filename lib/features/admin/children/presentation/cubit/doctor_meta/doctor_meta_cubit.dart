@@ -1,8 +1,8 @@
-import 'package:ajeal/core/di/service_locator.dart';
-import 'package:ajeal/features/admin/children/data/doctor_repository.dart';
-import 'package:ajeal/features/admin/children/presentation/cubit/doctor_meta/doctor_meta_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../data/doctor_repository.dart';
+import 'doctor_meta_state.dart';
 
 /// Cubit for updating doctor metadata fields (lastSessionWith, taskAddedFor, etc).
 /// Replaces the updateUserInfo / getUserInfo responsibilities previously in AddChildCubit.

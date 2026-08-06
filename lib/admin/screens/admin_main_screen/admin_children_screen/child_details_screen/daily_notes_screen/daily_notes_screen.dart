@@ -1,13 +1,14 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/date_navigation_button.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/empty_state.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/note_card.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/ui_helpers.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/daily_notes_cubit.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/daily_notes_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/daily_notes_cubit.dart';
+import '../../../../../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/daily_notes_state.dart';
+import '../../../../../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/date_navigation_button.dart';
+import '../../../../../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/empty_state.dart';
+import '../../../../../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/note_card.dart';
+import '../../../../../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/daily_notes_screen/ui_helpers.dart';
 
 class DailyNotesScreen extends StatelessWidget {
   final String userType;
@@ -133,7 +134,8 @@ class _DailyNotesViewState extends State<DailyNotesView> {
     );
   }
 
-  Widget _buildSearchAndDateNavigation(Color theme, DailyNotesCubit cubit, DailyNotesState state) {
+  Widget _buildSearchAndDateNavigation(
+      Color theme, DailyNotesCubit cubit, DailyNotesState state) {
     DateTime selectedDate = DateTime.now();
     if (state is DailyNotesLoaded) {
       selectedDate = state.selectedDate;
@@ -179,8 +181,7 @@ class _DailyNotesViewState extends State<DailyNotesView> {
                 icon: Icons.arrow_back_ios,
                 onPressed: () {
                   cubit.setSelectedDate(
-                      selectedDate.subtract(const Duration(days: 1))
-                  );
+                      selectedDate.subtract(const Duration(days: 1)));
                 },
               ),
               GestureDetector(
@@ -228,8 +229,7 @@ class _DailyNotesViewState extends State<DailyNotesView> {
                 icon: Icons.arrow_forward_ios,
                 onPressed: () {
                   cubit.setSelectedDate(
-                      selectedDate.add(const Duration(days: 1))
-                  );
+                      selectedDate.add(const Duration(days: 1)));
                 },
               ),
             ],
@@ -305,7 +305,7 @@ class _DailyNotesViewState extends State<DailyNotesView> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.pop(),
             child: Text(
               "Cancel",
               style: TextStyle(color: Colors.grey.shade600),
@@ -314,7 +314,7 @@ class _DailyNotesViewState extends State<DailyNotesView> {
           ElevatedButton(
             onPressed: () {
               cubit.addNote(_noteController.text);
-              Navigator.pop(context);
+              context.pop();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,

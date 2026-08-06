@@ -1,5 +1,6 @@
-﻿import 'package:ajeal/core/models/child_model/child_model.dart';
 import 'package:flutter/material.dart';
+
+import '../../core/models/child_model/child_model.dart';
 
 class ChildProfileHeader extends StatelessWidget {
   const ChildProfileHeader({
@@ -31,7 +32,7 @@ class ChildProfileHeader extends StatelessWidget {
           CircleAvatar(
             radius: 40,
             backgroundColor:
-            isDarkMode ? Colors.teal.shade600 : Colors.teal.shade100,
+                isDarkMode ? Colors.teal.shade600 : Colors.teal.shade100,
             child: Text(
               child.name[0].toUpperCase(),
               style: const TextStyle(

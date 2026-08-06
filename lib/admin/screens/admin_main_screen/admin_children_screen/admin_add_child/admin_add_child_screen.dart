@@ -1,6 +1,3 @@
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/add_child_cubit.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/admin_children_select_goals/admin_select_goals_screen.dart';
-import 'package:ajeal/core/models/goals_model/goals.dart';
 import 'package:ajeal/features/admin/children/presentation/cubit/children_list/children_list_cubit.dart'
     as ajeal_children_list_cubit;
 import 'package:ajeal/helpers/generated/l10n.dart';
@@ -8,6 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../admin/screens/admin_main_screen/admin_children_screen/admin_add_child/add_child_cubit/add_child_cubit.dart';
+import '../../../../../core/models/goals_model/goals.dart';
 
 class AdminAddChildScreen extends StatefulWidget {
   final String doctorId;
@@ -335,7 +336,7 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                 },
               );
             } else if (state is AddSuccessState) {
-              Navigator.pop(context); // Dismiss loading dialog
+              context.pop(); // Dismiss loading dialog
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Child added successfully!'),
@@ -346,9 +347,9 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
               context
                   .read<ajeal_children_list_cubit.ChildrenListCubit>()
                   .loadChildren();
-              Navigator.pop(context); // Dismiss Add Child screen
+              context.pop(); // Dismiss Add Child screen
             } else if (state is AddFailureState) {
-              Navigator.pop(context);
+              context.pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('An error occurred.'),
@@ -841,14 +842,14 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  selectedItems = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => AdminSelectGoals(
-                                        phone: parentPhoneController.text,
-                                      ),
-                                    ),
-                                  );
+                                  final result = await context.push(
+                                      '/admin/children/add/goals',
+                                      extra: {
+                                        'phone': parentPhoneController.text
+                                      });
+                                  if (result != null && result is List<Goal>) {
+                                    selectedItems = result;
+                                  }
                                   setState(() {});
                                 }
                               },

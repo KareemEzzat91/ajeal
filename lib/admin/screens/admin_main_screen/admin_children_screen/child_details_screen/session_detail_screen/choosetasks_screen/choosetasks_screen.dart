@@ -1,6 +1,8 @@
-﻿import 'package:ajeal/core/models/goals_model/goals.dart';
-import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../../../core/models/goals_model/goals.dart';
+import '../../../../../../../helpers/generated/l10n.dart';
 
 class ChooseTasksScreen extends StatefulWidget {
   final Goal selectedGoal;
@@ -26,8 +28,7 @@ class _ChooseTasksScreenState extends State<ChooseTasksScreen> {
 
   void _saveSelectedTasks() {
     // يمكنك هنا حفظ المهام المختارة أو إعادتها إلى الشاشة السابقة
-    Navigator.pop(
-        context, _selectedTasks); // إرجاع المهام المختارة إلى الشاشة السابقة
+    context.pop(_selectedTasks); // إرجاع المهام المختارة إلى الشاشة السابقة
   }
 
   @override
@@ -98,9 +99,10 @@ class _ChooseTasksScreenState extends State<ChooseTasksScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child:  Text(
-               S.of(context).save,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              child: Text(
+                S.of(context).save,
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ],

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -9,7 +8,7 @@ import 'package:printing/printing.dart';
 class AIResultsScreen extends StatelessWidget {
   final String analysis;
   final List<Map<String, dynamic>> sessionsData;
-  final String childName ;
+  final String childName;
 
   const AIResultsScreen({
     super.key,
@@ -22,7 +21,8 @@ class AIResultsScreen extends StatelessWidget {
     final pdf = pw.Document();
 
     // تحميل خط عربي
-    final fontData = await rootBundle.load("assets/fonts/NotoSansArabic-Regular.ttf");
+    final fontData =
+        await rootBundle.load("assets/fonts/NotoSansArabic-Regular.ttf");
     final ttf = pw.Font.ttf(fontData);
 
     // إزالة التنسيقات الغير مرغوبة مثل النجوم *
@@ -69,16 +69,18 @@ class AIResultsScreen extends StatelessWidget {
 
           // النصوص مقسمة بشكل جيد
           pw.ListView(
-            children: paragraphs.map((paragraph) =>
-                pw.Padding(
-                  padding: const pw.EdgeInsets.only(bottom: 8),
-                  child: pw.Text(
-                    paragraph,
-                    style: const pw.TextStyle(fontSize: 14),
-                    textDirection: pw.TextDirection.rtl,
+            children: paragraphs
+                .map(
+                  (paragraph) => pw.Padding(
+                    padding: const pw.EdgeInsets.only(bottom: 8),
+                    child: pw.Text(
+                      paragraph,
+                      style: const pw.TextStyle(fontSize: 14),
+                      textDirection: pw.TextDirection.rtl,
+                    ),
                   ),
-                ),
-            ).toList(),
+                )
+                .toList(),
           ),
         ],
 
@@ -115,7 +117,8 @@ class AIResultsScreen extends StatelessWidget {
           children: [
             Card(
               elevation: 2,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -125,13 +128,19 @@ class AIResultsScreen extends StatelessWidget {
                       children: [
                         Icon(Icons.auto_awesome, color: Colors.amber),
                         SizedBox(width: 8),
-                        Text("تحليل ذكاء اصطناعي", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                        Text("تحليل ذكاء اصطناعي",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text("تم تحليل ${sessionsData.length} جلسات مكتملة", style: TextStyle(color: Colors.grey[700], fontSize: 14)),
+                    Text("تم تحليل ${sessionsData.length} جلسات مكتملة",
+                        style:
+                            TextStyle(color: Colors.grey[700], fontSize: 14)),
                     const SizedBox(height: 16),
-                    const Text("هذا التحليل يقدم نظرة عامة على التقدم والإنجازات والتوصيات بناءً على بيانات الجلسات المكتملة.", style: TextStyle(fontSize: 14)),
+                    const Text(
+                        "هذا التحليل يقدم نظرة عامة على التقدم والإنجازات والتوصيات بناءً على بيانات الجلسات المكتملة.",
+                        style: TextStyle(fontSize: 14)),
                   ],
                 ),
               ),
@@ -139,19 +148,26 @@ class AIResultsScreen extends StatelessWidget {
             const SizedBox(height: 16),
             Card(
               elevation: 2,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("نتائج التحليل", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    const Text("نتائج التحليل",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 16),
                     MarkdownBody(
                       data: analysis,
                       styleSheet: MarkdownStyleSheet(
-                        h2: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue),
-                        h3: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        h2: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue),
+                        h3: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                         p: const TextStyle(fontSize: 14),
                       ),
                     ),
@@ -167,10 +183,11 @@ class AIResultsScreen extends StatelessWidget {
                     onPressed: () => generatePdf(),
                     icon: const Icon(Icons.download),
                     label: const Text("تصدير التقرير"),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green, foregroundColor: Colors.white),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white),
                   ),
                 ),
-
               ],
             ),
           ],

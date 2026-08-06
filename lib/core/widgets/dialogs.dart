@@ -1,4 +1,4 @@
-﻿// Helper methods to show dialog messages
+// Helper methods to show dialog messages
 import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_cards.dart';
 import 'package:ajeal/core/models/child_model/child_model.dart';
 import 'package:flutter/material.dart';
@@ -30,16 +30,15 @@ void showErrorMessage(BuildContext context, String error) {
     text: 'Error: $error',
   );
 }
+
 Future<dynamic> showCustomDialog(BuildContext context, {Child? child}) {
   // Determine if we're handling an "Others" case or not
   final bool isOthers = child == null;
 
   // Initialize controllers with existing values if available
-  final TextEditingController doctorNameController = TextEditingController(
-  );
+  final TextEditingController doctorNameController = TextEditingController();
 
-  final TextEditingController doctorIdController = TextEditingController(
-  );
+  final TextEditingController doctorIdController = TextEditingController();
 
   final TextEditingController childCodeController = TextEditingController();
 
@@ -132,12 +131,8 @@ Future<dynamic> showCustomDialog(BuildContext context, {Child? child}) {
         if (isOthers) {
           await handleOthersCase(context, childCodeController.text);
         } else {
-          await handleDoctorAssignment(
-              context,
-              child,
-              doctorNameController.text,
-              doctorIdController.text
-          );
+          await handleDoctorAssignment(context, child,
+              doctorNameController.text, doctorIdController.text);
         }
       } catch (e) {
         // Handle errors centrally

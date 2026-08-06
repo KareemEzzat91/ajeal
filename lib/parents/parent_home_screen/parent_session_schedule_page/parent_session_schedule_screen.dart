@@ -1,7 +1,8 @@
-﻿import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/session_detail_screen/session_detail_screen.dart';
-import 'package:ajeal/admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_progress.dart';
-import 'package:ajeal/core/models/child_model/child_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../admin/screens/admin_main_screen/admin_children_screen/child_details_screen/child_progress.dart';
+import '../../../core/models/child_model/child_model.dart';
 
 class SessionSchedulePage extends StatelessWidget {
   final String childId;
@@ -217,23 +218,14 @@ class SessionSchedulePage extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SessionDetailScreen(
-                childName: name,
-                isParent: true,
-                childId: childId,
-                sessionName: session['session'],
-                date: session['date'],
-                goals: List<String>.from(session['goals']),
-                notes: session['notes'] ?? 0,
-                rate: session['rate'] ?? 0.0,
-                tasks: List.from(session['tasks'] ?? []),
-                isCompleted: session['completed'] ?? 0,
-              ),
-            ),
-          );
+          context.push('/admin/children/sessions', extra: {
+            'childName': name,
+            'isParent': true,
+            'childId': childId,
+            'sessionName': session['session'],
+            'date': session['date'],
+            'goals': List<String>.from(session['goals'])
+          });
         },
         borderRadius: BorderRadius.circular(16),
         child: Padding(
@@ -324,23 +316,14 @@ class SessionSchedulePage extends StatelessWidget {
                 children: [
                   TextButton.icon(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SessionDetailScreen(
-                            childName: name,
-                            isParent: true,
-                            childId: childId,
-                            sessionName: session['session'],
-                            date: session['date'],
-                            goals: List<String>.from(session['goals']),
-                            notes: session['notes'] ?? '',
-                            rate: session['rate'] ?? 0.0,
-                            tasks: List.from(session['tasks'] ?? []),
-                            isCompleted: session['completed'] ?? 0,
-                          ),
-                        ),
-                      );
+                      context.push('/admin/children/sessions', extra: {
+                        'childName': name,
+                        'isParent': true,
+                        'childId': childId,
+                        'sessionName': session['session'],
+                        'date': session['date'],
+                        'goals': List<String>.from(session['goals'])
+                      });
                     },
                     icon: const Icon(Icons.visibility),
                     label: const Text("View Details"),

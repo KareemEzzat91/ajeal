@@ -1,6 +1,7 @@
-import 'package:ajeal/core/constants/firestore_collections.dart';
-import 'package:ajeal/core/models/doctor_model/doctor_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../../../core/constants/firestore_collections.dart';
+import '../../../../core/models/doctor_model/doctor_model.dart';
 
 /// Repository for doctor/admin user profile Firestore operations.
 class DoctorRepository {
