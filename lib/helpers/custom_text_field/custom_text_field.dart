@@ -42,7 +42,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     });
   }
 
-  double TextSize(context,
+  double textSize(context,
       {required double isExtraSmallSize,
       required double isMobileSize,
       required double isMobileLarge,
@@ -80,7 +80,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           focusNode: _focusNode, // Assign the focus node
           controller: widget.controller,
           style: TextStyle(
-              fontSize: TextSize(context,
+              fontSize: textSize(context,
                   isExtraSmallSize: 13,
                   isMobileSize: 15,
                   isMobileLarge: 21,
@@ -96,7 +96,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             hintStyle: TextStyle(color: _iconColor),
             isDense: true,
             border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.2)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.2)),
               borderRadius: BorderRadius.circular(15),
             ),
             focusedBorder: OutlineInputBorder(

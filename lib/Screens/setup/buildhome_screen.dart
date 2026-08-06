@@ -1,10 +1,10 @@
 
-import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
-import 'package:ajeal/Screens/setup/PreferenceKeys.dart';
-import 'package:ajeal/Screens/setup/home_screenbuilder.dart';
-import 'package:ajeal/Screens/setup/loading_screen.dart';
+import 'package:ajeal/admin/models/child_model/child_model.dart';
+import 'package:ajeal/screens/setup/preference_keys.dart';
+import 'package:ajeal/screens/setup/home_screenbuilder.dart';
+import 'package:ajeal/screens/setup/loading_screen.dart';
 import 'package:ajeal/helpers/generated/l10n.dart';
-import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';
+import 'package:ajeal/helpers/theme/dark_theme/theme_cubit/themes_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
