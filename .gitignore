@@ -41,4 +41,5 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-/lib/helpers/AIhelper/SecretKey
+/lib/helpers/ai_helper/secretkey.dart
+/lib/helpers/AIhelper/secretkey.dart
