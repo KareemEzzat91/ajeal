@@ -449,6 +449,7 @@ Future<void> handleOthersCase(BuildContext context, String childCode) async {
         .get();
 
     // Close loading dialog
+    if (!context.mounted) return;
     Navigator.pop(context);
 
     if (!childSnap.exists || childSnap.data() == null || childSnap.data()!.isEmpty) {
@@ -467,10 +468,12 @@ Future<void> handleOthersCase(BuildContext context, String childCode) async {
         .set(child.toMap());
 
     // Close dialog and show success message
+    if (!context.mounted) return;
     Navigator.pop(context);
     showSuccessMessage(context, 'Child added successfully');
 
   } catch (e) {
+    if (!context.mounted) return;
     Navigator.pop(context); // Close loading dialog if open
     showErrorMessage(context, e.toString());
   }
@@ -493,6 +496,7 @@ Future<void> handleDoctorAssignment(
         .get();
 
     // Close loading dialog
+    if (!context.mounted) return;
     Navigator.pop(context);
 
     if (!doctorSnap.exists) {
@@ -527,12 +531,14 @@ Future<void> handleDoctorAssignment(
         .delete();
 
     // Close dialog and show success message
+    if (!context.mounted) return;
     Navigator.pop(context);
     showSuccessMessage(
         context,
         "Child transferred to Dr. $doctorName successfully!"
     );
   } catch (e) {
+    if (!context.mounted) return;
     Navigator.pop(context); // Close loading dialog if open
     showErrorMessage(context, e.toString());
   }

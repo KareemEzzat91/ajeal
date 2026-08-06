@@ -154,7 +154,7 @@ Requirements:
     while (retryCount < maxRetries) {
       try {
         // Make API request with timeout
-        final response = await gemini.text(prompt).timeout(
+        final response = await gemini.prompt(parts: [Part.text(prompt)]).timeout(
               const Duration(seconds: 130),
               onTimeout: () =>
                   throw TimeoutException('Gemini API request timed out'),

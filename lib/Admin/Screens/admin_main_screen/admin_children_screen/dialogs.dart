@@ -141,6 +141,7 @@ Future<dynamic> showCustomDialog(BuildContext context, {Child? child}) {
         }
       } catch (e) {
         // Handle errors centrally
+        if (!context.mounted) return;
         showErrorMessage(context, e.toString());
       }
     },

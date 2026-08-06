@@ -25,7 +25,7 @@ class ChatScreen extends StatefulWidget {
   });
 
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
@@ -125,6 +125,7 @@ class _ChatScreenState extends State<ChatScreen> {
               child: const Text('Submit'),
               onPressed: () async {
                 await _chatCubit.submitReport(reportController.text);
+                if (!context.mounted) return;
                 Navigator.of(context).pop();
               },
             ),

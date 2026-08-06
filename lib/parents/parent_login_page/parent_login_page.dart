@@ -10,7 +10,7 @@ class ParentLoginPage extends StatefulWidget {
   const ParentLoginPage({super.key});
 
   @override
-  _ParentLoginPageState createState() => _ParentLoginPageState();
+  State<ParentLoginPage> createState() => _ParentLoginPageState();
 }
 
 class _ParentLoginPageState extends State<ParentLoginPage> {
@@ -34,7 +34,9 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
 
       if (!childSnapshot.exists) {
         
-        _showErrorSnackBar(S.of(context).invalid_parent_code);
+        if (mounted) {
+          _showErrorSnackBar(S.of(context).invalid_parent_code);
+        }
 
 
 
@@ -51,18 +53,19 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
           .get();
 
       if (!doctorSnapshot.exists || doctorSnapshot.data() == null) {
-        _showErrorSnackBar("Invalid admin code. Please try again.");
+        if (mounted) _showErrorSnackBar("Invalid admin code. Please try again.");
         return;
       }
 
       final doctorKey = doctorSnapshot.data()?['Doctor_id'];
       if (doctorKey == null) {
-        _showErrorSnackBar(S.of(context).invalid_parent_code);
+        if (mounted) _showErrorSnackBar(S.of(context).invalid_parent_code);
         return;
       }
 
       await saveToken(parentCode, doctorKey);
 
+      if (!mounted) return;
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(

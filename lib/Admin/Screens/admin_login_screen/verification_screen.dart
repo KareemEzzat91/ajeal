@@ -7,7 +7,7 @@ class VerificationScreen extends StatefulWidget {
   const VerificationScreen({super.key, required this.user});
 
   @override
-  _VerificationScreenState createState() => _VerificationScreenState();
+  State<VerificationScreen> createState() => _VerificationScreenState();
 }
 
 class _VerificationScreenState extends State<VerificationScreen> {

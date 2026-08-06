@@ -11,14 +11,14 @@ class NoteCard extends StatelessWidget {
   final Color senderIconColor;
 
   const NoteCard({
-    Key? key,
+    super.key,
     required this.note,
     required this.userType,
     required this.onDelete,
     required this.senderColor,
     required this.senderIcon,
     required this.senderIconColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

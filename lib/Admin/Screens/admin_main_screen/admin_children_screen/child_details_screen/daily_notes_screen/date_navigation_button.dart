@@ -6,10 +6,10 @@ class DateNavigationButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const DateNavigationButton({
-    Key? key,
+    super.key,
     required this.icon,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -461,12 +461,15 @@ class AddChildCubit extends Cubit<AddChildState> {
 
       // Send WhatsApp verification message
 
+      if (!context.mounted) return;
       Navigator.pop(context);
       emit(AddSuccessState());
     } catch (e) {
       emit(AddFailureState(e.toString()));
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.toString())));
+      }
     }
   }
 

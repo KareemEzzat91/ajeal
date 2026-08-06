@@ -14,7 +14,7 @@ class AdminAddChildScreen extends StatefulWidget {
       {super.key, required this.doctorId, required this.doctorName});
 
   @override
-  _AdminAddChildScreenState createState() => _AdminAddChildScreenState();
+  State<AdminAddChildScreen> createState() => _AdminAddChildScreenState();
 }
 
 class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
@@ -946,6 +946,7 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
   void _handleSave(AddChildCubit bloc, BuildContext context) async{
     if (!_formKey.currentState!.validate()) return;
     if (! await checkNumber(parentPhoneController.text)){
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('The Parent Phone number already exist Please Change The name '),
@@ -958,6 +959,9 @@ class _AdminAddChildScreenState extends State<AdminAddChildScreen> {
 
 
     }
+    
+    if (!context.mounted) return;
+
     if (selectedItems.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

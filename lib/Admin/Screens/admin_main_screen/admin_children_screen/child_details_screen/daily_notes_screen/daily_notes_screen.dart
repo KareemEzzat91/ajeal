@@ -16,12 +16,12 @@ class DailyNotesScreen extends StatelessWidget {
   final String? otherDoctorId;
 
   const DailyNotesScreen({
-    Key? key,
+    super.key,
     required this.userType,
     required this.childID,
     required this.isOthers,
     this.otherDoctorId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +38,10 @@ class DailyNotesScreen extends StatelessWidget {
 }
 
 class DailyNotesView extends StatefulWidget {
-  const DailyNotesView({Key? key}) : super(key: key);
+  const DailyNotesView({super.key});
 
   @override
-  _DailyNotesViewState createState() => _DailyNotesViewState();
+  State<DailyNotesView> createState() => _DailyNotesViewState();
 }
 
 class _DailyNotesViewState extends State<DailyNotesView> {

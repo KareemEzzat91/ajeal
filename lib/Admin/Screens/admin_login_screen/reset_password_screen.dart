@@ -38,6 +38,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
       // Navigate back after short delay
       Future.delayed(const Duration(seconds: 2), () {
+        if (!mounted) return;
         Navigator.pop(context);
       });
     } on FirebaseAuthException catch (e) {

@@ -54,7 +54,7 @@ class AIResultsScreen extends StatelessWidget {
           // عدد الجلسات
           pw.Text(
             "تم تحليل ${sessionsData.length} جلسات مكتملة",
-            style: pw.TextStyle(fontSize: 14),
+            style: const pw.TextStyle(fontSize: 14),
             textDirection: pw.TextDirection.rtl,
           ),
           pw.SizedBox(height: 20),
@@ -74,7 +74,7 @@ class AIResultsScreen extends StatelessWidget {
                   padding: const pw.EdgeInsets.only(bottom: 8),
                   child: pw.Text(
                     paragraph,
-                    style: pw.TextStyle(fontSize: 14),
+                    style: const pw.TextStyle(fontSize: 14),
                     textDirection: pw.TextDirection.rtl,
                   ),
                 ),
@@ -87,7 +87,7 @@ class AIResultsScreen extends StatelessWidget {
           alignment: pw.Alignment.centerRight,
           child: pw.Text(
             'صفحة ${context.pageNumber} من ${context.pagesCount}',
-            style: pw.TextStyle(fontSize: 12),
+            style: const pw.TextStyle(fontSize: 12),
             textDirection: pw.TextDirection.rtl,
           ),
         ),

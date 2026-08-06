@@ -10,6 +10,6 @@ final class SignSuccessState extends SignState {}
 final class SignLoadingState extends SignState {}
 
 final class SignFailureState extends SignState {
-  final error;
+  final String error;
   SignFailureState(this.error);
 }

@@ -467,7 +467,7 @@ class AllDetailsScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            )).toList(),
+            )),
           ],
         ),
       );

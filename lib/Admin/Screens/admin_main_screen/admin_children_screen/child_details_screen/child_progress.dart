@@ -140,7 +140,7 @@ class ProgressSection extends StatelessWidget {
                     }).toList(),
                     ),
                   ),
-                );;
+                );
                 
               },
               style: ElevatedButton.styleFrom(
@@ -230,6 +230,7 @@ class ProgressSection extends StatelessWidget {
 
 
       // Close loading dialog
+      if (!context.mounted) return;
       Navigator.pop(context);
 
       // Navigate to results screen
@@ -245,6 +246,7 @@ class ProgressSection extends StatelessWidget {
       );
     } catch (e) {
       // Close loading dialog
+      if (!context.mounted) return;
       Navigator.pop(context);
 
       // Show error

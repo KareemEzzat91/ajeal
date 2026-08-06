@@ -18,7 +18,7 @@ class GlobalChatScreen extends StatefulWidget {
   });
 
   @override
-  _GlobalChatScreenState createState() => _GlobalChatScreenState();
+  State<GlobalChatScreen> createState() => _GlobalChatScreenState();
 }
 
 class _GlobalChatScreenState extends State<GlobalChatScreen> {

@@ -261,7 +261,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                           context,
                           PageRouteBuilder(
                             pageBuilder: (context, animation, secondaryAnimation) =>
-                                AdminLoginScreen(),
+                                const AdminLoginScreen(),
                             transitionsBuilder: (context, animation, secondaryAnimation, child) {
                               var begin = const Offset(1.0, 0.0);
                               var end = Offset.zero;

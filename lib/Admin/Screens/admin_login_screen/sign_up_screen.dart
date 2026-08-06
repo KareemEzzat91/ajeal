@@ -260,7 +260,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   onPressed: () => Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (_) => AdminLoginScreen()),
+                                        builder: (_) => const AdminLoginScreen()),
                                   ),
                                   child: Text(
                                     S.of(context).loginPage,

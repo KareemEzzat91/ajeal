@@ -63,6 +63,8 @@ class SignCubit extends Cubit<SignState> {
 
       await saveAdminSession(doctorId, doctorName, doctorPhone);
 
+      if (!context.mounted) return;
+
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -102,6 +104,8 @@ class SignCubit extends Cubit<SignState> {
       await pref.remove("adminDoctorId");
       await pref.remove("adminDoctorName");
       await pref.remove("adminDoctorPhone");
+
+      if (!context.mounted) return;
 
       Navigator.pushAndRemoveUntil(
         context,
