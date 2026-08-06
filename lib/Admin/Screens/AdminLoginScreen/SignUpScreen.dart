@@ -47,7 +47,7 @@ class _SignupScreenState extends State<SignupScreen> {
       create: (context) => SignCubit(),
       child: BlocListener<SignCubit, SignState>(
         listener: (context, state) {
-          if (state is SignFaliureState) {
+          if (state is SignFailureState) {
             Get.snackbar(
               "Validation ",
               state.error,

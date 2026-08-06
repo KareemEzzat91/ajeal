@@ -1,5 +1,5 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/add_child_cubit.dart';
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenSelectGooals/GoalDetailScreen.dart';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/admin_children_select_goals/GoalDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/DailyNotesScreen/DailyNotesScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/SessionDetailScreen/SessionDetailScreen.dart';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/ChildDetailsScreen/child_header.dart';
@@ -195,9 +195,9 @@ class ChildDetailScreen extends StatelessWidget {
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: child.scheduleSesoins.length,
+          itemCount: child.scheduleSessions.length,
           itemBuilder: (context, index) {
-            final session = child.scheduleSesoins[index];
+            final session = child.scheduleSessions[index];
             return _buildSessionCard(
                 context, session, index, Theme
                 .of(context)

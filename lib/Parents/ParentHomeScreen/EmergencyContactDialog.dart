@@ -1,10 +1,11 @@
-import 'package:ajeal/Screens/AdminOrparents/AdminOrParintsScreen.dart';
+import 'package:ajeal/Screens/AdminOrparents/admin_or_parents_screen.dart';
 import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:ajeal/helpers/url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-void showEmergencyContactDialog(BuildContext context,String doctorPhone) {
+
+void showEmergencyContactDialog(BuildContext context, String doctorPhone) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
@@ -34,8 +35,7 @@ void showEmergencyContactDialog(BuildContext context,String doctorPhone) {
             onPressed: () {
               logout(context);
             },
-            style:
-            ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
           )
         ],
       ),
@@ -57,7 +57,7 @@ Future<void> logout(BuildContext context) async {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => const AdminOrParentsScreen()),
-          (route) => false,
+      (route) => false,
     );
   }
 }

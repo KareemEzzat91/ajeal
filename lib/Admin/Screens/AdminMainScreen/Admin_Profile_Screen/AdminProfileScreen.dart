@@ -111,7 +111,7 @@ class AdminProfileScreen extends StatelessWidget {
                       _buildActionButton(
                         icon: Icons.language,
                         title: S.of(context).changeLanguage,
-                        onTap: () => themeCubit.changeLang(),
+                        onTap: () => themeCubit.toggleLanguage(),
                         color: Colors.blue,
                       ),
                       const SizedBox(height: 12),

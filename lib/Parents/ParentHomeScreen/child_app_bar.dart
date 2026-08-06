@@ -79,7 +79,7 @@ class ChildAppBar extends StatelessWidget {
                     icon: Icons.language,
                     tooltip: S.of(context).changeLanguage,
                     onPressed: () {
-                      themeCubit.changeLang();
+                      themeCubit.toggleLanguage();
                     },
                   ),
                 ),

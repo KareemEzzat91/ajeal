@@ -4,7 +4,7 @@ import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/Allparentschats/GlobalchatScreen.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/Parentchat/ParentAdminchat/ParentAdminchatscreen.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/parentchildgoalspage/parentchildgoals_screen.dart';
-import 'package:ajeal/Parents/ParentHomeScreen/parentsessionschedulepage/parentssessionschedule_screen.dart';
+import 'package:ajeal/Parents/ParentHomeScreen/parentsessionschedulepage/parent_session_schedule_screen.dart';
 import 'package:ajeal/helpers/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -49,7 +49,7 @@ child: child,
               name :child.name,
               isParent: true,
               childId: child.parentPhone,
-              scheduleSesoins: child.scheduleSesoins,
+              scheduleSessions: child.scheduleSessions,
             ),
           ),
         )),

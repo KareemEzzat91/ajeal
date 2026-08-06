@@ -26,8 +26,8 @@ class ProgressSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int totalSessions = child.scheduleSesoins.length;
-    final int completedSessions = child.scheduleSesoins
+    final int totalSessions = child.scheduleSessions.length;
+    final int completedSessions = child.scheduleSessions
         .where((session) => session['completed'] == true)
         .length;
 
@@ -130,7 +130,7 @@ class ProgressSection extends StatelessWidget {
                     builder: (context) => AIResultsScreen(
                       childName: child.name,
                       analysis: child.analysis,
-                      sessionsData:  child.scheduleSesoins.where((session) => session['completed'] == true).map((session) => {
+                      sessionsData:  child.scheduleSessions.where((session) => session['completed'] == true).map((session) => {
                       "session": session["session"],
                       "date": session["date"],
                       "goals": session["goals"],
@@ -179,7 +179,7 @@ class ProgressSection extends StatelessWidget {
 
     try {
       // Prepare session data for AI analysis
-      final List<Map<String, dynamic>> sessionsData = child.scheduleSesoins
+      final List<Map<String, dynamic>> sessionsData = child.scheduleSessions
           .where((session) => session['completed'] == true)
           .map((session) => {
         "session": session["session"],

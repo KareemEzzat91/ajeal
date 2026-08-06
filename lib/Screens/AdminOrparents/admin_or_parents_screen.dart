@@ -117,7 +117,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                               icon: Icons.language,
                               tooltip: S.of(context).changeLanguage,
                               onPressed: () {
-                                themeCubit.changeLang();
+                                themeCubit.toggleLanguage();
                               },
                             ).animate().fadeIn(delay: 400.ms, duration: 300.ms),
                             const SizedBox(width: 8),

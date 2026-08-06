@@ -91,7 +91,7 @@ class Child extends Equatable {
 
   // Treatment Plan
   final List<Goal> selectedGoals;
-  final List<Map<String, dynamic>> scheduleSesoins;
+  final List<Map<String, dynamic>> scheduleSessions;
   final num completedSessions;
   final String analysis;
 
@@ -193,7 +193,7 @@ class Child extends Equatable {
 
     // Treatment Plan
     required this.selectedGoals,
-    required this.scheduleSesoins,
+    required this.scheduleSessions,
     required this.completedSessions,
 
     // Doctor Information
@@ -299,7 +299,8 @@ class Child extends Equatable {
 
       // Treatment Plan
       'goals': selectedGoals.map((goal) => goal.toMap()).toList(),
-      'scheduleSesoins': scheduleSesoins,
+      'scheduleSessions': scheduleSessions,
+      'scheduleSesoins': scheduleSessions, // Legacy key fallback
 
       // Doctor Information
       'doctorId': doctorId,
@@ -487,7 +488,7 @@ class Child extends Equatable {
 
         // Treatment Plan
         selectedGoals: _parseGoals(json['goals']),
-        scheduleSesoins: _parseScheduleSessions(json['scheduleSesoins']),
+        scheduleSessions: _parseScheduleSessions(json['scheduleSessions'] ?? json['scheduleSesoins']),
 
         // Doctor Information
         doctorId: json['doctorId'] ?? '',
@@ -522,7 +523,7 @@ class Child extends Equatable {
         motherNature: '',
         motherDiseasesDuringPregnancy: '',
         selectedGoals: const [],
-        scheduleSesoins: const [],
+        scheduleSessions: const [],
         doctorId: '',
         doctorName: '',
         doctorPhone: '',
@@ -650,7 +651,7 @@ class Child extends Equatable {
     String? throat,
     String? diagnosis,
     List<Goal>? selectedGoals,
-    List<Map<String, dynamic>>? scheduleSesoins,
+    List<Map<String, dynamic>>? scheduleSessions,
     String? doctorId,
     String? doctorName,
     String? doctorPhone,
@@ -729,7 +730,7 @@ class Child extends Equatable {
       throat: throat ?? this.throat,
       diagnosis: diagnosis ?? this.diagnosis,
       selectedGoals: selectedGoals ?? this.selectedGoals,
-      scheduleSesoins: scheduleSesoins ?? this.scheduleSesoins,
+      scheduleSessions: scheduleSessions ?? this.scheduleSessions,
       doctorId: doctorId ?? this.doctorId,
       doctorName: doctorName ?? this.doctorName,
       doctorPhone: doctorPhone ?? this.doctorPhone,

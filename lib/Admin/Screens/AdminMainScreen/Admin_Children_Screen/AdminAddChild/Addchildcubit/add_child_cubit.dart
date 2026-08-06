@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/generate.dart';
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/sendvreficationmessage.dart';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminAddChild/Addchildcubit/send_verification_message.dart';
 import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
 import 'package:ajeal/Admin/models/doctor_model/doctor_model.dart';
 import 'package:ajeal/Admin/models/goals_model/Goals.dart';
@@ -340,7 +340,7 @@ class AddChildCubit extends Cubit<AddChildState> {
         throw Exception("User not authenticated");
       }
 
-      final scheduleGenerator = GenerateSchedule();
+      final scheduleGenerator = ScheduleGeneratorService();
 
       // Generate schedule sessions
       scheduleSessions = await scheduleGenerator.generateScheduleWithFallback(
@@ -386,7 +386,7 @@ class AddChildCubit extends Cubit<AddChildState> {
         familyRelationship: familyRelationship,
         motherNature: motherNature,
         selectedGoals: selectedGoals,
-        scheduleSesoins: scheduleSessions,
+        scheduleSessions: scheduleSessions,
         doctorId: doctorId,
         doctorName: doctorName,
         doctorPhone: doctorPhone,

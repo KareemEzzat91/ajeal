@@ -1,8 +1,8 @@
 import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/EmergencyContactDialog.dart';
-import 'package:ajeal/Parents/ParentHomeScreen/childAppBar.dart';
+import 'package:ajeal/Parents/ParentHomeScreen/child_app_bar.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/child_action_cards.dart';
-import 'package:ajeal/Parents/ParentHomeScreen/child_profile_sectio_name_age.dart';
+import 'package:ajeal/Parents/ParentHomeScreen/child_profile_section_name_age.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/child_progress.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/child_quickstats.dart';
 import 'package:ajeal/helpers/theme/DarkTheme/ThemeCubit/themes_cubit.dart';

@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 part 'themes_state.dart';
 
-class ThemesCubit extends Cubit<ThemState> {
+class ThemesCubit extends Cubit<ThemeState> {
   static final lightTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: Colors.white,
@@ -28,7 +28,7 @@ class ThemesCubit extends Cubit<ThemState> {
     iconTheme: const IconThemeData(color: Colors.white60),
   );
 
-  ThemesCubit() : super(ThemState(const Locale("ar"), lightTheme)) {
+  ThemesCubit() : super(ThemeState(const Locale("ar"), lightTheme)) {
     _loadPreferences();
   }
 
@@ -38,7 +38,7 @@ class ThemesCubit extends Cubit<ThemState> {
     final isDark = prefs.getBool("isDark") ?? false;
     final lang = prefs.getString("lang") ?? "ar"; // Default to Arabic
 
-    emit(ThemState(Locale(lang), isDark ? darkTheme : lightTheme));
+    emit(ThemeState(Locale(lang), isDark ? darkTheme : lightTheme));
   }
 
   /// Toggle between light and dark themes
@@ -46,17 +46,17 @@ class ThemesCubit extends Cubit<ThemState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool("isDark", isDark);
 
-    emit(ThemState(state.loc, isDark ? darkTheme : lightTheme));
+    emit(ThemeState(state.loc, isDark ? darkTheme : lightTheme));
   }
 
-  Future<void> changeLang() async {
+  Future<void> toggleLanguage() async {
     final newLocale = state.loc == const Locale("ar")
         ? const Locale("en")
         : const Locale("ar");
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString("lang", newLocale.languageCode);
 
-    emit(ThemState(newLocale, state.themeData)); // Ensure UI rebuilds
+    emit(ThemeState(newLocale, state.themeData)); // Ensure UI rebuilds
     Get.updateLocale(newLocale); // Force update
   }
 }

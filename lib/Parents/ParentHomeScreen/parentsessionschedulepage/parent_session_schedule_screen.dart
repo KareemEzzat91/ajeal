@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class SessionSchedulePage extends StatelessWidget {
   final String childId;
   final Child child;
-  final List<Map<String, dynamic>> scheduleSesoins;
+  final List<Map<String, dynamic>> scheduleSessions;
   final bool isParent;
   final String name ;
   final int completedSesions;
@@ -15,7 +15,7 @@ class SessionSchedulePage extends StatelessWidget {
     super.key,
     required this.childId,
     required this.child,
-    required this.scheduleSesoins,
+    required this.scheduleSessions,
     required this.isParent,
     required this.name ,
     required this.completedSesions ,
@@ -85,11 +85,10 @@ class SessionSchedulePage extends StatelessWidget {
   }
 
   Widget _buildUpcomingSession() {
-    if (scheduleSesoins.isEmpty) {
+    if (scheduleSessions.isEmpty) {
       return _buildEmptyState();
     }
-
-    final nextSession = scheduleSesoins[ completedSesions==scheduleSesoins.length?completedSesions-1:completedSesions+1];
+    final nextSession = scheduleSessions[ completedSesions==scheduleSessions.length?completedSesions-1:completedSesions+1];
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -191,13 +190,13 @@ class SessionSchedulePage extends StatelessWidget {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          final session = scheduleSesoins[index];
+          final session = scheduleSessions[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 16),
             child: _buildSessionCard(context, session),
           );
         },
-        childCount: scheduleSesoins.length,
+        childCount: scheduleSessions.length,
       ),
     );
   }

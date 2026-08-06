@@ -1,9 +1,7 @@
-
-
 import 'package:ajeal/Admin/Screens/AdminMainScreen/AdminmainScreen/AdminmainScreen.dart';
 import 'package:ajeal/Admin/models/ChildModel/ChildModel.dart';
 import 'package:ajeal/Parents/ParentHomeScreen/ParentHomeScreen.dart';
-import 'package:ajeal/Screens/AdminOrparents/AdminOrParintsScreen.dart';
+import 'package:ajeal/Screens/AdminOrparents/admin_or_parents_screen.dart';
 import 'package:flutter/cupertino.dart';
 
 class HomeScreenBuilder extends StatelessWidget {
@@ -17,7 +15,14 @@ class HomeScreenBuilder extends StatelessWidget {
     required Child? child,
     required String parentCode,
     required String parentDoctorKey,
-  }) : _isAdminLogin = isAdminLogin, _adminDoctorId = adminDoctorId, _adminDoctorName = adminDoctorName, _adminDoctorPhone = adminDoctorPhone, _isParentLogin = isParentLogin, _child = child, _parentCode = parentCode, _parentDoctorKey = parentDoctorKey;
+  })  : _isAdminLogin = isAdminLogin,
+        _adminDoctorId = adminDoctorId,
+        _adminDoctorName = adminDoctorName,
+        _adminDoctorPhone = adminDoctorPhone,
+        _isParentLogin = isParentLogin,
+        _child = child,
+        _parentCode = parentCode,
+        _parentDoctorKey = parentDoctorKey;
 
   final bool _isAdminLogin;
   final String _adminDoctorId;
@@ -31,7 +36,7 @@ class HomeScreenBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (_isAdminLogin) {
-      return AdminmainScreen(
+      return AdminMainScreen(
         doctorId: _adminDoctorId,
         doctorName: _adminDoctorName,
         doctorPhone: _adminDoctorPhone,

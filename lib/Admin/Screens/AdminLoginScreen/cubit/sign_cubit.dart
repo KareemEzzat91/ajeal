@@ -1,5 +1,5 @@
 import 'package:ajeal/Admin/Screens/AdminMainScreen/AdminmainScreen/AdminmainScreen.dart';
-import 'package:ajeal/Screens/AdminOrparents/AdminOrParintsScreen.dart';
+import 'package:ajeal/Screens/AdminOrparents/admin_or_parents_screen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,15 +15,15 @@ class SignCubit extends Cubit<SignState> {
   SignCubit() : super(SignInitial());
 
   Future<void> login(
-      BuildContext context,
-      GlobalKey<FormState> formKey,
-      TextEditingController emailController,
-      TextEditingController passwordController,
-      ) async {
+    BuildContext context,
+    GlobalKey<FormState> formKey,
+    TextEditingController emailController,
+    TextEditingController passwordController,
+  ) async {
     emit(SignLoadingState());
 
     if (!formKey.currentState!.validate()) {
-      emit(SignFaliureState("Validation error"));
+      emit(SignFailureState("Validation error"));
       return;
     }
 
@@ -35,21 +35,21 @@ class SignCubit extends Cubit<SignState> {
 
       final User? user = response.user;
       if (user == null) {
-        emit(SignFaliureState("Login failed"));
+        emit(SignFailureState("Login failed"));
         return;
       }
 
       if (!user.emailVerified) {
         await user.sendEmailVerification();
-        emit(SignFaliureState("Please verify your account. Check your email."));
+        emit(SignFailureState("Please verify your account. Check your email."));
         return;
       }
 
       final doctorSnapshot =
-      await _firestore.collection("users").doc(user.uid).get();
+          await _firestore.collection("users").doc(user.uid).get();
 
       if (!doctorSnapshot.exists) {
-        emit(SignFaliureState("User data not found"));
+        emit(SignFailureState("User data not found"));
         return;
       }
 
@@ -61,27 +61,28 @@ class SignCubit extends Cubit<SignState> {
         "Doctor_id": user.uid,
       });
 
-      await saveToken(doctorId, doctorName, doctorPhone);
+      await saveAdminSession(doctorId, doctorName, doctorPhone);
 
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => AdminmainScreen(
+          builder: (context) => AdminMainScreen(
             doctorId: doctorId,
             doctorName: doctorName,
             doctorPhone: doctorPhone,
           ),
         ),
-            (Route<dynamic> route) => false,
+        (Route<dynamic> route) => false,
       );
 
-      emit(SignSuccesState());
+      emit(SignSuccessState());
     } catch (e) {
-      emit(SignFaliureState(e.toString()));
+      emit(SignFailureState(e.toString()));
     }
   }
 
-  Future<void> saveToken(String doctorId, String doctorName, String doctorPhone) async {
+  Future<void> saveAdminSession(
+      String doctorId, String doctorName, String doctorPhone) async {
     try {
       final SharedPreferences pref = await SharedPreferences.getInstance();
       await pref.setBool("AdminLogin", true);
@@ -105,7 +106,7 @@ class SignCubit extends Cubit<SignState> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const AdminOrParentsScreen()),
-            (Route<dynamic> route) => false,
+        (Route<dynamic> route) => false,
       );
     } catch (e) {
       debugPrint("Logout error: $e");
@@ -113,36 +114,39 @@ class SignCubit extends Cubit<SignState> {
   }
 
   Future<void> signUp(
-      BuildContext context,
-      GlobalKey<FormState> formKey,
-      TextEditingController emailController,
-      TextEditingController nameController,
-      TextEditingController passwordController,
-      TextEditingController mobileController,
-      ) async {
+    BuildContext context,
+    GlobalKey<FormState> formKey,
+    TextEditingController emailController,
+    TextEditingController nameController,
+    TextEditingController passwordController,
+    TextEditingController mobileController,
+  ) async {
     emit(SignLoadingState());
 
     if (!formKey.currentState!.validate()) {
-      emit(SignFaliureState("Validation error"));
+      emit(SignFailureState("Validation error"));
       return;
     }
 
     try {
-      final UserCredential response = await _auth.createUserWithEmailAndPassword(
+      final UserCredential response =
+          await _auth.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
 
       final User? user = response.user;
       if (user == null) {
-        emit(SignFaliureState("User creation failed"));
+        emit(SignFailureState("User creation failed"));
         return;
       }
 
-      final String doctorId = "${nameController.text.trim()}${mobileController.text.trim()}";
+      final String doctorId =
+          "${nameController.text.trim()}${mobileController.text.trim()}";
 
       await user.sendEmailVerification();
-      emit(SignFaliureState("Your account is created. Please verify your email."));
+      emit(SignFailureState(
+          "Your account is created. Please verify your email."));
 
       await _firestore.collection("users").doc(user.uid).set({
         'Doctor_Name': nameController.text.trim(),
@@ -159,11 +163,12 @@ class SignCubit extends Cubit<SignState> {
         "Doctor_id": user.uid,
       });
 
-      await saveToken(doctorId, nameController.text.trim(), mobileController.text.trim());
+      await saveAdminSession(
+          doctorId, nameController.text.trim(), mobileController.text.trim());
 
-      emit(SignSuccesState());
+      emit(SignSuccessState());
     } catch (e) {
-      emit(SignFaliureState(e.toString()));
+      emit(SignFailureState(e.toString()));
     }
   }
 }

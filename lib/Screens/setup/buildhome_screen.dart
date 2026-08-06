@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ThemesCubit(),
-      child: BlocBuilder<ThemesCubit, ThemState>(
+      child: BlocBuilder<ThemesCubit, ThemeState>(
         builder: (context, state) {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,

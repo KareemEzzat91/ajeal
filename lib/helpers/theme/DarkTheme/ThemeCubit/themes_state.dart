@@ -1,8 +1,8 @@
 part of 'themes_cubit.dart';
 
 @immutable
-class ThemState {
+class ThemeState {
   final ThemeData themeData;
   final Locale loc;
-  const ThemState(this.loc, this.themeData);
+  const ThemeState(this.loc, this.themeData);
 }

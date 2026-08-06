@@ -124,7 +124,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       };
 
       final currentScheduleSesoins = List<Map<String, dynamic>>.from(
-          userSnapshot.data()!['scheduleSesoins'] ?? []);
+          userSnapshot.data()!['scheduleSessions'] ?? userSnapshot.data()!['scheduleSesoins'] ?? []);
 
       if (widget.sessionName - 1 < currentScheduleSesoins.length) {
         currentScheduleSesoins[widget.sessionName - 1] = sessionData;
@@ -134,8 +134,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       print(widget.completedSessions);
        final cmp= widget.isCompleted?widget.completedSessions:widget.completedSessions!+1;
       print(cmp);
-      await userRef.update({'scheduleSesoins': currentScheduleSesoins,"completedSessions":cmp});
-      await FirebaseFirestore.instance.collection("Children").doc(widget.childId).update({'scheduleSesoins': currentScheduleSesoins,"completedSessions":cmp});
+      await userRef.update({'scheduleSessions': currentScheduleSesoins, 'scheduleSesoins': currentScheduleSesoins, "completedSessions":cmp});
+      await FirebaseFirestore.instance.collection("Children").doc(widget.childId).update({'scheduleSessions': currentScheduleSesoins, 'scheduleSesoins': currentScheduleSesoins, "completedSessions":cmp});
       _showSuccessDialog();
     } catch (e) {
       _showErrorDialog("حدث خطأ أثناء الحفظ: $e");

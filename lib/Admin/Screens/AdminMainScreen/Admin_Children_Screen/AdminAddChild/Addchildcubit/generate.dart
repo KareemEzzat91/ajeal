@@ -5,15 +5,15 @@ import 'dart:math';
 import 'package:ajeal/Admin/models/goals_model/Goals.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 
-class GenerateSchedule {
-  static final GenerateSchedule _generateSchedule =
-      GenerateSchedule._internal();
+class ScheduleGeneratorService {
+  static final ScheduleGeneratorService _generateSchedule =
+      ScheduleGeneratorService._internal();
 
-  factory GenerateSchedule() {
+  factory ScheduleGeneratorService() {
     return _generateSchedule;
   }
 
-  GenerateSchedule._internal();
+  ScheduleGeneratorService._internal();
 
   // Main method that doesn't rely on Gemini API
   Future<List<Map<String, dynamic>>> generateScheduleLocally({

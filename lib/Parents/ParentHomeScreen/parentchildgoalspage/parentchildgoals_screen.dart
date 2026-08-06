@@ -1,4 +1,4 @@
-import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/AdminChildrenSelectGooals/GoalDetailScreen.dart';
+import 'package:ajeal/Admin/Screens/AdminMainScreen/Admin_Children_Screen/admin_children_select_goals/GoalDetailScreen.dart';
 import 'package:ajeal/Admin/models/goals_model/Goals.dart';
 import 'package:flutter/material.dart';
 

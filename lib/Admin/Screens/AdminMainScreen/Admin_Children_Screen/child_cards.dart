@@ -129,7 +129,7 @@ class ChildCard extends StatelessWidget {
 
   Widget _buildProgressIndicator(BuildContext context ) {
     // Calculate progress percentage based on completed sessions
-    final int totalSessions = child.scheduleSesoins.length;
+    final int totalSessions = child.scheduleSessions.length;
     final  num completedSessions = child.completedSessions;
     final double progressPercentage = totalSessions > 0
         ? completedSessions / totalSessions
@@ -367,7 +367,7 @@ class ChildGridCard extends StatelessWidget {
     final localizations = S.of(context);
 
     // Calculate progress percentage based on completed sessions
-    final int totalSessions = child.scheduleSesoins.length;
+    final int totalSessions = child.scheduleSessions.length;
     final num completedSessions = child.completedSessions;
     final double progressPercentage = totalSessions > 0
         ? (completedSessions / totalSessions).clamp(0.0, 1.0)

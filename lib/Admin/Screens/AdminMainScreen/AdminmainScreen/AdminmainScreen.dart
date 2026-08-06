@@ -10,18 +10,18 @@ import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AdminmainScreen extends StatefulWidget {
+class AdminMainScreen extends StatefulWidget {
   final String doctorId;
   final String doctorName;
   final String doctorPhone;
-  const AdminmainScreen(
+  const AdminMainScreen(
       {super.key, required this.doctorId, required this.doctorName, required this.doctorPhone});
 
   @override
-  State<AdminmainScreen> createState() => _AdminmainScreenState();
+  State<AdminMainScreen> createState() => _AdminMainScreenState();
 }
 
-class _AdminmainScreenState extends State<AdminmainScreen> {
+class _AdminMainScreenState extends State<AdminMainScreen> {
   int _selectedIndex = 0;
   String doctorId = '';
   String doctorName = '';

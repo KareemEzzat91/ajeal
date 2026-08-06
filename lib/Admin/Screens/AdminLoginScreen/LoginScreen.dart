@@ -43,7 +43,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
       create: (context) => SignCubit(),
       child: BlocConsumer<SignCubit, SignState>(
         listener: (context, state) {
-          if (state is SignFaliureState) {
+          if (state is SignFailureState) {
             Get.snackbar(
               "Error",
               state.error,
