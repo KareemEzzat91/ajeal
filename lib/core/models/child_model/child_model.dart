@@ -302,7 +302,7 @@ class Child extends Equatable {
       // Treatment Plan
       'goals': selectedGoals.map((goal) => goal.toMap()).toList(),
       'scheduleSessions': scheduleSessions,
-      'scheduleSesoins': scheduleSessions, // Legacy key fallback
+      // Note: legacy typo key 'scheduleSesoins' intentionally NOT written here anymore.
 
       // Doctor Information
       'doctorId': doctorId,
@@ -407,7 +407,7 @@ class Child extends Equatable {
         parentPhone: json['parentPhone'] ??
             json['parentOccupation'] ??
             '', // Handle legacy data
-        parentPhoneNumber: json["parentPhoneNumber"],
+        parentPhoneNumber: json["parentPhoneNumber"] ?? '',
         notes: json['notes'] ?? '',
         school: json['school'] ?? '',
         residence: json['residence'] ?? '',
@@ -673,7 +673,7 @@ class Child extends Equatable {
         parentPhoneNumber: parentPhoneNumber ?? this.parentPhoneNumber,
         notes: notes ?? this.notes,
         school: school ?? this.school,
-        completedSessions: this.completedSessions,
+        completedSessions: completedSessions ?? this.completedSessions,
         residence: residence ?? this.residence,
         gender: gender ?? this.gender,
         fatherOccupation: fatherOccupation ?? this.fatherOccupation,

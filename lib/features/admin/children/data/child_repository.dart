@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../../../core/constants/firestore_collections.dart';
-import '../../../../core/models/child_model/child_model.dart';
+import 'package:ajeal/core/constants/firestore_collections.dart';
+import 'package:ajeal/core/models/child_model/child_model.dart';
 
 /// Repository responsible for all Child-related Firestore operations.
 /// Cubits must NOT access Firestore directly – use this class instead.
@@ -181,7 +181,7 @@ class ChildRepository {
 
     await userRef.update({
       'scheduleSessions': currentScheduleSesoins,
-      'scheduleSesoins': currentScheduleSesoins,
+      // Note: legacy typo key 'scheduleSesoins' intentionally NOT written anymore.
       'completedSessions': cmp
     });
 
@@ -190,7 +190,7 @@ class ChildRepository {
         .doc(childId)
         .update({
       'scheduleSessions': currentScheduleSesoins,
-      'scheduleSesoins': currentScheduleSesoins,
+      // Note: legacy typo key 'scheduleSesoins' intentionally NOT written anymore.
       'completedSessions': cmp
     });
   }

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../../../core/constants/firestore_collections.dart';
-import '../../../../core/models/doctor_model/doctor_model.dart';
+import 'package:ajeal/core/constants/firestore_collections.dart';
+import 'package:ajeal/core/models/doctor_model/doctor_model.dart';
 
 /// Repository for doctor/admin user profile Firestore operations.
 class DoctorRepository {
@@ -58,5 +58,19 @@ class DoctorRepository {
         .collection(FirestoreCollections.users)
         .doc(userId)
         .update({key: value});
+  }
+
+  /// Resolves the actual UID stored inside the doctor document for a given
+  /// [docId]. Used when [isOthers] is true to find the correct owner uid.
+  Future<String?> resolveDoctorUid(String docId) async {
+    try {
+      final doc = await _firestore
+          .collection(FirestoreCollections.users)
+          .doc(docId)
+          .get();
+      return doc.data()?['Doctor_id'] as String?;
+    } catch (_) {
+      return null;
+    }
   }
 }

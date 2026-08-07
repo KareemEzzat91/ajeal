@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../../core/di/service_locator.dart';
-import '../../../data/child_repository.dart';
-import 'children_list_state.dart';
+import 'package:ajeal/core/di/service_locator.dart';
+import 'package:ajeal/features/admin/children/data/child_repository.dart';
+import 'package:ajeal/features/admin/children/presentation/cubit/children_list/children_list_state.dart';
 
 /// Cubit responsible for loading and filtering the children list.
 /// Replaces the list-management responsibilities previously in AddChildCubit.

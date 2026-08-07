@@ -1,0 +1,104 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:ajeal/features/admin/auth/presentation/cubit/sign_cubit.dart';
+import 'package:ajeal/features/admin/children/presentation/screens/admin_children_screen.dart';
+import 'package:ajeal/features/admin/profile/presentation/screens/admin_profile_screen.dart';
+import 'package:ajeal/features/admin/reports/presentation/screens/admin_reports_screen.dart';
+import 'package:ajeal/features/admin/children/presentation/cubit/children_list/children_list_cubit.dart';
+import 'package:ajeal/helpers/generated/l10n.dart';
+import 'package:ajeal/features/parent/chat/presentation/screens/all_parents_chats/global_chat_screen.dart';
+
+class AdminMainScreen extends StatefulWidget {
+  final String doctorId;
+  final String doctorName;
+  final String doctorPhone;
+  const AdminMainScreen(
+      {super.key,
+      required this.doctorId,
+      required this.doctorName,
+      required this.doctorPhone});
+
+  @override
+  State<AdminMainScreen> createState() => _AdminMainScreenState();
+}
+
+class _AdminMainScreenState extends State<AdminMainScreen> {
+  int _selectedIndex = 0;
+  String doctorId = '';
+  String doctorName = '';
+  String doctorPhone = '';
+  late List<Widget> screens;
+
+  @override
+  void initState() {
+    doctorId = widget.doctorId;
+    doctorPhone = widget.doctorPhone;
+    doctorName = widget.doctorName;
+    super.initState();
+    screens = [
+      AdminChildrenScreen(doctorId: doctorId, doctorName: doctorName),
+      const AdminReportsScreen(),
+      GlobalChatScreen(
+          childName: '',
+          doctorId: FirebaseAuth.instance.currentUser!.uid,
+          parentId: '',
+          isParent: false),
+      AdminProfileScreen(
+          doctorPhone: doctorPhone, doctorName: doctorName, doctorId: doctorId),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => SignCubit()),
+        // ChildrenListCubit provided here so it persists across tab switches
+        BlocProvider(create: (_) => ChildrenListCubit()),
+      ],
+      child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        body: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 540),
+          child: screens[_selectedIndex],
+        ),
+        bottomNavigationBar: FlashyTabBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          animationDuration: const Duration(milliseconds: 540),
+          selectedIndex: _selectedIndex,
+          showElevation: true,
+          onItemSelected: (index) => setState(() => _selectedIndex = index),
+          items: [
+            FlashyTabBarItem(
+              activeColor: Colors.blue,
+              icon: const Icon(Icons.child_care_rounded),
+              title: Text(S.of(context).childrenPage,
+                  style: const TextStyle(fontSize: 12)),
+            ),
+            FlashyTabBarItem(
+              activeColor: Colors.blue,
+              icon: const Icon(Icons.analytics_outlined),
+              title: Text(S.of(context).reportsPage,
+                  style: const TextStyle(fontSize: 12)),
+            ),
+            FlashyTabBarItem(
+              activeColor: Colors.blue,
+              icon: const Icon(Icons.comment_rounded),
+              title: Text(S.of(context).global_chat,
+                  style: const TextStyle(fontSize: 12)),
+            ),
+            FlashyTabBarItem(
+              activeColor: Colors.blue,
+              icon: const Icon(Icons.person),
+              title: Text(S.of(context).profilePage,
+                  style: const TextStyle(fontSize: 12)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

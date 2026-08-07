@@ -1,4 +1,4 @@
-import '../../../../../../core/models/child_model/child_model.dart';
+import 'package:ajeal/core/models/child_model/child_model.dart';
 
 sealed class ChildrenListState {}
 
