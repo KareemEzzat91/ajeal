@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -221,7 +222,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                           : [const Color(0xFFE1BEE7), const Color(0xFF9C27B0)],
                       onTap: () {
                         // Add tap animation
-                        context.push('/parent/login');
+                        context.push(Routes.parentLogin);
                       },
                     ),
                   ),
@@ -241,7 +242,7 @@ class AdminOrParentsScreen extends StatelessWidget {
                           ? [const Color(0xFF00BCD4), const Color(0xFF2196F3)]
                           : [const Color(0xFFB2EBF2), const Color(0xFF00BCD4)],
                       onTap: () {
-                        context.push('/admin/login');
+                        context.push(Routes.adminLogin);
                       },
                     ),
                   ),

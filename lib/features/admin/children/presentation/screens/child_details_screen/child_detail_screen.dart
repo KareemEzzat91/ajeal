@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,7 +66,7 @@ class ChildDetailScreen extends StatelessWidget {
                       isOthers: isOthers,
                       key: "lastChattedWith",
                       value: childName);
-                  context.push('/parent/chat', extra: {
+                  context.push(Routes.parentChat, extra: {
                     'isOthers': isOthers,
                     'role': 'doctor',
                     'doctorId': adminId!,
@@ -81,7 +82,7 @@ class ChildDetailScreen extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.note_add_outlined, color: Colors.white),
               onPressed: () {
-                context.push('/admin/children/details/daily_notes', extra: {
+                context.push(Routes.adminChildrenDetailsDailyNotes, extra: {
                   'isOthers': isOthers,
                   'otherDoctorId': child.doctorId,
                   'userType': isOthers ? "Teacher" : 'Doctor',
@@ -136,6 +137,7 @@ class ChildDetailScreen extends StatelessWidget {
                               .read<ChildDetailCubit>()
                               .deleteChild(child.parentPhone, isOthers)
                               .then((_) {
+                            if (!context.mounted) return;
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text("Deleted Successfully"),
@@ -145,6 +147,7 @@ class ChildDetailScreen extends StatelessWidget {
                             context.pop();
                             context.pop(); // Pop back to list
                           }).catchError((e) {
+                            if (!context.mounted) return;
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(e.toString())),
                             );
@@ -284,7 +287,7 @@ class ChildDetailScreen extends StatelessWidget {
 
   void _navigateToSessionDetail(
       BuildContext context, Map<String, dynamic> session) {
-    context.push('/admin/children/sessions', extra: {
+    context.push(Routes.adminChildrenSessions, extra: {
       'childName': childName,
       'isParent': false,
       'childId': child.parentPhone,
@@ -332,7 +335,7 @@ class ChildDetailScreen extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: InkWell(
           onTap: () {
-            context.push('/admin/children/add/goals/detail',
+            context.push(Routes.adminChildrenAddGoalsDetail,
                 extra: {'goal': goal});
           },
           borderRadius: BorderRadius.circular(12),

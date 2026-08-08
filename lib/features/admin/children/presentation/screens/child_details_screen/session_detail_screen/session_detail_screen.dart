@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -303,7 +304,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   Future<void> _addTasksToGoal(int goalIndex) async {
     final thisGoal = getGoal(widget.goals[goalIndex]);
     final selectedTasks = await context.push(
-        '/admin/children/sessions/choose_tasks',
+        Routes.adminChildrenSessionsChooseTasks,
         extra: {'selectedGoal': thisGoal}) as List<Task>?;
     if (selectedTasks != null) {
       setState(() => _selectedTasksPerGoal[goalIndex] = selectedTasks);
@@ -311,7 +312,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   }
 
   Future<void> _editTaskRate(int goalIndex, int taskIndex) async {
-    final updatedTask = await context.push('/admin/children/sessions/rate_task',
+    final updatedTask = await context.push(Routes.adminChildrenSessionsRateTask,
         extra: {
           'isParent': widget.isParent,
           'task': _selectedTasksPerGoal[goalIndex][taskIndex]

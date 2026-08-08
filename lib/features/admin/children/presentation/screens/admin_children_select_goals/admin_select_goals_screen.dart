@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -170,7 +171,7 @@ class AdminSelectGoals extends StatelessWidget {
                   ),
                   ElevatedButton.icon(
                     onPressed: () {
-                      context.push('/admin/children/add/goals/detail',
+                      context.push(Routes.adminChildrenAddGoalsDetail,
                           extra: {'goal': goal});
                     },
                     icon: const Icon(Icons.info_outline),

@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -146,7 +147,7 @@ class ChildGoalsPage extends StatelessWidget {
       child: InkWell(
         onTap: () {
           context
-              .push('/admin/children/add/goals/detail', extra: {'goal': goal});
+              .push(Routes.adminChildrenAddGoalsDetail, extra: {'goal': goal});
         },
         borderRadius: BorderRadius.circular(16),
         child: Column(
@@ -213,7 +214,7 @@ class ChildGoalsPage extends StatelessWidget {
                       _buildGoalTag("In Progress", Colors.orange),
                       TextButton(
                         onPressed: () {
-                          context.push('/admin/children/add/goals/detail',
+                          context.push(Routes.adminChildrenAddGoalsDetail,
                               extra: {'goal': goal});
                         },
                         child: const Text("View Details"),

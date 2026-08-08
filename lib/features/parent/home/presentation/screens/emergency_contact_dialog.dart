@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -55,6 +56,6 @@ Future<void> logout(BuildContext context) async {
   final pref = await SharedPreferences.getInstance();
   await pref.setBool("ParentLogin", false);
   if (context.mounted) {
-    context.go('/choice');
+    context.go(Routes.choice);
   }
 }

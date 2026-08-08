@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -42,7 +43,7 @@ class SignCubit extends Cubit<SignState> {
       );
 
       if (!context.mounted) return;
-      context.go('/admin/main', extra: data);
+      context.go(Routes.adminMain, extra: data);
 
       emit(SignSuccessState());
     } catch (e) {
@@ -86,7 +87,7 @@ class SignCubit extends Cubit<SignState> {
     try {
       await _repo.logout();
       if (!context.mounted) return;
-      context.go('/choice');
+      context.go(Routes.choice);
     } catch (_) {
       // Ignore logout errors — user is being sent to the choice screen anyway.
     }

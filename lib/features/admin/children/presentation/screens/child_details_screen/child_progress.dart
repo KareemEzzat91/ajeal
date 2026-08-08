@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
@@ -127,7 +128,7 @@ class ProgressSection extends StatelessWidget {
                 isAnalysisEmpty
                     ? showAIResults(context, child)
                     : context
-                        .push('/admin/children/details/ai_results', extra: {
+                        .push(Routes.adminChildrenDetailsAiResults, extra: {
                         'childName': child.name,
                         'analysis': child.analysis,
                         'sessionsData': child.scheduleSessions
@@ -224,7 +225,7 @@ class ProgressSection extends StatelessWidget {
       context.pop();
 
       // Navigate to results screen
-      context.push('/admin/children/details/ai_results', extra: {
+      context.push(Routes.adminChildrenDetailsAiResults, extra: {
         'childName': child.name,
         'analysis': aiAnalysis,
         'sessionsData': sessionsData

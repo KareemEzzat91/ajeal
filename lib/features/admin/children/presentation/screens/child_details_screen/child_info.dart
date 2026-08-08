@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -60,7 +61,7 @@ class ChildInfoSection extends StatelessWidget {
           GestureDetector(
             onTap: () {
               context
-                  .push('/admin/children/details/all', extra: {'child': child});
+                  .push(Routes.adminChildrenDetailsAll, extra: {'child': child});
             },
             child: ChildInforRow(
                 icon: Icons.align_horizontal_left,

@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -218,7 +219,7 @@ class SessionSchedulePage extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          context.push('/admin/children/sessions', extra: {
+          context.push(Routes.adminChildrenSessions, extra: {
             'childName': name,
             'isParent': true,
             'childId': childId,
@@ -316,7 +317,7 @@ class SessionSchedulePage extends StatelessWidget {
                 children: [
                   TextButton.icon(
                     onPressed: () {
-                      context.push('/admin/children/sessions', extra: {
+                      context.push(Routes.adminChildrenSessions, extra: {
                         'childName': name,
                         'isParent': true,
                         'childId': childId,

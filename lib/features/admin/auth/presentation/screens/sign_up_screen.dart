@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -258,7 +259,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   style: TextStyle(color: Colors.grey.shade700),
                                 ),
                                 TextButton(
-                                  onPressed: () => context.go('/admin/login'),
+                                  onPressed: () => context.go(Routes.adminLogin),
                                   child: Text(
                                     S.of(context).loginPage,
                                     style: const TextStyle(

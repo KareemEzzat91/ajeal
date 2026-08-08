@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,7 +30,7 @@ class ChildActionCards extends StatelessWidget {
             icon: Icons.person,
             color: Colors.red,
             onTap: () => context
-                .push('/admin/children/details/all', extra: {'child': child})),
+                .push(Routes.adminChildrenDetailsAll, extra: {'child': child})),
         const SizedBox(height: 16),
         ChildActionCardBuilder(
             context: context,
@@ -38,7 +39,7 @@ class ChildActionCards extends StatelessWidget {
             icon: Icons.flag,
             color: Colors.orange,
             onTap: () =>
-                context.push('/parent/child_goals', extra: {'child': child})),
+                context.push(Routes.parentChildGoals, extra: {'child': child})),
         const SizedBox(height: 16),
         ChildActionCardBuilder(
             context: context,
@@ -47,7 +48,7 @@ class ChildActionCards extends StatelessWidget {
             icon: Icons.calendar_today,
             color: Colors.purple,
             onTap: () => context
-                .push('/parent/session_schedule', extra: {'child': child})),
+                .push(Routes.parentSessionSchedule, extra: {'child': child})),
         const SizedBox(height: 16),
         ChildActionCardBuilder(
             context: context,
@@ -55,7 +56,7 @@ class ChildActionCards extends StatelessWidget {
             subtitle: S.of(context).direct_communication,
             icon: Icons.chat,
             color: Colors.blue,
-            onTap: () => context.push('/parent/chat', extra: {
+            onTap: () => context.push(Routes.parentChat, extra: {
                   'isOthers': false,
                   'role': 'parent',
                   'isParent': true,
@@ -69,7 +70,7 @@ class ChildActionCards extends StatelessWidget {
             subtitle: S.of(context).connect_community,
             icon: Icons.people,
             color: Colors.green,
-            onTap: () => context.push('/parent/global_chat', extra: {
+            onTap: () => context.push(Routes.parentGlobalChat, extra: {
                   'childName': child.name,
                   'isParent': true,
                   'doctorId': adminId,
@@ -82,7 +83,7 @@ class ChildActionCards extends StatelessWidget {
             subtitle: S.of(context).write_daily_notes,
             icon: Icons.note_add_sharp,
             color: Colors.brown,
-            onTap: () => context.push('/admin/children/details/daily_notes',
+            onTap: () => context.push(Routes.adminChildrenDetailsDailyNotes,
                     extra: {
                       'isOthers': false,
                       'childID': parentCode,

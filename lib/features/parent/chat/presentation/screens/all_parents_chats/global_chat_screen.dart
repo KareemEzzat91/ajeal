@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -240,7 +241,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
       onTap: () {
         if (widget.isParent == false &&
             message["sender_id"] != widget.doctorId) {
-          context.push('/parent/chat', extra: {
+          context.push(Routes.parentChat, extra: {
             'isOthers': false,
             'role': 'doctor',
             'doctorId': widget.doctorId,

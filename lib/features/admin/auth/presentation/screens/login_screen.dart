@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -156,7 +157,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                                     alignment: Alignment.centerRight,
                                     child: TextButton(
                                       onPressed: () =>
-                                          context.push('/admin/reset_password'),
+                                          context.push(Routes.adminResetPassword),
                                       child: Text(
                                         s.forgot_password,
                                         style: const TextStyle(
@@ -209,7 +210,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                                       ),
                                       TextButton(
                                         onPressed: () =>
-                                            context.go('/admin/signup'),
+                                            context.go(Routes.adminSignup),
                                         child: Text(
                                           s.register_now,
                                           style: const TextStyle(

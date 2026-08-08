@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -49,21 +50,24 @@ class _ParentLoginPageState extends State<ParentLoginPage> {
           .get();
 
       if (!doctorSnapshot.exists || doctorSnapshot.data() == null) {
-        if (mounted)
+        if (mounted) {
           _showErrorSnackBar("Invalid admin code. Please try again.");
+        }
         return;
       }
 
       final doctorKey = doctorSnapshot.data()?['Doctor_id'];
       if (doctorKey == null) {
-        if (mounted) _showErrorSnackBar(S.of(context).invalid_parent_code);
+        if (mounted) {
+          _showErrorSnackBar(S.of(context).invalid_parent_code);
+        }
         return;
       }
 
       await saveToken(parentCode, doctorKey);
 
       if (!mounted) return;
-      context.go('/parent/main', extra: {
+      context.go(Routes.parentMain, extra: {
         'parentCode': parentCode,
         'child': child,
         'adminId': doctorKey

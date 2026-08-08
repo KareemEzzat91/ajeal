@@ -1,3 +1,4 @@
+import 'package:ajeal/core/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -218,7 +219,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
   }
 
   void _navigateToDetails(BuildContext context, Child child) {
-    context.push('/admin/children/details', extra: {
+    context.push(Routes.adminChildrenDetails, extra: {
       'child': child,
       'isOthers':
           context.read<ChildrenListCubit>().state is ChildrenListLoaded &&
@@ -226,6 +227,7 @@ class _AdminChildrenScreenState extends State<AdminChildrenScreen>
                       .filter ==
                   'Others',
     }).then((v) {
+      if (!context.mounted) return;
       if (v == true) {
         context.read<ChildrenListCubit>().loadChildren();
       }
@@ -255,10 +257,11 @@ class AddChildButton extends StatelessWidget {
         if (isOthers) {
           showCustomDialog(context);
         } else {
-          context.push('/admin/children/add', extra: {
+          context.push(Routes.adminChildrenAdd, extra: {
             'doctorId': widget.doctorId,
             'doctorName': widget.doctorName,
           }).then((v) {
+            if (!context.mounted) return;
             if (v == true) {
               context.read<ChildrenListCubit>().loadChildren();
             }

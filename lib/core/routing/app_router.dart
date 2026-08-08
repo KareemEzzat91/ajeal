@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'routes.dart';
 
 import '../../features/admin/auth/presentation/screens/login_screen.dart';
 import '../../features/admin/auth/presentation/screens/reset_password_screen.dart';
@@ -83,13 +84,9 @@ class AppRouter {
           },
         ),
         GoRoute(
-          path: '/admin/children/add',
+          path: Routes.adminChildrenAdd,
           builder: (context, state) {
-            final extra = state.extra as Map<String, dynamic>? ?? {};
-            return AdminAddChildScreen(
-              doctorId: extra['doctorId'] ?? '',
-              doctorName: extra['doctorName'] ?? '',
-            );
+            return const AdminAddChildScreen();
           },
         ),
         GoRoute(
