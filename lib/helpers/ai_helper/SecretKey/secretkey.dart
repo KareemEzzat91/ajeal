@@ -1,9 +1,12 @@
 import 'package:envied/envied.dart';
 
-part 'secretkey.g.dart';
-
-@Envied(path: '.env')
+@Envied(path: ".env")
 abstract class Env {
-  @EnviedField(varName: 'API_KEY')
-  static const String apiKey = _Env.apiKey;
+  @EnviedField(varName: 'API_KEY') // تأكد أن اسم المتغير مطابق لما في ملف .env
+  static const String apiKey = _apiKey;
 }
+
+const String _apiKey =
+    "AIzaSyCXkMaUZA4uEBVCb8JLVPIfJ2KFyniTsSo"; // للتأكد من أن القيم تُحمل بشكل صحيح
+
+//

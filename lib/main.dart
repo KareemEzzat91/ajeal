@@ -1,10 +1,11 @@
-
-import 'package:ajeal/Screens/setup/buildhome_screen.dart';
-import 'package:ajeal/Screens/setup/setup.dart';
 import 'package:flutter/material.dart';
+
+import 'package:ajeal/core/di/service_locator.dart';
+import 'package:ajeal/features/onboarding/presentation/screens/setup/buildhome_screen.dart';
+import 'package:ajeal/features/onboarding/presentation/screens/setup/setup.dart';
+
 Future<void> main() async {
   await Setup.instance.initialize();
-    runApp(const MyApp());
+  setupServiceLocator();
+  runApp(const MyApp());
 }
-
-
