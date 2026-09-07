@@ -79,15 +79,19 @@ Firestore access in repositories and screens.
 The repository includes design screenshots used in the README gallery. These
 are located in `assets/design/screens/` and are already referenced below.
 
-![Role selection](assets/design/screens/Untitled design (3).png)
-![Practitioner list](assets/design/screens/Untitled design (4).png)
-![Child detail](assets/design/screens/Untitled design (5).png)
-![Session detail](assets/design/screens/Untitled design (6).png)
-![Parent dashboard](assets/design/screens/Untitled design (7).png)
-![Chat sample](assets/design/screens/Untitled design (8).png)
-![Reports]https://github.com/KareemEzzat91/ajeal/blob/master/assets/design/screens/Untitled%20design%20(9).png
-![Mockup 1]https://github.com/KareemEzzat91/ajeal/blob/master/assets/design/screens/Untitled%20design%20(10).png
-![Mockup 2]https://github.com/KareemEzzat91/ajeal/blob/master/assets/design/screens/Untitled%20design%20(11).png
+![Ajeal]<img width="1536" height="1024" alt="ajeal-benha" src="https://github.com/user-attachments/assets/1a5af7a0-26e5-4c39-8360-63ceee843e3a" />
+![Role Selection]<img width="1080" height="1080" alt="screenshot-03" src="https://github.com/user-attachments/assets/895e377a-8777-4eec-beff-cb2c896ba883" />
+![Practitioner list]<img width="1080" height="1080" alt="screenshot-09" src="https://github.com/user-attachments/assets/feb8324f-d425-4cfc-b489-41f6efbe3848" />
+![Child detail]<img width="1080" height="1080" alt="screenshot-07" src="https://github.com/user-attachments/assets/3c533d5d-bf8d-4844-96c0-02e9e9b3b787" />
+
+![Session detail]<img width="1080" height="1080" alt="screenshot-08" src="https://github.com/user-attachments/assets/b28da3c4-5a9a-456e-abe3-16496c2766ca" />
+
+![Parent dashboard]<img width="1080" height="1080" alt="screenshot-06" src="https://github.com/user-attachments/assets/c5f199f4-70ee-45b4-a8bd-cb0aea46b97c" />
+
+![Chat sample]<img width="1080" height="1080" alt="screenshot-02" src="https://github.com/user-attachments/assets/2824ed80-66e1-43e9-a10a-df281654e748" />
+
+![Reports]<img width="1080" height="1080" alt="screenshot-01" src="https://github.com/user-attachments/assets/7ce21658-db2d-461a-af1b-7a1e643ffbdb" />
+
 
 ---
 
